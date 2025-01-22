@@ -20,15 +20,15 @@ def create_retrabalho_agent(rework_data):
             "
         """,
         expected_output="""
-            Como resultado quero os dados resultantes da sua análside individualmente para cada desenvolvedor
+            Como resultado quero a soma de retrabalho para cada desenvolvedor.
         """,
         agent=rework_agent  
     )
 
     crew = Crew(
         name='Rework Crew',
-        agents=rework_agent,
-        tasks=rework_agent_task,
+        agents=[rework_agent],
+        tasks=[rework_agent_task],
         verbose= True
     )
     return crew.kickoff(inputs = {'data': rework_data})

@@ -1,7 +1,13 @@
 def rework_search(data: dict) -> list:
-    cancelados = []
+    cards = []
     for i in data['issues']:
-        if i['fields']['status']['name'] == 'Cancelado':
-            cancelados.append(i['id'])
+        card_id = i['id']
+        priority_id = i['fields']['priority']['id'] if i['fields'].get('priority') else None
+        assignee = i['fields']['assignee']['displayName'] if i['fields'].get('assignee') else None
 
-    return cancelados
+        cards.append({
+            'id': card_id,
+            'priority_id': priority_id,
+            'assignee': assignee
+        })
+    return cards

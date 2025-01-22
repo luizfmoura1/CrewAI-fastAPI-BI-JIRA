@@ -4,6 +4,6 @@ from src.utils.rework_search import rework_search
 
 def main(data: dict) -> list:
     rework = rework_search(data)
-    rework_analysis = create_retrabalho_agent(rework)
-    return rework
+    rework_analysis = create_retrabalho_agent({'data': rework})
+    return rework_analysis
     
