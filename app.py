@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
-from utils.jira_client import JiraClient
+from src.utils.jira_client import JiraClient
 from dotenv import load_dotenv
+from src.main import main
 import os
 import logging
 
@@ -28,20 +29,18 @@ app = FastAPI()
 # Criando o cliente do Jira
 jira_client = JiraClient(base_url=BASE_URL, email=EMAIL, api_token=API_TOKEN_JIRA)
 
-# Endpoint raiz
-@app.get("/")
-def root():
-    return {"message": "Hello World"}
-
 # Novo endpoint para buscar dados do quadro
-@app.get("/board")
-def get_board():
+@app.get("/JIRA_analitycs")
+def get_analitycs(board_id: str) -> dict:
     try:
         # Buscando os dados do quadro com board_id fixo
-        board_data = jira_client.get_single_board(board_id=BOARD_ID)
-        return board_data
+        board_data = jira_client.get_single_board(board_id)
+        response = main(board_data)
+        final_content = {'data': [response]}
+        return final_content
     except Exception as e:
         # Logando o erro completo
         logger.error(f"Erro ao buscar o quadro: {str(e)}", exc_info=True)
         # Retornando um erro 500 em caso de falha
         raise HTTPException(status_code=500, detail=str(e))
+    

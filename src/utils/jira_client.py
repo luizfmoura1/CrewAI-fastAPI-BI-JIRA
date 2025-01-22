@@ -9,7 +9,7 @@ class JiraClient:
         """
         Obtém os dados de um quadro (board) específico no Jira.
         """
-        url = f"{self.base_url}/rest/agile/1.0/board/{board_id}"
+        url = f"{self.base_url}/rest/agile/1.0/board/{board_id}/issue"
         headers = {
             "Accept": "application/json"
         }
