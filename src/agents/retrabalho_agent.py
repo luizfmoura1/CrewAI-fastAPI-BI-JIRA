@@ -27,8 +27,8 @@ def create_retrabalho_agent(rework_data):
 
     crew = Crew(
         name='Rework Crew',
-        agents=rework_agent,
-        tasks=rework_agent_task,
+        agents=[rework_agent],
+        tasks=[rework_agent_task],
         verbose= True
     )
     return crew.kickoff(inputs = {'data': rework_data})

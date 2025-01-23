@@ -5,11 +5,29 @@ class JiraClient:
         self.base_url = base_url
         self.auth = (email, api_token)  # Autenticação básica (email + API token)
 
-    def get_single_board(self, board_id):
+    def get_sprints(self, board_id):
+        """
+        Obtém a lista de sprints de um board específico no Jira.
+        """
+        url = f"{self.base_url}/rest/agile/1.0/board/{board_id}/sprint"
+        headers = {
+            "Accept": "application/json"
+        }
+        
+        # Fazendo a requisição GET
+        response = requests.get(url, headers=headers, auth=self.auth)
+        
+        # Verificando se a requisição foi bem-sucedida
+        if response.status_code == 200:
+            return response.json()  # Retorna a lista de sprints
+        else:
+            raise Exception(f"Erro ao buscar os sprints: {response.status_code} - {response.text}")
+
+    def get_single_board(self, board_id, sprint_id):
         """
         Obtém os dados de um quadro (board) específico no Jira.
         """
-        url = f"{self.base_url}/rest/agile/1.0/board/{board_id}/issue"
+        url = f"{self.base_url}/rest/agile/1.0/board/{board_id}/sprint/{sprint_id}/issue"
         headers = {
             "Accept": "application/json"
         }

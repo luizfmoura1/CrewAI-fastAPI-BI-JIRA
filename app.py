@@ -31,11 +31,29 @@ jira_client = JiraClient(base_url=BASE_URL, email=EMAIL, api_token=API_TOKEN_JIR
 
 # Novo endpoint para buscar dados do quadro
 @app.get("/JIRA_analitycs")
-def get_analitycs(board_id: str) -> dict:
+def get_analitycs(board_id: int = BOARD_ID, sprint_id: int = None) -> dict:
     try:
-        # Buscando os dados do quadro com board_id fixo
-        board_data = jira_client.get_single_board(board_id)
-        response = main(board_data)
+        # Se o sprint_id não for fornecido, listar os sprints e permitir a seleção
+        if sprint_id is None:
+            # Buscar a lista de sprints do board
+            sprints = jira_client.get_sprints(board_id)
+            
+            # Exibir a lista de sprints para o usuário (via logs)
+            logger.info("Lista de sprints disponíveis:")
+            for i, sprint in enumerate(sprints['values']):
+                logger.info(f"{i + 1}. Sprint ID: {sprint['id']}, Sprint Name: {sprint['name']}")
+            
+            # Selecionar o primeiro sprint da lista como padrão
+            sprint_id = sprints['values'][0]['id']
+            logger.info(f"Usando o Sprint ID padrão: {sprint_id}")
+
+        # Buscando os dados do quadro com board_id e sprint_id
+        board_data = jira_client.get_single_board(board_id, sprint_id)
+        
+        # Passando o sprint_id para a função main (ou outra lógica que precise dele)
+        response = main(board_data, sprint_id=sprint_id)
+        
+        # Retornando a resposta formatada
         final_content = {'data': [response]}
         return final_content
     except Exception as e:
@@ -43,4 +61,3 @@ def get_analitycs(board_id: str) -> dict:
         logger.error(f"Erro ao buscar o quadro: {str(e)}", exc_info=True)
         # Retornando um erro 500 em caso de falha
         raise HTTPException(status_code=500, detail=str(e))
-    
