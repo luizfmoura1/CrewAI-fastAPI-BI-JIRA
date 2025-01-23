@@ -2,12 +2,10 @@ from crewai import Agent, Task, Crew
 
 def create_retrabalho_agent(rework_data):
     rework_agent = Agent(
-        role="Analista de Retrabalho",
-        goal="Analisar o número de alterações no status dos cards e identificar padrões de retrabalho.",
-        backstory="""Você é um especialista em análise de fluxo de trabalho e identifica padrões de retrabalho,individualmente para cada deselvolvedor, em um board no JIRA. Retrabalho é quando um **CARD**, se encontra na coluna Planejados/Reprovados, e está com o status 'Reprovado'.
-        **ATENÇÃO**
-            - Sempre que um card estiver viculado a um 'Estagiário' você deve procurar pelo nome verdadeiro desse estágiario no tópico 'Desenvolvedor'.
-            - Um card pode ser reprovado N vezes, ou seja retrabalho = N.
+        role="Analista de Cards",
+        goal="Identificar os desenvolvedores, listar os cards vinculados a eles e contar o número total de cards por desenvolvedor.",
+        backstory="""
+        Você é um especialista em análise de workflow de desenvolvimento. Seu objetivo é conectar-se ao JIRA, identificar os desenvolvedores, listar os cards vinculados a eles e fornecer o número total de cards associados a cada desenvolvedor.
         """,
         verbose=True,
         allow_delegation=False
@@ -15,25 +13,31 @@ def create_retrabalho_agent(rework_data):
 
     rework_agent_task = Task(
         description="""
-            "Esta task conecta-se ao JIRA, extrai todos os cards do board e ao fim separa os casos de retrabalho separado por desenvolvedor."
-            "Deve ser analisado todos os issues do board, e a resposta final deve ser o a soma de índice de retrabalho de cada desenvolvedor.",
-            "Caso um desenvolvedor tenha 0 de indice de retrabalho, ele *deve* ser incluido na resposta final.",
-            "Dados a serem analisados a seguir: 
+            Esta task conecta-se ao JIRA, extrai todos os cards do board e realiza a análise para identificar:
+            1. O nome do desenvolvedor.
+            2. Os cards vinculados a ele.
+            3. A quantidade total de cards atribuída ao desenvolvedor.
+
+            Dados a serem analisados:
             -----------------
             {data}
             -----------------
-            "
-            """,
-        expected_output="""
-            Como resultado quero a soma de retrabalho para cada desenvolvedor.
         """,
-        agent=rework_agent  
+        expected_output="""
+            O resultado final deve listar para cada desenvolvedor:
+            - Nome do desenvolvedor.
+            - Quais cards estão vinculados a ele.
+            - Quantos cards estão vinculados a ele.
+        """,
+        agent=rework_agent
     )
 
     crew = Crew(
         name='Rework Crew',
         agents=[rework_agent],
         tasks=[rework_agent_task],
-        verbose= True
+        verbose=True
     )
-    return crew.kickoff(inputs = {'data': rework_data})
+
+    return crew.kickoff(inputs={'data': rework_data})
+    

@@ -15,7 +15,7 @@ class JiraClient:
         # Parâmetros para incluir todos os cards, independentemente do status
         params = {
             "jql": "status NOT IN (CANCELADO)",  # Filtra apenas cards ativos
-            "maxResults": 1000,
+            "maxResults": 100,
             "fields": "*all"
         }
         
