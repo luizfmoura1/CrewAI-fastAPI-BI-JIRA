@@ -16,7 +16,6 @@ load_dotenv()
 BASE_URL = "https://ngosolucoes.atlassian.net"
 EMAIL = "master@oppem.com.br"
 API_TOKEN_JIRA = os.getenv("API_TOKEN_JIRA")  # Carregado do arquivo .env
-BOARD_ID = 24  # Usando o board_id fixo
 
 # Verifique se o token foi carregado corretamente
 if not API_TOKEN_JIRA:
@@ -31,10 +30,10 @@ jira_client = JiraClient(base_url=BASE_URL, email=EMAIL, api_token=API_TOKEN_JIR
 
 # Novo endpoint para buscar dados do quadro
 @app.get("/JIRA_analitycs")
-def get_analitycs(board_id: str) -> dict:
+def get_analitycs(board_id: str, sprint_id: str) -> dict:
     try:
-        # Buscando os dados do quadro com board_id fixo
-        board_data = jira_client.get_single_board(board_id)
+        # Buscando os dados do quadro e da sprint
+        board_data = jira_client.get_single_board(board_id, sprint_id)
         response = main(board_data)
         final_content = {'data': [response]}
         return final_content

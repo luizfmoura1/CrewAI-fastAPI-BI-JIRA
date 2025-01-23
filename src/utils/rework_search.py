@@ -1,13 +1,9 @@
 def rework_search(data: dict) -> list:
+    """
+    Retorna todas as informações disponíveis sobre os cards (issues) do Jira.
+    """
     cards = []
-    for i in data['issues']:
-        card_id = i['id']
-        priority_id = i['fields']['priority']['id'] if i['fields'].get('priority') else None
-        assignee = i['fields']['assignee']['displayName'] if i['fields'].get('assignee') else None
-
-        cards.append({
-            'id': card_id,
-            'priority_id': priority_id,
-            'assignee': assignee
-        })
+    for issue in data['issues']:
+        # Adiciona todos os dados da issue ao card
+        cards.append(issue)
     return cards
