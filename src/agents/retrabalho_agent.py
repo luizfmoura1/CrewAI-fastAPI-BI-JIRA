@@ -25,9 +25,8 @@ def create_retrabalho_agent(rework_data):
         """,
         expected_output="""
             O resultado final deve listar para cada desenvolvedor:
-            - Nome do desenvolvedor.
-            - Quais cards estão vinculados a ele.
-            - Quantos cards estão vinculados a ele.
+            - Nome do desenvolvedor e os cards vinculados a ele.
+            - todas as informações vinculadas a todos os cards
         """,
         agent=rework_agent
     )
