@@ -3,9 +3,9 @@ from crewai import Agent, Task, Crew
 def create_retrabalho_agent(rework_data):
     rework_agent = Agent(
         role="Analista de Cards",
-        goal="Identificar os desenvolvedores, listar os cards vinculados a eles e contar o número total de cards por desenvolvedor.",
+        goal="Retornar o changelog do card mais recente.",
         backstory="""
-        Você é um especialista em análise de workflow de desenvolvimento. Seu objetivo é conectar-se ao JIRA, identificar os desenvolvedores, listar os cards vinculados a eles e fornecer o número total de cards associados a cada desenvolvedor.
+        Você é um especialista em análise de workflow de desenvolvimento. Seu objetivo é identificar o card mais antigo e retornar seu changelog.
         """,
         verbose=True,
         allow_delegation=False
@@ -13,10 +13,7 @@ def create_retrabalho_agent(rework_data):
 
     rework_agent_task = Task(
         description="""
-            Esta task conecta-se ao JIRA, extrai todos os cards do board e realiza a análise para identificar:
-            1. O nome do desenvolvedor.
-            2. Os cards vinculados a ele.
-            3. A quantidade total de cards atribuída ao desenvolvedor.
+            Esta task analisa os dados fornecidos e retorna o changelog do card mais antigo.
 
             Dados a serem analisados:
             -----------------
@@ -24,9 +21,7 @@ def create_retrabalho_agent(rework_data):
             -----------------
         """,
         expected_output="""
-            O resultado final deve listar para cada desenvolvedor:
-            - Nome do desenvolvedor e os cards vinculados a ele.
-            - todas as informações vinculadas a todos os cards
+            O changelog do card mais antigo.
         """,
         agent=rework_agent
     )
@@ -39,4 +34,3 @@ def create_retrabalho_agent(rework_data):
     )
 
     return crew.kickoff(inputs={'data': rework_data})
-    
