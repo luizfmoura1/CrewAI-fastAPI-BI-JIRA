@@ -31,3 +31,22 @@ class JiraClient:
             return response.json()  # Retorna os dados do quadro e da sprint
         else:
             raise Exception(f"Erro ao buscar o quadro/sprint: {response.status_code} - {response.text}")
+        
+    def get_issue_changelog(self, issue_id):
+        """
+        Retorna os dados de uma issue específica, incluindo o changelog.
+        """
+        url = f"{self.base_url}/rest/api/2/issue/{issue_id}"
+        params = {
+            "expand": "changelog"
+        }
+        headers = {
+            "Accept": "application/json"
+        }
+
+        response = requests.get(url, headers=headers, params=params, auth=self.auth)
+        
+        if response.status_code == 200:
+            return response.json()
+        else:
+            raise Exception(f"Erro ao buscar o changelog da issue: {response.status_code} - {response.text}")
