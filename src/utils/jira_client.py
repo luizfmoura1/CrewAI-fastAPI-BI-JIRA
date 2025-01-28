@@ -10,7 +10,7 @@ class JiraClient:
 
         params = {
         "jql": "status NOT IN (CANCELADO)",
-        "maxResults": 500,
+        "maxResults": 3000,
         "fields": "customfield_10106,assignee,status"  # Campos adicionados
     }
 

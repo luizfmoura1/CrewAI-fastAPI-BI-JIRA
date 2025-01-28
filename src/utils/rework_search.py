@@ -5,7 +5,7 @@ def rework_search(data: dict) -> list:
     - Changelog (histórico de alterações)
     - Nome do status (status -> name)
     - Categoria do status (status -> statusCategory)
-    - ID da prioridade (priority -> id)
+    - Story Points (customfield_10106)
     - Nome do desenvolvedor (assignee -> displayName)
     - Data de criação (created)
     - Data de atualização (updated)
@@ -13,27 +13,26 @@ def rework_search(data: dict) -> list:
     cards = []
     for issue in data['issues']:
         # Extraindo informações básicas do issue
-        issue_key = issue.get('key')  # Chave do card (ex: WEB-291)
+        issue_key = issue.get('key')
         
         # Extraindo o changelog (histórico de alterações)
         changelog = issue.get('changelog', {}).get('histories', [])
         
         # Extraindo o status do card
         status = issue.get('fields', {}).get('status', {})
-        status_name = status.get('name')  # Nome do status (ex: "Cancelado")
-        status_category = status.get('statusCategory', {}).get('name')  # Categoria do status (ex: "Done")
+        status_name = status.get('name')
+        status_category = status.get('statusCategory', {}).get('name')
         
-        # Extraindo o ID da prioridade
-        priority = issue.get('fields', {}).get('priority', {})
-        priority_id = priority.get('id')  # ID da prioridade
+        # Extraindo story points
+        story_points = issue.get('fields', {}).get('customfield_10106', 0)
         
         # Extraindo o nome do desenvolvedor (assignee)
         assignee = issue.get('fields', {}).get('assignee', {})
         developer_name = assignee.get('displayName') if assignee else "Não atribuído"
         
         # Extraindo as datas de criação e atualização
-        created = issue.get('fields', {}).get('created')  # Data de criação
-        updated = issue.get('fields', {}).get('updated')  # Data de atualização
+        created = issue.get('fields', {}).get('created')
+        updated = issue.get('fields', {}).get('updated')
         
         # Adicionando os dados ao card
         card_info = {
@@ -43,9 +42,7 @@ def rework_search(data: dict) -> list:
                 'name': status_name,
                 'statusCategory': status_category
             },
-            'priority': {
-                'id': priority_id
-            },
+            'story_points': story_points,
             'assignee': {
                 'displayName': developer_name
             },
