@@ -4,7 +4,7 @@ def create_retrabalho_agent(rework_data):
     story_agent = Agent(
         role="Analista de Story Points",
         goal="Para cada desenvolvedor, somar os story points por dia e por semana.",
-        backstory="Você é um analista de story points, responsável por calcular os story points de cada desenvolvedor, por dia e por semana.",
+        backstory="Você é um analista de story points, responsável por calcular os story points de cada desenvolvedor.",
         verbose=True,
         allow_delegation=False
     )
@@ -12,15 +12,20 @@ def create_retrabalho_agent(rework_data):
     story_agent_task = Task(
         description="""
         "Esta task é responsável por medir a soma do story points de todos os cards, separados por desenvolvedores individualmente."
-        "Story Points se referem ao campo customfield_10106 (ou o que você configurou para SP) no JSON retornado pelo Jira."
         
         Dados a serem analisados a seguir:
         ---------------------
         {data}
         ---------------------
+        ""
+        Analise cuidadosamente a estrutura JSON dos dados.
+        - Story Points estão em issues.fields.customfield_10106
+        - Desenvolvedor está em issues.fields.assignee.displayName
+        ""
+        
         """,
         expected_output="""
-            Como resultado final, deve ser separada a soma de story points de cada desenvolvedor por dia (mencionando a data) e por semana.
+            Como resultado final, deve ser separada a soma de story points de cada desenvolvedor.
         """,
         agent=story_agent
     )

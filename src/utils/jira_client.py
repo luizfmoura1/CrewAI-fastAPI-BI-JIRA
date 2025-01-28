@@ -9,10 +9,10 @@ class JiraClient:
         url = f"{self.base_url}/rest/agile/1.0/board/{board_id}/sprint/{sprint_id}/issue"
 
         params = {
-            "jql": "status NOT IN (CANCELADO)",
-            "maxResults": 100,
-            "fields": "summary, issuetype, status, customfield_10106"
-        }
+        "jql": "status NOT IN (CANCELADO)",
+        "maxResults": 500,
+        "fields": "customfield_10106,assignee,status"  # Campos adicionados
+    }
 
         headers = {"Accept": "application/json"}
 
