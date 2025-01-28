@@ -1,9 +1,8 @@
-from src.agents.retrabalho_agent import create_retrabalho_agent
-from src.agents.story_points_agent import create_story_points_agent
-from src.utils.rework_search import rework_search
+from src.agents.sp_agent import create_story_agent
+from src.utils.sp_search import sp_search
 
 def main(data: dict) -> list:
-    rework = rework_search(data)
-    rework_analysis = create_retrabalho_agent({'data': rework})
-    return rework_analysis
+    rework = sp_search(data)
+    sp_analysis = create_story_agent({'data': rework})
+    return sp_analysis
     

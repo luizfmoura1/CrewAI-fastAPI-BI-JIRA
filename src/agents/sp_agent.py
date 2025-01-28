@@ -1,6 +1,6 @@
 from crewai import Agent, Task, Crew
 
-def create_retrabalho_agent(rework_data):
+def create_story_agent(story_data):
     story_agent = Agent(
         role="Analista de Story Points",
         goal="Para cada desenvolvedor, somar os story points.",
@@ -42,4 +42,4 @@ def create_retrabalho_agent(rework_data):
         verbose=True
     )
 
-    return crew.kickoff(inputs={'data': rework_data})
+    return crew.kickoff(inputs={'data': story_data})

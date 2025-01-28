@@ -1,4 +1,4 @@
-def rework_search(data: dict) -> list:
+def sp_search(data: dict) -> list:
     """
     Retorna informações específicas sobre os cards (issues) do Jira, incluindo:
     - Chave do card (key)
