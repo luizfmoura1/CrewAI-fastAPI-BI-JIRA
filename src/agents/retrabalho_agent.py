@@ -11,16 +11,16 @@ def create_retrabalho_agent(rework_data):
 
     story_agent_task = Task(
         description="""
-    "Esta task é responsável por medir a soma do story points de todos os cards separados por desenvolvedores individualmente."
-    "Story point se refere a estrutura do JSON, 'priority' -> 'id'."
-    "Dados a serem analisados a seguir:
-    ---------------------
-    {data}
-    ---------------------
-    "
-    """,
-    expected_output="""
-            Como resultado final, deve ser separado a soma de story points de cada desenvolvedor por dia mencinando a data, e por semana.
+        "Esta task é responsável por medir a soma do story points de todos os cards, separados por desenvolvedores individualmente."
+        "Story Points se referem ao campo customfield_10106 (ou o que você configurou para SP) no JSON retornado pelo Jira."
+        
+        Dados a serem analisados a seguir:
+        ---------------------
+        {data}
+        ---------------------
+        """,
+        expected_output="""
+            Como resultado final, deve ser separada a soma de story points de cada desenvolvedor por dia (mencionando a data) e por semana.
         """,
         agent=story_agent
     )
@@ -29,9 +29,7 @@ def create_retrabalho_agent(rework_data):
         name='Story Crew',
         agents=[story_agent],
         tasks=[story_agent_task],
-        verbose= True
+        verbose=True
     )
 
     return crew.kickoff(inputs={'data': rework_data})
-
-    
