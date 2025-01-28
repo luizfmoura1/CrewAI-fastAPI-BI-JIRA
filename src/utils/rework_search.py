@@ -9,6 +9,7 @@ def rework_search(data: dict) -> list:
     - Nome do desenvolvedor (assignee -> displayName)
     - Data de criação (created)
     - Data de atualização (updated)
+    - Dev (customfield_10172)
     """
     cards = []
     for issue in data['issues']:
@@ -25,6 +26,9 @@ def rework_search(data: dict) -> list:
         
         # Extraindo story points
         story_points = issue.get('fields', {}).get('customfield_10106', 0)
+        
+        # Extraindo o campo 'dev' (ex: customfield_10172)
+        dev = issue.get('fields', {}).get('customfield_10172', 0)
         
         # Extraindo o nome do desenvolvedor (assignee)
         assignee = issue.get('fields', {}).get('assignee', {})
@@ -43,6 +47,7 @@ def rework_search(data: dict) -> list:
                 'statusCategory': status_category
             },
             'story_points': story_points,
+            'dev': dev,
             'assignee': {
                 'displayName': developer_name
             },

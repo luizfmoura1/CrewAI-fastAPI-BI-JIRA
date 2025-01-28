@@ -20,8 +20,13 @@ def create_retrabalho_agent(rework_data):
         ""
         Analise cuidadosamente a estrutura JSON dos dados.
         - Story Points estão em issues.fields.customfield_10106
-        - Desenvolvedor está em issues.fields.assignee.displayName
+        - Responsável está em issues.fields.assignee.displayName
+        - Desenvolvedor está em issues.fields.customfield_10172
         ""
+
+        **ATENÇÃO**
+
+        - Sempre que o responsável pelo card for um **Estagiário** você deve substituir o nome do responsável pelo desenvolvedor presente na customfield_10172.
         
         """,
         expected_output="""
