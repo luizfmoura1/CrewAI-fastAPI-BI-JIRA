@@ -13,8 +13,8 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 
 # Variáveis do Jira
-BASE_URL = "https://ngosolucoes.atlassian.net"
-EMAIL = "master@oppem.com.br"
+BASE_URL = os.getenv("BASE_URL")
+EMAIL = os.getenv("EMAIL")
 API_TOKEN_JIRA = os.getenv("API_TOKEN_JIRA")
 
 if not API_TOKEN_JIRA:
