@@ -3,7 +3,7 @@ from crewai import Agent, Task, Crew
 def create_retrabalho_agent(rework_data):
     story_agent = Agent(
         role="Analista de Story Points",
-        goal="Para cada desenvolvedor, somar os story points por dia e por semana.",
+        goal="Para cada desenvolvedor, somar os story points.",
         backstory="Você é um analista de story points, responsável por calcular os story points de cada desenvolvedor.",
         verbose=True,
         allow_delegation=False
