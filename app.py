@@ -7,6 +7,8 @@ from src.main import main
 import os
 import logging
 
+from src.utils.rework_search import filter_reprovado_entries
+
 # Configuração de logs e .env
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -39,44 +41,36 @@ def get_analitycs(board_id: str, sprint_id: str) -> dict:
 
 @app.get("/JIRA_analitycs_with_changelogs")
 def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
-    """
-    Endpoint que retorna as issues de um board/sprint já acompanhadas de seus changelogs.
-    """
     try:
-        # 1. Obter os dados do quadro e sprint (issues, etc.)
         board_data = jira_client.get_single_board(board_id, sprint_id)
-        
         issues = board_data.get("issues", [])
         
-        # 2. Para cada issue, buscar o changelog chamando o novo método do JiraClient
         issues_with_changelogs = []
         for issue in issues:
             issue_key = issue.get("key")
+            dev = issue.get('fields', {}).get('customfield_10172', 'Não definido')  # Novo
+            
             if issue_key:
                 try:
                     changelog_response = jira_client.get_issue_changelog(issue_key)
-                    # Anexa o changelog (ou parte dele) aos dados da issue
+                    filtered = filter_reprovado_entries(
+                        issue_key=issue_key,
+                        dev=dev,
+                        changelog_data=changelog_response
+                    )
                     issues_with_changelogs.append({
-                        "issue": issue,  # dados básicos da issue
-                        "changelog": changelog_response.get("changelog")  
+                        "issue": issue,
+                        "reprovado_entries": filtered
                     })
                 except Exception as ex:
-                    logger.error(f"Falha ao buscar changelog da issue {issue_key}: {ex}", exc_info=True)
-                    # Dependendo da necessidade, você pode:
-                    # - Continuar (pular) ou 
-                    # - Interromper e lançar HTTPException
-                    # Aqui vamos apenas pular para não travar todas as issues
+                    logger.error(f"Falha ao buscar changelog: {ex}", exc_info=True)
                     continue
-
-        # 3. Se quiser processar com a função main (ou algum agente), faça aqui.
-        #    Ou retorne diretamente.
 
         return {
             "board_id": board_id,
             "sprint_id": sprint_id,
-            "issues_count": len(issues_with_changelogs),
             "data": issues_with_changelogs
         }
     except Exception as e:
-        logger.error(f"Erro ao buscar quadro/sprint e changelogs: {str(e)}", exc_info=True)
+        logger.error(f"Erro: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))

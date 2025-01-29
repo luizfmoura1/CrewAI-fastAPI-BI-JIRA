@@ -24,7 +24,7 @@ def sp_search(data: dict) -> list:
         story_points = issue.get('fields', {}).get('customfield_10106', 0)
         
         # Extraindo o campo 'dev' (ex: customfield_10172)
-        dev = issue.get('fields', {}).get('customfield_10172', 0)
+        dev = issue.get('fields', {}).get('customfield_10172', 'Não definido')
         
         # Extraindo o nome do desenvolvedor (assignee)
         assignee = issue.get('fields', {}).get('assignee', {})
@@ -37,6 +37,7 @@ def sp_search(data: dict) -> list:
         # Adicionando os dados ao card
         card_info = {
             'key': issue_key,
+            'changelog': issue.get('changelog', {}).get('histories', []),
             'status': {
                 'name': status_name,
                 'statusCategory': status_category
