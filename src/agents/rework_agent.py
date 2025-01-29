@@ -21,7 +21,8 @@ def create_rework_agent(reprovados_data: list) -> Dict[str, Any]:
         1. Use exatamente os nomes dos desenvolvedores como recebidos
         2. Não generalize ou altere os nomes
         3. Mantenha a fidelidade absoluta aos dados de entrada
-        4. key do card ("card_key"), responsável("responsavel"), desenvolvedor(customfield_10172).
+        4. key do card ("card_key"), responsável("displayName"), desenvolvedor(customfield_10172).
+        5. Sempre que o responsável for um **Estagiário**, substituir pelo customfield_10172.
 
         Dados a serem analisados a seguir:
         ---------------------
