@@ -2,7 +2,6 @@ def sp_search(data: dict) -> list:
     """
     Retorna informações específicas sobre os cards (issues) do Jira, incluindo:
     - Chave do card (key)
-    - Changelog (histórico de alterações)
     - Nome do status (status -> name)
     - Categoria do status (status -> statusCategory)
     - Story Points (customfield_10106)
@@ -15,9 +14,6 @@ def sp_search(data: dict) -> list:
     for issue in data['issues']:
         # Extraindo informações básicas do issue
         issue_key = issue.get('key')
-        
-        # Extraindo o changelog (histórico de alterações)
-        changelog = issue.get('changelog', {}).get('histories', [])
         
         # Extraindo o status do card
         status = issue.get('fields', {}).get('status', {})
@@ -41,7 +37,6 @@ def sp_search(data: dict) -> list:
         # Adicionando os dados ao card
         card_info = {
             'key': issue_key,
-            'changelog': changelog,
             'status': {
                 'name': status_name,
                 'statusCategory': status_category
