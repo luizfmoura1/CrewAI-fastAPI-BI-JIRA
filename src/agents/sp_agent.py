@@ -26,7 +26,8 @@ def create_story_agent(story_data):
 
         **ATENÇÃO**
 
-        - Sempre que o responsável pelo card for um **Estagiário** você deve substituir o nome do responsável pelo desenvolvedor presente na customfield_10172.
+        -# Em sp_agente.py
+        - Sempre que o responsável for um **Estagiário**, substituir pelo customfield_10172.
         
         """,
         expected_output="""
