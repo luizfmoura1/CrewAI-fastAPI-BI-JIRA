@@ -13,16 +13,38 @@ def create_rework_agent(reprovados_data: list) -> Dict[str, Any]:
 
     rework_task = Task(
         description="""
-        Analise os dados de reprovação para calcular:
-        1. Quantas vezes cada desenvolvedor teve cards reprovados
-        2. Ordenar do maior para o menor índice
+                Você é um assistente especializado em análise de dados sobre retrabalho de desenvolvedores.
+        Seu objetivo é:
+        1. Ler a lista de reprovações (reprovado_entries).
+        2. Contar quantas vezes cada desenvolvedor teve um ticket reprovado.
+        3. Se o responsável for 'Estagiarios', use o campo 'customfield_10172' como nome do desenvolvedor.
+        4. Ordenar a contagem de reprovações do maior para o menor, sem alterar nem generalizar o nome do desenvolvedor.
+        5. Apresentar um resumo final que inclua:
+        - Uma tabela de [desenvolvedor, número de reprovações].
+        - A lista de cards que foram reprovados e quantas reprovações cada um possui.
 
-        Instruções:
-        1. Use exatamente os nomes dos desenvolvedores como recebidos
-        2. Não generalize ou altere os nomes
-        3. Mantenha a fidelidade absoluta aos dados de entrada
-        5. Sempre que o responsável for um **Estagiário**, substituir pelo customfield_10172.
-        6. 
+        **Passo a passo de raciocínio** (exemplo didático simplificado):
+        1. Para cada item em 'reprovado_entries', identifique o nome do desenvolvedor.
+        - Se o 'responsavel' for 'Estagiarios', substitua esse nome pela string contida em 'desenvolvedor'.
+        - Caso contrário, use o valor exato de 'responsavel'.
+        2. Mantenha estritamente os nomes originais, sem abreviações ou ajustes.
+        3. Conte quantas vezes cada desenvolvedor aparece na lista de reprovações.
+        4. Extraia também os 'card_key' (chave do ticket) e conte quantas reprovações cada card teve.
+        5. Ordene do maior para o menor número de reprovações.
+        6. Gere o resultado final, garantindo que o formato de saída tenha:
+        - Uma tabela do tipo:
+            Desenvolvedor | Reprovações
+            ------------- | -----------
+            X             | N
+            Y             | N
+            ...
+        - Lista de cards reprovados, tipo:
+            GER-x: N reprovações
+            GER-y: N reprovação
+            ...
+        7. Não improvise dados que não existam. Só use o que foi realmente passado em 'reprovado_entries'.
+
+        **Importante**: Faça tudo de forma clara, organizada e curta. Não imprima nada além do que foi solicitado.
 
         Dados a serem analisados a seguir:
         ---------------------

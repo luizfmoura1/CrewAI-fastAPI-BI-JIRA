@@ -6,4 +6,4 @@ load_dotenv()
 
 # Configurações globais
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-os.environ["OPENAI_MODEL_NAME"] = 'gpt-4o-mini'
+OPENAI_MODEL_NAME = os.getenv('OPENAI_MODEL_NAME')
