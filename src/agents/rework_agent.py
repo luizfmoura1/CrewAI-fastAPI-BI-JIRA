@@ -43,6 +43,7 @@ def create_rework_agent(reprovados_data: list) -> Dict[str, Any]:
             GER-y: N reprovação
             ...
         7. Não improvise dados que não existam. Só use o que foi realmente passado em 'reprovado_entries'.
+        8. Listar os cards que pertencem a cada desenvolvedor.
 
         **Importante**: Faça tudo de forma clara, organizada e curta. Não imprima nada além do que foi solicitado.
 
@@ -54,7 +55,7 @@ def create_rework_agent(reprovados_data: list) -> Dict[str, Any]:
         expected_output="""
         - Tabela ordenada de desenvolvedores e contagem de reprovações
         - Key dos cards com reprovações e quantas reprovações cada um teve.
-        - Lista com quantidade de reprovações de cada card.
+        - Lista de quais cards pertencem a cada desenvolvedor.
         """,
         agent=rework_agent,
         inputs={'reprovado_entries': reprovados_data}  # ← Dados passados corretamente
