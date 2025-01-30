@@ -48,29 +48,29 @@ def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
         
         for issue in issues:
             issue_key = issue.get("key")
-            dev = issue.get('fields', {}).get('customfield_10172', 'Não definido')
+            fields = issue.get('fields', {})
             
-            if not issue_key:
-                continue
-                
-            try:
-                changelog_response = jira_client.get_issue_changelog(issue_key)
-                filtered = filter_reprovado_entries(
-                    issue_key=issue_key,
-                    dev=dev,
-                    changelog_data=changelog_response
-                )
-                
-                # Popula AMBAS as listas
-                issues_with_changelogs.append({
-                    "issue": issue,
-                    "reprovado_entries": filtered
-                })
-                all_reprovados.extend(filtered)
-                
-            except Exception as ex:
-                logger.error(f"Falha ao buscar changelog: {ex}", exc_info=True)
-                continue
+            # Extrai dados do assignee corretamente
+            assignee = fields.get('assignee', {})  # Pega o objeto completo do assignee
+            dev = fields.get('customfield_10172', 'Não definido')
+            
+            if issue_key:
+                try:
+                    changelog_response = jira_client.get_issue_changelog(issue_key)
+                    filtered = filter_reprovado_entries(
+                        issue_key=issue_key,
+                        dev=dev,
+                        changelog_data=changelog_response,
+                        assignee=assignee  # Passa o objeto completo
+                    )
+                    issues_with_changelogs.append({
+                        "issue": issue,
+                        "reprovado_entries": filtered
+                    })
+                    all_reprovados.extend(filtered)
+                except Exception as ex:
+                    logger.error(f"Falha ao buscar changelog: {ex}", exc_info=True)
+                    continue
 
         from src.agents.rework_agent import create_rework_agent
         rework_analysis = create_rework_agent(all_reprovados)
@@ -78,10 +78,10 @@ def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
         return {
             "board_id": board_id,
             "sprint_id": sprint_id,
-            "raw_data": issues_with_changelogs,  # Dados brutos completos
-            "analysis": rework_analysis  # Resultado processado
+            "data": issues_with_changelogs,
+            "analysis": rework_analysis
         }
-
+        
     except Exception as e:
         logger.error(f"Erro: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
