@@ -31,7 +31,11 @@ def create_story_agent(story_data):
         
         """,
         expected_output="""
-            Como resultado final, deve ser separada a soma de story points de cada desenvolvedor.
+        - Tabela ordenada de desenvolvedores e contagem de story points.
+        - Key dos cards com story points
+        - Lista de quais cards pertencem a cada desenvolvedor.
+        - Contagem total de cards encontrados na análise.
+        - Contagem total de cards com story points.
         """,
         agent=story_agent
     )

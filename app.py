@@ -31,7 +31,9 @@ def get_analitycs(board_id: str, sprint_id: str) -> dict:
         board_data = jira_client.get_single_board(board_id, sprint_id)
         response = main(board_data)
         final_content = {'data': [response]}
-        return final_content
+
+        return  final_content
+    
     except Exception as e:
         logger.error(f"Erro ao buscar o quadro: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
@@ -50,27 +52,31 @@ def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
             issue_key = issue.get("key")
             fields = issue.get('fields', {})
             
-            # Extrai dados do assignee corretamente
-            assignee = fields.get('assignee', {})  # Pega o objeto completo do assignee
+            # Extrai dados do assignee e dev
+            assignee = fields.get('assignee', {})  # ✅ Extração correta
             dev = fields.get('customfield_10172', 'Não definido')
             
-            if issue_key:
-                try:
-                    changelog_response = jira_client.get_issue_changelog(issue_key)
-                    filtered = filter_reprovado_entries(
-                        issue_key=issue_key,
-                        dev=dev,
-                        changelog_data=changelog_response,
-                        assignee=assignee  # Passa o objeto completo
-                    )
-                    issues_with_changelogs.append({
-                        "issue": issue,
-                        "reprovado_entries": filtered
-                    })
-                    all_reprovados.extend(filtered)
-                except Exception as ex:
-                    logger.error(f"Falha ao buscar changelog: {ex}", exc_info=True)
-                    continue
+            if not issue_key:
+                continue
+                
+            try:
+                changelog_response = jira_client.get_issue_changelog(issue_key)
+                filtered = filter_reprovado_entries(
+                    issue_key=issue_key,
+                    dev=dev,
+                    changelog_data=changelog_response,
+                    assignee=assignee  # ✅ Parâmetro adicionado
+                )
+                
+                issues_with_changelogs.append({
+                    "issue": issue,
+                    "reprovado_entries": filtered
+                })
+                all_reprovados.extend(filtered)
+                
+            except Exception as ex:
+                logger.error(f"Falha ao buscar changelog: {ex}", exc_info=True)
+                continue
 
         from src.agents.rework_agent import create_rework_agent
         rework_analysis = create_rework_agent(all_reprovados)
@@ -78,10 +84,12 @@ def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
         return {
             "board_id": board_id,
             "sprint_id": sprint_id,
-            "data": issues_with_changelogs,
-            "analysis": rework_analysis
+            "raw_data": issues_with_changelogs,  # Dados brutos completos
+            "analysis": rework_analysis  # Resultado processado
         }
-        
+
     except Exception as e:
         logger.error(f"Erro: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
+    
+    
