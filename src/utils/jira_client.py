@@ -10,7 +10,7 @@ class JiraClient:
 
         params = {
         "jql": "status NOT IN (CANCELADO)",
-        "fields": "customfield_10106,customfield_10172,assignee,status"  # Campos adicionados
+        "fields": "customfield_10106,customfield_10172,assignee,status,created"  # Campos adicionados
     }
 
         headers = {"Accept": "application/json"}

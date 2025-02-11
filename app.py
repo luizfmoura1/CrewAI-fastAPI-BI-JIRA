@@ -30,13 +30,24 @@ def get_analitycs(board_id: str, sprint_id: str) -> dict:
     try:
         board_data = jira_client.get_single_board(board_id, sprint_id)
         response = main(board_data)
-        final_content = {'data': [response]}
+        
+        from src.agents.sp_agent import create_story_agent
+        sp_analysis = create_story_agent(board_data)
 
-        return  final_content
+        return {
+            "board_id": board_id,
+            "sprint_id": sprint_id,
+            "raw_data": board_data,  # Inclui os dados brutos extraídos do Jira
+            "analysis": {
+                "processed_data": [response],  # Dados processados pelo `main()`
+                "sp_analysis": sp_analysis  # Resultado da análise do agente
+            }
+        }
     
     except Exception as e:
         logger.error(f"Erro ao buscar o quadro: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
+
 
 
 @app.get("/JIRA_analitycs_with_changelogs")
