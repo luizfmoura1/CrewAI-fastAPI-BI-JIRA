@@ -16,6 +16,7 @@ def filter_reprovado_entries(
                     'responsavel': assignee_name,
                     'desenvolvedor': dev,
                     'status_novo': item.get('toString'),
+                    'data_mudanca': history.get('created'),
                 }
                 reprovado_entries.append(entry)
     
