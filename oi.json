@@ -1,0 +1,2040 @@
+{
+    "board_id": "20",
+    "sprint_id": "123",
+    "raw_data": [
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14773",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14773",
+          "key": "GER-1466",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=6328a184f568615bdc7a90df",
+              "accountId": "6328a184f568615bdc7a90df",
+              "avatarUrls": {
+                "48x48": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/48",
+                "24x24": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/24",
+                "16x16": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/16",
+                "32x32": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/32"
+              },
+              "displayName": "Samuel de Alencar Rocha Lizardo",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": [
+          {
+            "card_key": "GER-1466",
+            "responsavel": "Samuel de Alencar Rocha Lizardo",
+            "desenvolvedor": null,
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-1466",
+            "responsavel": "Samuel de Alencar Rocha Lizardo",
+            "desenvolvedor": null,
+            "status_novo": "Reprovado"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "13299",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/13299",
+          "key": "GER-877",
+          "fields": {
+            "customfield_10106": 1,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215",
+              "value": "João Carlos",
+              "id": "10215"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": [
+          {
+            "card_key": "GER-877",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215",
+              "value": "João Carlos",
+              "id": "10215"
+            },
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-877",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215",
+              "value": "João Carlos",
+              "id": "10215"
+            },
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-877",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215",
+              "value": "João Carlos",
+              "id": "10215"
+            },
+            "status_novo": "Reprovado"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14771",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14771",
+          "key": "GER-1464",
+          "fields": {
+            "customfield_10106": 2,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216",
+              "value": "Bianca",
+              "id": "10216"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": [
+          {
+            "card_key": "GER-1464",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216",
+              "value": "Bianca",
+              "id": "10216"
+            },
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-1464",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216",
+              "value": "Bianca",
+              "id": "10216"
+            },
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-1464",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216",
+              "value": "Bianca",
+              "id": "10216"
+            },
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-1464",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216",
+              "value": "Bianca",
+              "id": "10216"
+            },
+            "status_novo": "Reprovado"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14772",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14772",
+          "key": "GER-1465",
+          "fields": {
+            "customfield_10106": 5,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215",
+              "value": "João Carlos",
+              "id": "10215"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14720",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14720",
+          "key": "GER-1433",
+          "fields": {
+            "customfield_10106": 5,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10212",
+              "value": "Romero",
+              "id": "10212"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": [
+          {
+            "card_key": "GER-1433",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10212",
+              "value": "Romero",
+              "id": "10212"
+            },
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-1433",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10212",
+              "value": "Romero",
+              "id": "10212"
+            },
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-1433",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10212",
+              "value": "Romero",
+              "id": "10212"
+            },
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-1433",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10212",
+              "value": "Romero",
+              "id": "10212"
+            },
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-1433",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10212",
+              "value": "Romero",
+              "id": "10212"
+            },
+            "status_novo": "Reprovado"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14814",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14814",
+          "key": "GER-1488",
+          "fields": {
+            "customfield_10106": 3,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216",
+              "value": "Bianca",
+              "id": "10216"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": [
+          {
+            "card_key": "GER-1488",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216",
+              "value": "Bianca",
+              "id": "10216"
+            },
+            "status_novo": "Reprovado"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14830",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14830",
+          "key": "GER-1494",
+          "fields": {
+            "customfield_10106": 3,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215",
+              "value": "João Carlos",
+              "id": "10215"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": [
+          {
+            "card_key": "GER-1494",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215",
+              "value": "João Carlos",
+              "id": "10215"
+            },
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-1494",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215",
+              "value": "João Carlos",
+              "id": "10215"
+            },
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-1494",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215",
+              "value": "João Carlos",
+              "id": "10215"
+            },
+            "status_novo": "Reprovado"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14774",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14774",
+          "key": "GER-1467",
+          "fields": {
+            "customfield_10106": 13,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3Ad2a7ab73-4139-4426-8119-df962d66e8b6",
+              "accountId": "712020:d2a7ab73-4139-4426-8119-df962d66e8b6",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/9e53019029dfded45c6688f017eaf5c0?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FBR-2.png",
+                "24x24": "https://secure.gravatar.com/avatar/9e53019029dfded45c6688f017eaf5c0?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FBR-2.png",
+                "16x16": "https://secure.gravatar.com/avatar/9e53019029dfded45c6688f017eaf5c0?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FBR-2.png",
+                "32x32": "https://secure.gravatar.com/avatar/9e53019029dfded45c6688f017eaf5c0?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FBR-2.png"
+              },
+              "displayName": "Bruno Souza Ramos",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "13717",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/13717",
+          "key": "GER-1049",
+          "fields": {
+            "customfield_10106": 13,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216",
+              "value": "Bianca",
+              "id": "10216"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "13721",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/13721",
+          "key": "GER-1053",
+          "fields": {
+            "customfield_10106": 3,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10211",
+              "value": "Eduarda",
+              "id": "10211"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": [
+          {
+            "card_key": "GER-1053",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10211",
+              "value": "Eduarda",
+              "id": "10211"
+            },
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-1053",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10211",
+              "value": "Eduarda",
+              "id": "10211"
+            },
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-1053",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10211",
+              "value": "Eduarda",
+              "id": "10211"
+            },
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-1053",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10211",
+              "value": "Eduarda",
+              "id": "10211"
+            },
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-1053",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10211",
+              "value": "Eduarda",
+              "id": "10211"
+            },
+            "status_novo": "Reprovado"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14883",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14883",
+          "key": "GER-1506",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "accountId": "712020:692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "24x24": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "16x16": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "32x32": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png"
+              },
+              "displayName": "Leandro Santiago Gomes",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14987",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14987",
+          "key": "GER-1526",
+          "fields": {
+            "customfield_10106": 3,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216",
+              "value": "Bianca",
+              "id": "10216"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14537",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14537",
+          "key": "GER-1351",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "accountId": "712020:692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "24x24": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "16x16": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "32x32": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png"
+              },
+              "displayName": "Leandro Santiago Gomes",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14567",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14567",
+          "key": "GER-1381",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215",
+              "value": "João Carlos",
+              "id": "10215"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14539",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14539",
+          "key": "GER-1353",
+          "fields": {
+            "customfield_10106": 3,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A03e7e277-d098-474e-8a15-c8d15247a591",
+              "accountId": "712020:03e7e277-d098-474e-8a15-c8d15247a591",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/f16b426931bac0bfeb3bc789611fad01?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FWS-2.png",
+                "24x24": "https://secure.gravatar.com/avatar/f16b426931bac0bfeb3bc789611fad01?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FWS-2.png",
+                "16x16": "https://secure.gravatar.com/avatar/f16b426931bac0bfeb3bc789611fad01?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FWS-2.png",
+                "32x32": "https://secure.gravatar.com/avatar/f16b426931bac0bfeb3bc789611fad01?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FWS-2.png"
+              },
+              "displayName": "Wellington Souza",
+              "active": false,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14540",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14540",
+          "key": "GER-1354",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "accountId": "712020:692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "24x24": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "16x16": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "32x32": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png"
+              },
+              "displayName": "Leandro Santiago Gomes",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": [
+          {
+            "card_key": "GER-1354",
+            "responsavel": "Leandro Santiago Gomes",
+            "desenvolvedor": null,
+            "status_novo": "Reprovado"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14542",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14542",
+          "key": "GER-1356",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=6328a184f568615bdc7a90df",
+              "accountId": "6328a184f568615bdc7a90df",
+              "avatarUrls": {
+                "48x48": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/48",
+                "24x24": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/24",
+                "16x16": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/16",
+                "32x32": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/32"
+              },
+              "displayName": "Samuel de Alencar Rocha Lizardo",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": [
+          {
+            "card_key": "GER-1356",
+            "responsavel": "Samuel de Alencar Rocha Lizardo",
+            "desenvolvedor": null,
+            "status_novo": "Reprovado"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14546",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14546",
+          "key": "GER-1360",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "accountId": "712020:692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "24x24": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "16x16": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "32x32": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png"
+              },
+              "displayName": "Leandro Santiago Gomes",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14547",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14547",
+          "key": "GER-1361",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=6328a184f568615bdc7a90df",
+              "accountId": "6328a184f568615bdc7a90df",
+              "avatarUrls": {
+                "48x48": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/48",
+                "24x24": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/24",
+                "16x16": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/16",
+                "32x32": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/32"
+              },
+              "displayName": "Samuel de Alencar Rocha Lizardo",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": [
+          {
+            "card_key": "GER-1361",
+            "responsavel": "Samuel de Alencar Rocha Lizardo",
+            "desenvolvedor": null,
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-1361",
+            "responsavel": "Samuel de Alencar Rocha Lizardo",
+            "desenvolvedor": null,
+            "status_novo": "Reprovado"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14550",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14550",
+          "key": "GER-1364",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "accountId": "712020:692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "24x24": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "16x16": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "32x32": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png"
+              },
+              "displayName": "Leandro Santiago Gomes",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14551",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14551",
+          "key": "GER-1365",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "accountId": "712020:692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "24x24": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "16x16": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "32x32": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png"
+              },
+              "displayName": "Leandro Santiago Gomes",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14552",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14552",
+          "key": "GER-1366",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=6328a184f568615bdc7a90df",
+              "accountId": "6328a184f568615bdc7a90df",
+              "avatarUrls": {
+                "48x48": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/48",
+                "24x24": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/24",
+                "16x16": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/16",
+                "32x32": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/32"
+              },
+              "displayName": "Samuel de Alencar Rocha Lizardo",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": [
+          {
+            "card_key": "GER-1366",
+            "responsavel": "Samuel de Alencar Rocha Lizardo",
+            "desenvolvedor": null,
+            "status_novo": "Reprovado"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14553",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14553",
+          "key": "GER-1367",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "accountId": "712020:692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "24x24": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "16x16": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "32x32": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png"
+              },
+              "displayName": "Leandro Santiago Gomes",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14555",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14555",
+          "key": "GER-1369",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "accountId": "712020:692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "24x24": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "16x16": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "32x32": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png"
+              },
+              "displayName": "Leandro Santiago Gomes",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14558",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14558",
+          "key": "GER-1372",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=6328a184f568615bdc7a90df",
+              "accountId": "6328a184f568615bdc7a90df",
+              "avatarUrls": {
+                "48x48": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/48",
+                "24x24": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/24",
+                "16x16": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/16",
+                "32x32": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/32"
+              },
+              "displayName": "Samuel de Alencar Rocha Lizardo",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": [
+          {
+            "card_key": "GER-1372",
+            "responsavel": "Samuel de Alencar Rocha Lizardo",
+            "desenvolvedor": null,
+            "status_novo": "Reprovado"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14559",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14559",
+          "key": "GER-1373",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "accountId": "712020:692dba79-e6ac-4db3-8efa-16fad0fb417c",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "24x24": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "16x16": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png",
+                "32x32": "https://secure.gravatar.com/avatar/01949185a73a6ebc2bbde5bc7008b52d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FLG-3.png"
+              },
+              "displayName": "Leandro Santiago Gomes",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14560",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14560",
+          "key": "GER-1374",
+          "fields": {
+            "customfield_10106": 3,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215",
+              "value": "João Carlos",
+              "id": "10215"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": [
+          {
+            "card_key": "GER-1374",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215",
+              "value": "João Carlos",
+              "id": "10215"
+            },
+            "status_novo": "Reprovado"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14561",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14561",
+          "key": "GER-1375",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=6328a184f568615bdc7a90df",
+              "accountId": "6328a184f568615bdc7a90df",
+              "avatarUrls": {
+                "48x48": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/48",
+                "24x24": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/24",
+                "16x16": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/16",
+                "32x32": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/32"
+              },
+              "displayName": "Samuel de Alencar Rocha Lizardo",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": [
+          {
+            "card_key": "GER-1375",
+            "responsavel": "Samuel de Alencar Rocha Lizardo",
+            "desenvolvedor": null,
+            "status_novo": "Reprovado"
+          },
+          {
+            "card_key": "GER-1375",
+            "responsavel": "Samuel de Alencar Rocha Lizardo",
+            "desenvolvedor": null,
+            "status_novo": "Reprovado"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14562",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14562",
+          "key": "GER-1376",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215",
+              "value": "João Carlos",
+              "id": "10215"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14563",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14563",
+          "key": "GER-1377",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=6328a184f568615bdc7a90df",
+              "accountId": "6328a184f568615bdc7a90df",
+              "avatarUrls": {
+                "48x48": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/48",
+                "24x24": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/24",
+                "16x16": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/16",
+                "32x32": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/6328a184f568615bdc7a90df/c07ce43a-6ffe-4926-a104-bc7ce3d60a10/32"
+              },
+              "displayName": "Samuel de Alencar Rocha Lizardo",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": [
+          {
+            "card_key": "GER-1377",
+            "responsavel": "Samuel de Alencar Rocha Lizardo",
+            "desenvolvedor": null,
+            "status_novo": "Reprovado"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14566",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14566",
+          "key": "GER-1380",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215",
+              "value": "João Carlos",
+              "id": "10215"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14568",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14568",
+          "key": "GER-1382",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215",
+              "value": "João Carlos",
+              "id": "10215"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14571",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14571",
+          "key": "GER-1385",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10211",
+              "value": "Eduarda",
+              "id": "10211"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14572",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14572",
+          "key": "GER-1386",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215",
+              "value": "João Carlos",
+              "id": "10215"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "14574",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/14574",
+          "key": "GER-1388",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=712020%3A1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "accountId": "712020:1fde78fb-116f-46ec-854b-b18d8b0e2248",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "24x24": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "16x16": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png",
+                "32x32": "https://secure.gravatar.com/avatar/3b3baa2206cc76bc859b14ce45b2404b?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-1.png"
+              },
+              "displayName": "Estagiarios",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216",
+              "value": "Bianca",
+              "id": "10216"
+            },
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": [
+          {
+            "card_key": "GER-1388",
+            "responsavel": "Estagiarios",
+            "desenvolvedor": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216",
+              "value": "Bianca",
+              "id": "10216"
+            },
+            "status_novo": "Reprovado"
+          }
+        ]
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "15075",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/15075",
+          "key": "GER-1531",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=5dca99f3a4a2d70dbffee11b",
+              "accountId": "5dca99f3a4a2d70dbffee11b",
+              "avatarUrls": {
+                "48x48": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/5dca99f3a4a2d70dbffee11b/dfa2a464-e65e-4d9c-879f-3d45eaffd340/48",
+                "24x24": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/5dca99f3a4a2d70dbffee11b/dfa2a464-e65e-4d9c-879f-3d45eaffd340/24",
+                "16x16": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/5dca99f3a4a2d70dbffee11b/dfa2a464-e65e-4d9c-879f-3d45eaffd340/16",
+                "32x32": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/5dca99f3a4a2d70dbffee11b/dfa2a464-e65e-4d9c-879f-3d45eaffd340/32"
+              },
+              "displayName": "Eugenio Cunha",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "15131",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/15131",
+          "key": "GER-1536",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=5d4385db4125b20c3159cf75",
+              "accountId": "5d4385db4125b20c3159cf75",
+              "emailAddress": "master@oppem.com.br",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/ec5d07a84b8705a1eb66ba8992cd93a4?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FMG-3.png",
+                "24x24": "https://secure.gravatar.com/avatar/ec5d07a84b8705a1eb66ba8992cd93a4?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FMG-3.png",
+                "16x16": "https://secure.gravatar.com/avatar/ec5d07a84b8705a1eb66ba8992cd93a4?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FMG-3.png",
+                "32x32": "https://secure.gravatar.com/avatar/ec5d07a84b8705a1eb66ba8992cd93a4?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FMG-3.png"
+              },
+              "displayName": "Mateus Gontijo",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "15192",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/15192",
+          "key": "GER-1537",
+          "fields": {
+            "customfield_10106": 1,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=60ed7a0ccc1f700071016201",
+              "accountId": "60ed7a0ccc1f700071016201",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/9c4b4ef13298e9773cc24effe204f6c1?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FH-5.png",
+                "24x24": "https://secure.gravatar.com/avatar/9c4b4ef13298e9773cc24effe204f6c1?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FH-5.png",
+                "16x16": "https://secure.gravatar.com/avatar/9c4b4ef13298e9773cc24effe204f6c1?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FH-5.png",
+                "32x32": "https://secure.gravatar.com/avatar/9c4b4ef13298e9773cc24effe204f6c1?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FH-5.png"
+              },
+              "displayName": "Henrique",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "15197",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/15197",
+          "key": "GER-1539",
+          "fields": {
+            "customfield_10106": null,
+            "assignee": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/user?accountId=5d4385db4125b20c3159cf75",
+              "accountId": "5d4385db4125b20c3159cf75",
+              "emailAddress": "master@oppem.com.br",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/ec5d07a84b8705a1eb66ba8992cd93a4?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FMG-3.png",
+                "24x24": "https://secure.gravatar.com/avatar/ec5d07a84b8705a1eb66ba8992cd93a4?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FMG-3.png",
+                "16x16": "https://secure.gravatar.com/avatar/ec5d07a84b8705a1eb66ba8992cd93a4?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FMG-3.png",
+                "32x32": "https://secure.gravatar.com/avatar/ec5d07a84b8705a1eb66ba8992cd93a4?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FMG-3.png"
+              },
+              "displayName": "Mateus Gontijo",
+              "active": true,
+              "timeZone": "America/Sao_Paulo",
+              "accountType": "atlassian"
+            },
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      },
+      {
+        "issue": {
+          "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+          "id": "15234",
+          "self": "https://ngosolucoes.atlassian.net/rest/agile/1.0/issue/15234",
+          "key": "GER-1540",
+          "fields": {
+            "customfield_10106": 19,
+            "assignee": null,
+            "customfield_10172": null,
+            "status": {
+              "self": "https://ngosolucoes.atlassian.net/rest/api/2/status/10027",
+              "description": "Ticket finalizado.",
+              "iconUrl": "https://ngosolucoes.atlassian.net/",
+              "name": "Em produção",
+              "id": "10027",
+              "statusCategory": {
+                "self": "https://ngosolucoes.atlassian.net/rest/api/2/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Itens concluídos"
+              }
+            }
+          }
+        },
+        "reprovado_entries": []
+      }
+    ],
+    "analysis": {
+      "raw": "**Resultado Consolidado:**\n\n### Desenvolvedores (ordem decrescente)\n| Desenvolvedor                     | Reprovações | Cards Associados                   |\n|-----------------------------------|-------------|------------------------------------|\n| Samuel de Alencar Rocha Lizardo   | 9           | GER-1466, GER-1356, GER-1361, GER-1366, GER-1372, GER-1375, GER-1377, GER-1361 (dobrado) |\n| João Carlos                       | 8           | GER-877, GER-1494, GER-1374        |\n| Eduarda                           | 5           | GER-1053                           |\n| Romero                            | 5           | GER-1433                           |\n| Bianca                            | 5           | GER-1464, GER-1488, GER-1388       |\n| Leandro Santiago Gomes            | 1           | GER-1354                           |\n\n**Total de Cards Analisados:** 31\n**Total de cards com no mínimo 1 reprovação:** 12",
+      "pydantic": null,
+      "json_dict": null,
+      "tasks_output": [
+        {
+          "description": "\n        ## Análise de Cards Reprovados\n        \n        **Objetivo:**  \n        Processar dados de reprovação para calcular métricas de retrabalho por desenvolvedor\n        \n        **Processamento:**  \n        1. Para cada entrada em 'reprovado_entries':\n           - Identificar desenvolvedor responsável:\n             - Usar campo 'desenvolvedor' se 'responsavel' for 'Estagiarios'\n             - Manter nome original do 'responsavel' nos demais casos\n           - Coletar chave do card (card_key)\n        \n        2. Agregar dados:\n           - Contar ocorrências por desenvolvedor\n           - Contar reprovações por card\n           - Listar cards associados a cada desenvolvedor\n        \n        **Regras:**\n        - Manter nomes originais sem normalização\n        - Cards sem informação clara devem ser registrados separadamente\n        - Priorizar dados explícitos do campo 'desenvolvedor'\n        \n        **Dados de Entrada:**\n        [{'card_key': 'GER-1466', 'responsavel': 'Samuel de Alencar Rocha Lizardo', 'desenvolvedor': None, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1466', 'responsavel': 'Samuel de Alencar Rocha Lizardo', 'desenvolvedor': None, 'status_novo': 'Reprovado'}, {'card_key': 'GER-877', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215', 'value': 'João Carlos', 'id': '10215'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-877', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215', 'value': 'João Carlos', 'id': '10215'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-877', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215', 'value': 'João Carlos', 'id': '10215'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1464', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216', 'value': 'Bianca', 'id': '10216'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1464', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216', 'value': 'Bianca', 'id': '10216'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1464', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216', 'value': 'Bianca', 'id': '10216'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1464', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216', 'value': 'Bianca', 'id': '10216'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1433', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10212', 'value': 'Romero', 'id': '10212'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1433', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10212', 'value': 'Romero', 'id': '10212'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1433', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10212', 'value': 'Romero', 'id': '10212'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1433', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10212', 'value': 'Romero', 'id': '10212'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1433', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10212', 'value': 'Romero', 'id': '10212'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1488', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216', 'value': 'Bianca', 'id': '10216'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1494', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215', 'value': 'João Carlos', 'id': '10215'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1494', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215', 'value': 'João Carlos', 'id': '10215'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1494', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215', 'value': 'João Carlos', 'id': '10215'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1053', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10211', 'value': 'Eduarda', 'id': '10211'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1053', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10211', 'value': 'Eduarda', 'id': '10211'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1053', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10211', 'value': 'Eduarda', 'id': '10211'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1053', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10211', 'value': 'Eduarda', 'id': '10211'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1053', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10211', 'value': 'Eduarda', 'id': '10211'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1354', 'responsavel': 'Leandro Santiago Gomes', 'desenvolvedor': None, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1356', 'responsavel': 'Samuel de Alencar Rocha Lizardo', 'desenvolvedor': None, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1361', 'responsavel': 'Samuel de Alencar Rocha Lizardo', 'desenvolvedor': None, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1361', 'responsavel': 'Samuel de Alencar Rocha Lizardo', 'desenvolvedor': None, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1366', 'responsavel': 'Samuel de Alencar Rocha Lizardo', 'desenvolvedor': None, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1372', 'responsavel': 'Samuel de Alencar Rocha Lizardo', 'desenvolvedor': None, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1374', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10215', 'value': 'João Carlos', 'id': '10215'}, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1375', 'responsavel': 'Samuel de Alencar Rocha Lizardo', 'desenvolvedor': None, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1375', 'responsavel': 'Samuel de Alencar Rocha Lizardo', 'desenvolvedor': None, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1377', 'responsavel': 'Samuel de Alencar Rocha Lizardo', 'desenvolvedor': None, 'status_novo': 'Reprovado'}, {'card_key': 'GER-1388', 'responsavel': 'Estagiarios', 'desenvolvedor': {'self': 'https://ngosolucoes.atlassian.net/rest/api/2/customFieldOption/10216', 'value': 'Bianca', 'id': '10216'}, 'status_novo': 'Reprovado'}]\n        ",
+          "name": null,
+          "expected_output": "\n        **Resultado Consolidado:**\n        \n        ### Desenvolvedores (ordem decrescente)\n        | Desenvolvedor    | Reprovações | Cards Associados          |\n        |------------------|-------------|---------------------------|\n        | [Nome]           | [N]         | [GER-123, GER-456]        |\n        \n\n        \n        **Total de Cards Analisados:** [X]\n        **Total de cards com no mínimo 1 reprovação:** [Y]\n        ",
+          "summary": "\n        ## Análise...",
+          "raw": "**Resultado Consolidado:**\n\n### Desenvolvedores (ordem decrescente)\n| Desenvolvedor                     | Reprovações | Cards Associados                   |\n|-----------------------------------|-------------|------------------------------------|\n| Samuel de Alencar Rocha Lizardo   | 9           | GER-1466, GER-1356, GER-1361, GER-1366, GER-1372, GER-1375, GER-1377, GER-1361 (dobrado) |\n| João Carlos                       | 8           | GER-877, GER-1494, GER-1374        |\n| Eduarda                           | 5           | GER-1053                           |\n| Romero                            | 5           | GER-1433                           |\n| Bianca                            | 5           | GER-1464, GER-1488, GER-1388       |\n| Leandro Santiago Gomes            | 1           | GER-1354                           |\n\n**Total de Cards Analisados:** 31\n**Total de cards com no mínimo 1 reprovação:** 12",
+          "pydantic": null,
+          "json_dict": null,
+          "agent": "Analista de Retrabalho",
+          "output_format": "raw"
+        }
+      ],
+      "token_usage": {
+        "total_tokens": 2896,
+        "prompt_tokens": 2630,
+        "cached_prompt_tokens": 0,
+        "completion_tokens": 266,
+        "successful_requests": 1
+      }
+    }
+  }

@@ -19,5 +19,6 @@ def sp_search(data: dict) -> list:
             'created': created
         }
         cards.append(card_info)
+        print(cards)
     
     return cards

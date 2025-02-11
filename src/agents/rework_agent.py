@@ -1,12 +1,19 @@
-from crewai import Agent, Task, Crew
-from typing import Dict, Any
+from crewai import Agent, Task, Crew, LLM
+from typing import Dict, Any, List
 
-def create_rework_agent(reprovados_data: list) -> Dict[str, Any]:
+def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]:
+    llm = LLM(
+        model="gpt-4o",
+        temperature=0.7,
+        seed=0
+    )
+    
     rework_agent = Agent(
         role="Analista de Retrabalho",
         goal="Calcular o índice de retrabalho por desenvolvedor",
         backstory="""Especialista em análise de qualidade de código com experiência em métricas ágeis.
         Responsável por identificar padrões de retrabalho em cards do JIRA e propor melhorias no processo de desenvolvimento.""",
+        llm=llm,
         verbose=True
     )
 
@@ -15,24 +22,24 @@ def create_rework_agent(reprovados_data: list) -> Dict[str, Any]:
         ## Análise de Cards Reprovados
         
         **Objetivo:**  
-        Processar dados de reprovação para calcular métricas de retrabalho por desenvolvedor
+        Processar dados de reprovação para calcular métricas de retrabalho por desenvolvedor.
         
         **Processamento:**  
         1. Para cada entrada em 'reprovado_entries':
            - Identificar desenvolvedor responsável:
-             - Usar campo 'desenvolvedor' se 'responsavel' for 'Estagiarios'
-             - Manter nome original do 'responsavel' nos demais casos
-           - Coletar chave do card (card_key)
+             - Se 'responsavel' for 'Estagiarios', usar o campo 'desenvolvedor' para identificar o desenvolvedor.
+             - Caso contrário, usar o nome do 'responsavel'.
+           - Coletar chave do card (card_key).
+           - Para saber quantos cards foram encontrados, deve se contar quantos valores de car_key existem.
         
         2. Agregar dados:
-           - Contar ocorrências por desenvolvedor
-           - Contar reprovações por card
-           - Listar cards associados a cada desenvolvedor
+           - Contar ocorrências de reprovações por desenvolvedor.
+           - Contar quantos cards únicos foram reprovados por desenvolvedor.
+           - Listar os cards associados a cada desenvolvedor.
         
         **Regras:**
-        - Manter nomes originais sem normalização
-        - Cards sem informação clara devem ser registrados separadamente
-        - Priorizar dados explícitos do campo 'desenvolvedor'
+        - Manter nomes originais sem normalização.
+        - Todos os cards devem ser considerados, mesmo que não tenham reprovações.
         
         **Dados de Entrada:**
         {reprovado_entries}
@@ -41,14 +48,19 @@ def create_rework_agent(reprovados_data: list) -> Dict[str, Any]:
         **Resultado Consolidado:**
         
         ### Desenvolvedores (ordem decrescente)
-        | Desenvolvedor    | Reprovações | Cards Associados          |
-        |------------------|-------------|---------------------------|
-        | [Nome]           | [N]         | [GER-123, GER-456]        |
-        
-
+        | Desenvolvedor                     | Reprovações | Cards Associados                   |
+        |-----------------------------------|-------------|------------------------------------|
+        | [Nome do Desenvolvedor]           | [Número de Reprovações] | [Card(s) Associado(s)] |
         
         **Total de Cards Analisados:** [X]
-        **Total de cards com no mínimo 1 reprovação:** [Y]
+        **Total de cards quem contém reprovações** [Y]
+        
+
+        ### Cards e quantidade de reprovações (ordem decrescente)
+        | Key do card                    | Reprovações |
+        |--------------------------------|-------------|
+        | [Nome do Desenvolvedor]        | [Número de Reprovações]|
+
         """,
         agent=rework_agent,
         inputs={'reprovado_entries': reprovados_data}

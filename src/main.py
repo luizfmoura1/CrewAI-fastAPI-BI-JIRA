@@ -1,6 +1,6 @@
 from src.agents.sp_agent import create_story_agent
 from src.utils.sp_search import sp_search
-from src.utils.rework_search import filter_reprovado_entries  # Novo
+from src.utils.rework_search import filter_reprovado_entries
 
 def main(data: dict) -> list:
     

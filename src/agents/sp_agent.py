@@ -1,6 +1,12 @@
-from crewai import Agent, Task, Crew
+from crewai import Agent, Task, Crew, LLM
 
 def create_story_agent(story_data):
+    llm = LLM(
+            model="gpt-4o",
+            temperature=0.7,
+            seed=0
+        )
+
     story_agent = Agent(
         role="Analista de Story Points",
         goal="Para cada desenvolvedor, somar os story points.",
@@ -8,6 +14,7 @@ def create_story_agent(story_data):
         a entenderem sua capacidade por sprint. Domina técnicas de data wrangling para extrair métricas de estruturas JSON complexas,
         identificando discrepâncias entre responsáveis e executores. Tem um olhar crítico para dados inconsistentes e sempre valida
         a origem das informações antes de calcular as métricas.""",
+        llm=llm,
         verbose=True,
         allow_delegation=False
     )
@@ -22,6 +29,7 @@ def create_story_agent(story_data):
           * Story Points: issues.fields.customfield_10106
           * Responsável: issues.fields.assignee.displayName
           * Desenvolvedor: issues.fields.customfield_10172
+          * Data de criação: issues.fields.created
 
         **Processamento:**
         1. Identificar o desenvolvedor correto:
@@ -34,6 +42,10 @@ def create_story_agent(story_data):
            - Agrupar cards por desenvolvedor
            - Somar pontos por desenvolvedor
            - Contar cards válidos/inválidos
+        4. Identificar data de criação:
+           - Extrair a data de criação do campo issues.fields.created
+           - Validar o formato da data e convertê-la para o formato desejado (dd/mm/yyyy)
+           - Associar a data de criação ao desenvolvedor correspondente
 
         **Input:**
         ```json
@@ -47,14 +59,11 @@ def create_story_agent(story_data):
         - Cards sem story points: [Z]
 
         **Desenvolvedores:**
-        | Nome           | Story Points | Cards Atribuídos |
-        |----------------|--------------|-------------------|
-        | Desenvolvedor A | 13           | PROJ-123, PROJ-456|
-        | Desenvolvedor B | 8            | PROJ-789          |
+        | Nome            | Story Points | Cards Atribuídos  | Data de Criação |
+        |---------------- |--------------|-------------------|-----------------|
+        | Desenvolvedor A |     x        | PROJ-123, PROJ-456|    xx/xx/xxxx   |
+        | Desenvolvedor B |     y        | PROJ-789          |    xx/xx/xxxx   |
 
-        **Listas:**
-        - Cards sem story points: [PROJ-001, PROJ-002]
-        - Cards com responsável inválido: [PROJ-003]
         """,
         agent=story_agent
     )
