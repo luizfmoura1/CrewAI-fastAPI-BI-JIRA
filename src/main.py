@@ -10,6 +10,7 @@ def main(data: dict) -> list:
         card['reprovado_entries'] = filter_reprovado_entries(
             issue_key=card['key'],
             dev=card['dev'],
+            sp=card['sp'],
             changelog_data={'changelog': {'histories': card['changelog']}},
             assignee=card.get('assignee', {})
         )

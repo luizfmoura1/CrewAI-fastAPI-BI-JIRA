@@ -66,6 +66,7 @@ def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
             # Extrai dados do assignee e dev
             assignee = fields.get('assignee', {})  # ✅ Extração correta
             dev = fields.get('customfield_10172', 'Não definido')
+            sp = fields.get('customfield_10106', 0)
             
             if not issue_key:
                 continue
@@ -75,6 +76,7 @@ def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
                 filtered = filter_reprovado_entries(
                     issue_key=issue_key,
                     dev=dev,
+                    sp=sp,
                     changelog_data=changelog_response,
                     assignee=assignee  # ✅ Parâmetro adicionado
                 )

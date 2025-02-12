@@ -1,6 +1,7 @@
 def filter_reprovado_entries(
     issue_key: str,
     dev: str,
+    sp: float,
     changelog_data: dict,
     assignee: dict
 ) -> list:
@@ -17,6 +18,7 @@ def filter_reprovado_entries(
                     'desenvolvedor': dev,
                     'status_novo': item.get('toString'),
                     'data_mudanca': history.get('created'),
+                    'sp':sp,
                 }
                 reprovado_entries.append(entry)
     
