@@ -46,6 +46,12 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         - Considerar apenas a parte da data antes do 'T' (YYYY-MM-DD)
         - Ignorar milissegundos e offset timezone
         - Formato final da hora: HH:mm (ex: 11:54)
+
+        **ATENÇÃO:**
+        Dados a serem analisados a seguir:
+        ---------------------
+        {reprovado_entries}
+        ---------------------
         """,
         expected_output="""
         **Relatório Consolidado - 02/01/2025**
@@ -53,12 +59,11 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         ### Conclusões (Em produção)
         | Card              | Responsável          | Horário        |
         |-------------------|----------------------|----------------|
-        | [Nenhum registro encontrado]          | -     | -          |
-        
+        | -                 | -                    | -              |      
         ### Reprovações
         | Card              | Responsável          | Reprovações | Horários        |
         |-------------------|----------------------|-------------|-----------------|
-        | [Nenhum registro encontrado]        | -     | -           | -    |
+        | -                 | -                    | -           |    -            |
         
         **Métricas Chave:**
         - Total de cards concluídos: 0
