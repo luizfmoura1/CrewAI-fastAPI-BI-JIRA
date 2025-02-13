@@ -11,54 +11,62 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
 
     # Dados dinâmicos formatados
     current_date = datetime.datetime.now().strftime("%d-%m-%Y")
-    total_entries = len(reprovados_data)  # Nova métrica
+    start_date = (datetime.datetime.now() - datetime.timedelta(days=30)).strftime("%d-%m-%Y")
 
     rework_agent = Agent(
         role="Analista de Entrega Técnica",
-        goal="Identificar padrões de conclusão e retrabalho em cards específicos",
-        backstory="""Especialista em métricas de entrega ágil com ampla experiência em análise de sprints.
+        goal="Analisar padrões de conclusão e retrabalho em cards específicos nos últimos 30 dias",
+        backstory=f"""Especialista em métricas de entrega ágil com ampla experiência em análise de sprints.
         Responsável por monitorar tanto as conclusões bem-sucedidas quanto os casos de retrabalho,
-        garantindo a qualidade do processo de desenvolvimento e identificando oportunidades de melhoria.""",
+        garantindo a qualidade do processo de desenvolvimento e identificando oportunidades de melhoria.
+        Com um olhar analítico, você se concentra na detecção de padrões de inconsistência e oportunidades
+        de otimização no fluxo de trabalho, especialmente ao longo de períodos contínuos, como os últimos 30 dias.""",
         llm=llm,
         verbose=True
     )
 
     rework_task = Task(
         description=f"""
-        ## Análise de Status de Cards - {current_date}
+        ## Análise de Status de Cards - Período {start_date} a {current_date}
         
         **Objetivo:**  
-        Analisar {total_entries} registros técnicos para identificar padrões de conclusão e reprovação.
+        Analisar {{reprovado_entries}} identificar padrões de conclusão e reprovação nos últimos 30 dias.
         
         **Processamento:**  
         1. Acessar os dados brutos em 'reprovado_entries'
         2. Converter datas para formato DD-MM-AAAA
-        3. Filtrar registros do dia {current_date}
+        3. Filtrar registros entre {start_date} e {current_date}
         4. Classificar por status:
            - 'Em produção' -> Conclusão válida
            - 'Reprovado' -> Requer retrabalho
-        5. Agregar métricas por desenvolvedor
+        5. Agregar métricas por desenvolvedor e detectar recorrências
         
-        **Fonte de Dados:**
-        - Entrada primária: Lista de dicionários com histórico de cards
+        **ATENÇÃO:**
+        Dados a serem analisados a seguir:
+        ---------------------
+        {{reprovado_entries}}
+        ---------------------
         - Campo chave: 'data_mudanca' (timestamp ISO 8601)
         """,
         expected_output=f"""
-        **Relatório Consolidado - {current_date}**
+        **Relatório Consolidado - Período {start_date} a {current_date}**
         
         ### Dados Analisados
-        - Total de registros: {total_entries}
-        - Período analisado: {current_date}
+        - Período analisado: {start_date} a {current_date}
         
-        ### Métricas Chave
-        | Categoria           | Quantidade |
-        |----------------------|------------|
-        | Conclusões válidas   | 0          |
-        | Reprovações          | 0          |
-        | Cards problemáticos  | 0          |
+        ### Conclusões (Em produção)
+        | Card              | Responsável          | Horário        |
+        |-------------------|----------------------|----------------|
+        | -                 | -                    | -              |      
+        ### Reprovações
+        | Card              | Responsável          | Reprovações | Horários        |
+        |-------------------|----------------------|-------------|-----------------|
+        | -                 | -                    | -           |    -            |
         
-        **Observações:**  
-        Detalhamento por desenvolvedor disponível nos dados brutos.
+        **Métricas Chave:**
+        - Total de cards concluídos: 0
+        - Total de cards com reprovações: 0
+        - Total de reprovações no dia: 0
         """,
         agent=rework_agent,
         inputs={'reprovado_entries': reprovados_data}  # Dados brutos separados
