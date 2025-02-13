@@ -1,5 +1,6 @@
 from crewai import Agent, Task, Crew, LLM
 from typing import Dict, Any, List
+import datetime
 
 def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]:
     llm = LLM(
@@ -7,7 +8,11 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         temperature=0.7,
         seed=0
     )
-    
+
+    # Dados dinâmicos formatados
+    current_date = datetime.datetime.now().strftime("%d-%m-%Y")
+    total_entries = len(reprovados_data)  # Nova métrica
+
     rework_agent = Agent(
         role="Analista de Entrega Técnica",
         goal="Identificar padrões de conclusão e retrabalho em cards específicos",
@@ -19,59 +24,44 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
     )
 
     rework_task = Task(
-        description="""
-        ## Análise de Status de Cards - 02/01/2025
+        description=f"""
+        ## Análise de Status de Cards - {current_date}
         
         **Objetivo:**  
-        Identificar cards concluídos (Em produção) e reprovações ocorridas na data específica.
+        Analisar {total_entries} registros técnicos para identificar padrões de conclusão e reprovação.
         
         **Processamento:**  
-        1. Para cada entrada em 'reprovado_entries':
-           - Extrair a data do campo 'data_mudanca' (parte antes do 'T')
-           - Converter para formato DD-MM-AAAA (ex: 02-01-2025)
-           - Filtrar apenas registros onde a data é 02-01-2025
-           - Classificar por tipo de status:
-             * 'Em produção' -> Conclusão bem-sucedida
-             * 'Reprovado' -> Registrar contagem de reprovações
-           - Identificar responsável:
-             - Usar 'responsavel' se diferente de 'Estagiarios'
-             - Caso contrário, usar 'desenvolvedor'
+        1. Acessar os dados brutos em 'reprovado_entries'
+        2. Converter datas para formato DD-MM-AAAA
+        3. Filtrar registros do dia {current_date}
+        4. Classificar por status:
+           - 'Em produção' -> Conclusão válida
+           - 'Reprovado' -> Requer retrabalho
+        5. Agregar métricas por desenvolvedor
         
-        2. Agregar dados:
-           - Contar ocorrências de cada status por desenvolvedor
-           - Identificar cards únicos com múltiplas reprovações
-           - Listar cards concluídos sem reprovações
-        
-        **Regras:**
-        - Considerar apenas a parte da data antes do 'T' (YYYY-MM-DD)
-        - Ignorar milissegundos e offset timezone
-        - Formato final da hora: HH:mm (ex: 11:54)
-
-        **ATENÇÃO:**
-        Dados a serem analisados a seguir:
-        ---------------------
-        {reprovado_entries}
-        ---------------------
+        **Fonte de Dados:**
+        - Entrada primária: Lista de dicionários com histórico de cards
+        - Campo chave: 'data_mudanca' (timestamp ISO 8601)
         """,
-        expected_output="""
-        **Relatório Consolidado - 02/01/2025**
+        expected_output=f"""
+        **Relatório Consolidado - {current_date}**
         
-        ### Conclusões (Em produção)
-        | Card              | Responsável          | Horário        |
-        |-------------------|----------------------|----------------|
-        | -                 | -                    | -              |      
-        ### Reprovações
-        | Card              | Responsável          | Reprovações | Horários        |
-        |-------------------|----------------------|-------------|-----------------|
-        | -                 | -                    | -           |    -            |
+        ### Dados Analisados
+        - Total de registros: {total_entries}
+        - Período analisado: {current_date}
         
-        **Métricas Chave:**
-        - Total de cards concluídos: 0
-        - Total de cards com reprovações: 0
-        - Total de reprovações no dia: 0
+        ### Métricas Chave
+        | Categoria           | Quantidade |
+        |----------------------|------------|
+        | Conclusões válidas   | 0          |
+        | Reprovações          | 0          |
+        | Cards problemáticos  | 0          |
+        
+        **Observações:**  
+        Detalhamento por desenvolvedor disponível nos dados brutos.
         """,
         agent=rework_agent,
-        inputs={'reprovado_entries': reprovados_data}
+        inputs={'reprovado_entries': reprovados_data}  # Dados brutos separados
     )
 
     crew = Crew(
@@ -80,4 +70,4 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         verbose=True
     )
 
-    return crew.kickoff(inputs={'reprovado_entries': reprovados_data})
+    return crew.kickoff()
