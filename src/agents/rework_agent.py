@@ -32,6 +32,7 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         **Objetivo:**  
         - Analisar e identificar padrões de conclusão (Em produção) e reprovação nos últimos 15 dias nos dados fornecidos.
         - Apenas cards entre {start_date} e {current_date} **devem** ser considerados para a análise.
+        - **ATENÇÃO**: Sempre que o responsável for um 'Estágiario', você **deve** utilizar o nome vinculado a 'desenvolvedor' 
  
         **Processamento:**  
         1. Acessar os dados brutos em 'reprovado_entries'
@@ -50,6 +51,8 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         - Campo chave: 'data_mudanca' (timestamp ISO 8601)
         - Campo chave: 'status_novo': 'Em produção' (concluído)
         - Campo chave: 'status_novo': 'Reprovado' (reprovado)
+        - Usar campo 'desenvolvedor' se 'responsavel' for 'Estagiarios'
+
         """,
         expected_output=f"""
         **Relatório Consolidado - Período obrigátorio dos cards: {start_date} a {current_date}**
