@@ -93,23 +93,39 @@ def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
 
         from src.agents.rework_agent import create_rework_agent
         rework_analysis = create_rework_agent(all_reprovados)
-
+        
         return {
             "board_id": board_id,
             "sprint_id": sprint_id,
             "analysis": {
-                "raw_analysis": rework_analysis,
-                "charts_data": {
-                    "conclusoes": rework_analysis['charts_data']['conclusoes'].to_dict(),
-                    "reprovacoes": rework_analysis['charts_data']['reprovacoes'].to_dict(),
-                    "metrics": rework_analysis['charts_data']['metrics']
-                },
-                "llm_analysis": rework_analysis['llm_analysis']
+                "llm_analysis": rework_analysis.get("llm_analysis", "Análise não disponível"),
+                "charts_data": rework_analysis.get("charts_data", {
+                    "conclusoes": [],
+                    "reprovacoes": [],
+                    "metrics": {
+                        "total_concluidos": 0,
+                        "total_reprovados": 0,
+                        "total_reprovas": 0
+                    }
+                })
             }
         }
 
     except Exception as e:
-        logger.error(f"Erro: {str(e)}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
+        return {
+            "error": str(e),
+            "analysis": {
+                "llm_analysis": "Erro na análise",
+                "charts_data": {
+                    "conclusoes": [],
+                    "reprovacoes": [],
+                    "metrics": {
+                        "total_concluidos": 0,
+                        "total_reprovados": 0,
+                        "total_reprovas": 0
+                    }
+                }
+            }
+        }
     
     

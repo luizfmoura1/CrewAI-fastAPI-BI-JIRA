@@ -102,46 +102,51 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         agent=rework_agent,
     )
 
-    df = pd.DataFrame(reprovados_data)
-    
-    # Converter datas e filtrar período
-    df['data_mudanca'] = pd.to_datetime(df['data_mudanca']).dt.strftime('%d-%m-%Y')
-    start_date = (datetime.now() - pd.DateOffset(days=15)).strftime('%d-%m-%Y')
-    current_date = datetime.now().strftime('%d-%m-%Y')
-    mask = (df['data_mudanca'] >= start_date) & (df['data_mudanca'] <= current_date)
-    df = df[mask]
+    try:
+        df = pd.DataFrame(reprovados_data)
+        
+        # Processamento de datas
+        df['data_mudanca'] = pd.to_datetime(df['data_mudanca']).dt.strftime('%d-%m-%Y')
+        start_date = (datetime.now() - timedelta(days=15)).strftime('%d-%m-%Y')
+        current_date = datetime.now().strftime('%d-%m-%Y')
+        df = df[(df['data_mudanca'] >= start_date) & (df['data_mudanca'] <= current_date)]
 
-    # Classificar conclusões e reprovações
-    conclusoes = df[df['status_novo'].isin(['Em produção', 'Em release', 'Em homologação'])]
-    reprovacoes = df[df['status_novo'] == 'Reprovado']
+        # Classificação dos dados
+        conclusoes = df[df['status_novo'].isin(['Em produção', 'Em release', 'Em homologação'])]
+        reprovacoes = df[df['status_novo'] == 'Reprovado']
 
-    # Agregar métricas
-    metrics = {
-        'total_concluidos': conclusoes['card_key'].nunique(),
-        'total_reprovados': reprovacoes['card_key'].nunique(),
-        'total_reprovas': len(reprovacoes)
-    }
-
-    # Criar dados para análise do LLM
-    analysis_data = {
-        'conclusoes': conclusoes.to_dict('records'),
-        'reprovacoes': reprovacoes.to_dict('records'),
-        'metrics': metrics
-    }
-
-    rework_task = Task(
-        description=f"""
-        ## Nova descrição da tarefa usando analysis_data
-        {analysis_data}
-        """,
-        expected_output="Análise detalhada com insights sobre padrões de qualidade e produtividade",
-        agent=rework_agent,
-    )
-
-    crew = Crew(
+        crew = Crew(
         agents=[rework_agent],
         tasks=[rework_task],
         verbose=True
     )
+        llm_result = crew.kickoff()
+        # Criação do payload estruturado
+        return {
+            "llm_analysis": llm_result,  # Análise textual do CrewAI
+            "charts_data": {
+                "conclusoes": conclusoes.to_dict(orient='records'),
+                "reprovacoes": reprovacoes.to_dict(orient='records'),
+                "metrics": {
+                    "total_concluidos": conclusoes['card_key'].nunique(),
+                    "total_reprovados": reprovacoes['card_key'].nunique(),
+                    "total_reprovas": len(reprovacoes)
+                }
+            }
+        }
+    
+    except Exception as e:
+        return {
+            "error": str(e),
+            "charts_data": {
+                "conclusoes": [],
+                "reprovacoes": [],
+                "metrics": {
+                    "total_concluidos": 0,
+                    "total_reprovados": 0,
+                    "total_reprovas": 0
+                }
+            }
+        }
 
-    return crew.kickoff()
+
