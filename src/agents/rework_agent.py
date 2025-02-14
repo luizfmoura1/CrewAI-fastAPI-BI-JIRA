@@ -1,6 +1,6 @@
 from crewai import Agent, Task, Crew, LLM
 from typing import Dict, Any, List
-from datetime import datetime
+from datetime import datetime, timedelta
 import pandas as pd
 
 def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -10,8 +10,8 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         seed=0
     )
 
-    current_date = datetime.datetime.now().strftime("%d-%m-%Y")
-    start_date = (datetime.datetime.now() - datetime.timedelta(days=15)).strftime("%d-%m-%Y")
+    current_date = datetime.now().strftime("%d-%m-%Y")
+    start_date = (datetime.now() - timedelta(days=15)).strftime("%d-%m-%Y")
 
     rework_agent = Agent(
         role="Analista de Entrega Técnica",
