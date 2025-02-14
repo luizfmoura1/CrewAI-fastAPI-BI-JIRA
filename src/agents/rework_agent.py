@@ -45,7 +45,7 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
             - DESCARTAR todos outros registros SEM EXCEÇÃO
         3. Regras de Classificação:
             - **REPROVAÇÕES VÁLIDAS**: 
-                * Apenas registros 'Reprovado' DENTRO do período
+                * Apenas alterações no status (status_novo'Reprovado') DENTRO do período
                 * Se múltiplas reprovações no período, listar TODAS
                 * Ignorar reprovações anteriores a {start_date}
         4. Classificar por status:
