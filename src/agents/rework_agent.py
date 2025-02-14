@@ -11,27 +11,28 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
 
     # Dados dinâmicos formatados
     current_date = datetime.datetime.now().strftime("%d-%m-%Y")
-    start_date = (datetime.datetime.now() - datetime.timedelta(days=30)).strftime("%d-%m-%Y")
+    start_date = (datetime.datetime.now() - datetime.timedelta(days=15)).strftime("%d-%m-%Y")
 
     rework_agent = Agent(
         role="Analista de Entrega Técnica",
-        goal="Analisar padrões de conclusão e retrabalho em cards específicos nos últimos 30 dias",
-        backstory=f"""Especialista em métricas de entrega ágil com ampla experiência em análise de sprints.
+        goal="Analisar padrões de conclusão e retrabalho apenas em cards específicos nos últimos **15 dias**",
+        backstory="""Especialista em métricas de entrega ágil com ampla experiência em análise de sprints.
         Responsável por monitorar tanto as conclusões bem-sucedidas quanto os casos de retrabalho,
         garantindo a qualidade do processo de desenvolvimento e identificando oportunidades de melhoria.
         Com um olhar analítico, você se concentra na detecção de padrões de inconsistência e oportunidades
-        de otimização no fluxo de trabalho, especialmente ao longo de períodos contínuos, como os últimos 30 dias.""",
+        de otimização no fluxo de trabalho, especialmente ao longo de períodos contínuos, como os últimos 15 dias.""",
         llm=llm,
         verbose=True
     )
 
     rework_task = Task(
         description=f"""
-        ## Análise de Status de Cards - Período {start_date} a {current_date}
+        ## Análise de Status de Cards - Período a ser analisado: {start_date} a {current_date}
         
         **Objetivo:**  
-        Analisar {{reprovado_entries}} identificar padrões de conclusão e reprovação nos últimos 30 dias.
-        
+        - Analisar e identificar padrões de conclusão (Em produção) e reprovação nos últimos 15 dias nos dados fornecidos.
+        - Apenas cards entre {start_date} e {current_date} **devem** ser considerados para a análise.
+ 
         **Processamento:**  
         1. Acessar os dados brutos em 'reprovado_entries'
         2. Converter datas para formato DD-MM-AAAA
@@ -44,12 +45,14 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         **ATENÇÃO:**
         Dados a serem analisados a seguir:
         ---------------------
-        {{reprovado_entries}}
+        {reprovados_data}
         ---------------------
         - Campo chave: 'data_mudanca' (timestamp ISO 8601)
+        - Campo chave: 'status_novo': 'Em produção' (concluído)
+        - Campo chave: 'status_novo': 'Reprovado' (reprovado)
         """,
         expected_output=f"""
-        **Relatório Consolidado - Período {start_date} a {current_date}**
+        **Relatório Consolidado - Período obrigátorio dos cards: {start_date} a {current_date}**
         
         ### Dados Analisados
         - Período analisado: {start_date} a {current_date}
@@ -69,7 +72,6 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         - Total de reprovações no dia: 0
         """,
         agent=rework_agent,
-        inputs={'reprovado_entries': reprovados_data}  # Dados brutos separados
     )
 
     crew = Crew(
