@@ -9,7 +9,6 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         seed=0
     )
 
-    # Dados dinâmicos formatados
     current_date = datetime.datetime.now().strftime("%d-%m-%Y")
     start_date = (datetime.datetime.now() - datetime.timedelta(days=15)).strftime("%d-%m-%Y")
 
@@ -30,18 +29,34 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         ## Análise de Status de Cards - Período a ser analisado: {start_date} a {current_date}
         
         **Objetivo:**  
-        - Analisar e identificar padrões de conclusão (Em produção) e reprovação nos últimos 15 dias nos dados fornecidos.
-        - Apenas cards entre {start_date} e {current_date} **devem** ser considerados para a análise.
-        - **ATENÇÃO**: Sempre que o responsável for um 'Estágiario', você **deve** utilizar o nome vinculado a 'desenvolvedor' 
- 
+        - Analisar e identificar padrões de conclusão (Em produção, Em release e Em homologação) e reprovação nos últimos 15 dias nos dados fornecidos.
+        - **ATENÇÃO**: Sempre que o responsável for um 'Estágiario', você **deve** utilizar o nome vinculado a 'desenvolvedor'
+        - Analisar STRITAMENTE cards com alterações entre {start_date} e {current_date}
+        - **CRITICO**: Verificar CADA 'data_mudanca' convertida (DD-MM-AAAA) antes de considerar
+        - **CRITICO**: Ignorar COMPLETAMENTE qualquer registro fora do intervalo
+
         **Processamento:**  
         1. Acessar os dados brutos em 'reprovado_entries'
-        2. Converter datas para formato DD-MM-AAAA
-        3. Filtrar registros entre {start_date} e {current_date}
+        2. Converter 'data_mudanca' para DD-MM-AAAA
+             - MANTER APENAS registros onde:
+                data_mudanca >= {start_date} 
+                AND 
+                data_mudanca <= {current_date}
+            - DESCARTAR todos outros registros SEM EXCEÇÃO
+        3. Regras de Classificação:
+            - **REPROVAÇÕES VÁLIDAS**: 
+                * Apenas registros 'Reprovado' DENTRO do período
+                * Se múltiplas reprovações no período, listar TODAS
+                * Ignorar reprovações anteriores a {start_date}
         4. Classificar por status:
-           - 'Em produção' -> Conclusão válida
-           - 'Reprovado' -> Requer retrabalho
+            - 'Em homologação' -> Conclusão válida
+            - 'Em release' -> Conclusão válida
+            - 'Em produção' -> Conclusão válida
+            - 'Reprovado' -> Requer retrabalho
+            - **ATENÇÃO**: Se um card tiver mais de um status de **conclusão**, considere  apenas o status que veio **primeiro**
+            - - **ATENÇÃO**: Caso o card tenha mais de uma reprovação, considere apenas a reprovação que esteja dentro do périodo de análise.
         5. Agregar métricas por desenvolvedor e detectar recorrências
+        6. Dos cards que **apresentarem um status de conclusão**, você **deve** exibir o Story Points do card (campo 'sp')
         
         **ATENÇÃO:**
         Dados a serem analisados a seguir:
@@ -50,8 +65,17 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         ---------------------
         - Campo chave: 'data_mudanca' (timestamp ISO 8601)
         - Campo chave: 'status_novo': 'Em produção' (concluído)
+        - Campo chave: 'status_novo': 'Em release' (concluído)
+        - Campo chave: 'status_novo': 'Em homologação' (concluído)
         - Campo chave: 'status_novo': 'Reprovado' (reprovado)
+        - Campo chave: 'sp': Story Points
         - Usar campo 'desenvolvedor' se 'responsavel' for 'Estagiarios'
+
+        **CONTROLES CRÍTICOS:**
+        ---------------------
+        - NUNCA usar histórico completo dos cards
+        - SEMPRE validar data_mudanca ENTRE {start_date}-{current_date}
+        - REPROVAÇÕES: Excluir automaticamente se data_mudanca < {start_date}
 
         """,
         expected_output=f"""
@@ -60,10 +84,10 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         ### Dados Analisados
         - Período analisado: {start_date} a {current_date}
         
-        ### Conclusões (Em produção)
-        | Card              | Responsável          | Horário        |
-        |-------------------|----------------------|----------------|
-        | -                 | -                    | -              |      
+        ### Conclusões (Em produção, Em release e Em homologação)
+        | Card              | Responsável          | Horário        | Story Points   |
+        |-------------------|----------------------|----------------|----------------|
+        | -                 | -                    | -              | -              |
         ### Reprovações
         | Card              | Responsável          | Reprovações | Horários        |
         |-------------------|----------------------|-------------|-----------------|
@@ -72,7 +96,7 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         **Métricas Chave:**
         - Total de cards concluídos: 0
         - Total de cards com reprovações: 0
-        - Total de reprovações no dia: 0
+        - Total de reprovações no período: 0
         """,
         agent=rework_agent,
     )
