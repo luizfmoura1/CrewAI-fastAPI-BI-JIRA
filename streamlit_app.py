@@ -83,8 +83,8 @@ def process_dataframe(df: pd.DataFrame, df_name: str) -> pd.DataFrame:
 def main():
     with st.sidebar:
         st.title("Configurações")
-        board_id = st.text_input("Board ID", value="123")
-        sprint_id = st.text_input("Sprint ID", value="456")
+        board_id = st.text_input("Board ID", value="20")
+        sprint_id = st.text_input("Sprint ID", value="123")
 
     try:
         with st.spinner("Obtendo dados do Jira..."):
