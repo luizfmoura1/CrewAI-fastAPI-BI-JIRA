@@ -1,6 +1,7 @@
 from crewai import Agent, Task, Crew, LLM
 from typing import Dict, Any, List
-import datetime
+from datetime import datetime
+import pandas as pd
 
 def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]:
     llm = LLM(
@@ -98,6 +99,42 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         - Total de cards com reprovações: 0
         - Total de reprovações no período: 0
         """,
+        agent=rework_agent,
+    )
+
+    df = pd.DataFrame(reprovados_data)
+    
+    # Converter datas e filtrar período
+    df['data_mudanca'] = pd.to_datetime(df['data_mudanca']).dt.strftime('%d-%m-%Y')
+    start_date = (datetime.now() - pd.DateOffset(days=15)).strftime('%d-%m-%Y')
+    current_date = datetime.now().strftime('%d-%m-%Y')
+    mask = (df['data_mudanca'] >= start_date) & (df['data_mudanca'] <= current_date)
+    df = df[mask]
+
+    # Classificar conclusões e reprovações
+    conclusoes = df[df['status_novo'].isin(['Em produção', 'Em release', 'Em homologação'])]
+    reprovacoes = df[df['status_novo'] == 'Reprovado']
+
+    # Agregar métricas
+    metrics = {
+        'total_concluidos': conclusoes['card_key'].nunique(),
+        'total_reprovados': reprovacoes['card_key'].nunique(),
+        'total_reprovas': len(reprovacoes)
+    }
+
+    # Criar dados para análise do LLM
+    analysis_data = {
+        'conclusoes': conclusoes.to_dict('records'),
+        'reprovacoes': reprovacoes.to_dict('records'),
+        'metrics': metrics
+    }
+
+    rework_task = Task(
+        description=f"""
+        ## Nova descrição da tarefa usando analysis_data
+        {analysis_data}
+        """,
+        expected_output="Análise detalhada com insights sobre padrões de qualidade e produtividade",
         agent=rework_agent,
     )
 

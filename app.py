@@ -97,8 +97,15 @@ def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
         return {
             "board_id": board_id,
             "sprint_id": sprint_id,
-            "raw_data": issues_with_changelogs,  # Dados brutos completos
-            "analysis": rework_analysis  # Resultado processado
+            "analysis": {
+                "raw_analysis": rework_analysis,
+                "charts_data": {
+                    "conclusoes": rework_analysis['charts_data']['conclusoes'].to_dict(),
+                    "reprovacoes": rework_analysis['charts_data']['reprovacoes'].to_dict(),
+                    "metrics": rework_analysis['charts_data']['metrics']
+                },
+                "llm_analysis": rework_analysis['llm_analysis']
+            }
         }
 
     except Exception as e:
