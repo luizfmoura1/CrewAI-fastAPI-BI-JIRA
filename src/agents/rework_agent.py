@@ -104,16 +104,21 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
 
     try:
         df = pd.DataFrame(reprovados_data)
-        
-        # Processamento de datas
-        df['data_mudanca'] = pd.to_datetime(df['data_mudanca']).dt.strftime('%d-%m-%Y')
-        start_date = (datetime.now() - timedelta(days=15)).strftime('%d-%m-%Y')
-        current_date = datetime.now().strftime('%d-%m-%Y')
-        df = df[(df['data_mudanca'] >= start_date) & (df['data_mudanca'] <= current_date)]
 
+        df['data_mudanca'] = pd.to_datetime(df['data_mudanca']).dt.tz_localize(None)
+
+        # Converter as datas de início e fim para Timestamp
+        start_date = datetime.now() - timedelta(days=15)
+        current_date = datetime.now()
+
+        # Filtrar o DataFrame
+        df_filtrado = df[(df['data_mudanca'] >= start_date) & (df['data_mudanca'] <= current_date)]
+
+
+        print(df_filtrado)
         # Classificação dos dados
-        conclusoes = df[df['status_novo'].isin(['Em produção', 'Em release', 'Em homologação'])]
-        reprovacoes = df[df['status_novo'] == 'Reprovado']
+        conclusoes = df_filtrado[df_filtrado['status_novo'].isin(['Em produção', 'Em release', 'Em homologação'])]
+        reprovacoes = df_filtrado[df_filtrado['status_novo'] == 'Reprovado']
 
         crew = Crew(
         agents=[rework_agent],
@@ -130,7 +135,7 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
                 "metrics": {
                     "total_concluidos": conclusoes['card_key'].nunique(),
                     "total_reprovados": reprovacoes['card_key'].nunique(),
-                    "total_reprovas": len(reprovacoes)
+                    "total_reprovações": len(reprovacoes)
                 }
             }
         }

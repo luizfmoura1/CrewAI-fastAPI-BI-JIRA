@@ -105,7 +105,7 @@ def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
                     "metrics": {
                         "total_concluidos": 0,
                         "total_reprovados": 0,
-                        "total_reprovas": 0
+                        "total_reprovações": 0
                     }
                 })
             }

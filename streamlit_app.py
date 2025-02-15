@@ -106,25 +106,6 @@ def main():
             "Reprovações"
         )
 
-        # Calcula as opções dos desenvolvedores após processar os DataFrames
-        all_devs = list(set(
-            concl_df['responsavel'].astype(str).unique().tolist() +
-            reprov_df['responsavel'].astype(str).unique().tolist()
-        ))
-        invalid_entries = ['', 'None', 'nan', 'Não definido']
-        all_devs = [d for d in all_devs if str(d).strip() not in invalid_entries]
-
-        # Cria o widget de multiselect usando as opções calculadas
-        selected_developers = st.sidebar.multiselect(
-            "Selecione os desenvolvedores",
-            options=sorted(all_devs, key=lambda x: x.lower()),
-            placeholder="Escolha os responsáveis"
-        )
-
-        if selected_developers:
-            concl_df = concl_df[concl_df['responsavel'].isin(selected_developers)]
-            reprov_df = reprov_df[reprov_df['responsavel'].isin(selected_developers)]
-
         # Extrai as métricas dos dados
         metrics = charts_data.get('metrics', {})
 
