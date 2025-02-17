@@ -85,7 +85,7 @@ def main():
         st.title("Configurações")
         
         # Lista de boards conhecidos + opção "Outro"
-        board_options = [20, 23, 24, 32, "Outro"]
+        board_options = [23, 20, 24, 32, "Outro"]
         selected_board = st.selectbox("Selecione o Board ID", options=board_options)
         
         if selected_board == "Outro":
@@ -94,7 +94,7 @@ def main():
             board_id = selected_board  # usa o valor selecionado no selectbox
 
         # Lista de sprints conhecidas + opção "Outro"
-        sprint_options = [121, 120, 123, "Outro"]
+        sprint_options = [123, 120, 121, "Outro"]
         selected_sprint = st.selectbox("Selecione a Sprint ID", options=sprint_options)
         
         if selected_sprint == "Outro":
