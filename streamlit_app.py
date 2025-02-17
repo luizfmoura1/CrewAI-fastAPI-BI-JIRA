@@ -11,7 +11,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS deve vir logo após
+# Custom CSS
 st.markdown("""
     <style>
     .metric-box {
@@ -102,74 +102,81 @@ def main():
         else:
             sprint_id = selected_sprint
 
-    try:
-        with st.spinner("Obtendo dados do Jira..."):
-            data = fetch_data(board_id, sprint_id)
+        # Botão para executar a chamada à API
+        run_query = st.button("Run")
 
-        if 'error' in data:
-            st.error(f"Erro na API: {data['error']}")
-            return
+    if run_query:
+        # Somente executa a API se o botão foi clicado
+        try:
+            with st.spinner("Obtendo dados do Jira..."):
+                data = fetch_data(str(board_id), str(sprint_id))
 
-        analysis = data.get('analysis', {})
-        charts_data = analysis.get('charts_data', {})
+            if 'error' in data:
+                st.error(f"Erro na API: {data['error']}")
+                return
 
-        concl_df = process_dataframe(
-            pd.DataFrame(charts_data.get('conclusoes', [])),
-            "Conclusões"
-        )
-        reprov_df = process_dataframe(
-            pd.DataFrame(charts_data.get('reprovacoes', [])),
-            "Reprovações"
-        )
+            analysis = data.get('analysis', {})
+            charts_data = analysis.get('charts_data', {})
 
-        # Extrai as métricas dos dados
-        metrics = charts_data.get('metrics', {})
-
-        st.title("📊 Análise de Performance de Sprint")
-
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.markdown(
-                format_metric(metrics.get('total_concluidos', 0), "Concluídos"),
-                unsafe_allow_html=True
+            concl_df = process_dataframe(
+                pd.DataFrame(charts_data.get('conclusoes', [])),
+                "Conclusões"
             )
-        with col2:
-            st.markdown(
-                format_metric(metrics.get('total_reprovados', 0), "Reprovados"),
-                unsafe_allow_html=True
-            )
-        with col3:
-            st.markdown(
-                format_metric(metrics.get('total_reprovas', 0), "Reprovações"),
-                unsafe_allow_html=True
+            reprov_df = process_dataframe(
+                pd.DataFrame(charts_data.get('reprovacoes', [])),
+                "Reprovações"
             )
 
-        st.header("Performance por Responsável")
-        col1, col2 = st.columns(2)
-        with col1:
-            fig = plot_responsavel_performance(concl_df, "Conclusões Bem-sucedidas")
-            st.pyplot(fig) if fig else st.info("Sem dados de conclusões")
-        with col2:
-            fig = plot_responsavel_performance(reprov_df, "Reprovações por Responsável")
-            st.pyplot(fig) if fig else st.info("Sem dados de reprovações")
+            # Extrai as métricas dos dados
+            metrics = charts_data.get('metrics', {})
 
-        st.header("Insights Analíticos")
-        with st.expander("Ver Análise Detalhada"):
-            llm_analysis = analysis.get('llm_analysis', 'Análise não disponível')
-            st.markdown(f"```\n{llm_analysis}\n```")
+            st.title("📊 Análise de Performance de Sprint")
 
-        st.header("Dados Detalhados")
-        tab1, tab2 = st.tabs(["Conclusões", "Reprovações"])
-        with tab1:
-            st.dataframe(concl_df, hide_index=True, use_container_width=True,
-                        column_config={"card_key": "Card", "responsavel": "Responsável"})
-        with tab2:
-            st.dataframe(reprov_df, hide_index=True, use_container_width=True,
-                        column_config={"card_key": "Card", "responsavel": "Responsável"})
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.markdown(
+                    format_metric(metrics.get('total_concluidos', 0), "Concluídos"),
+                    unsafe_allow_html=True
+                )
+            with col2:
+                st.markdown(
+                    format_metric(metrics.get('total_reprovados', 0), "Reprovados"),
+                    unsafe_allow_html=True
+                )
+            with col3:
+                st.markdown(
+                    format_metric(metrics.get('total_reprovas', 0), "Reprovações"),
+                    unsafe_allow_html=True
+                )
 
-    except Exception as e:
-        st.error(f"Erro crítico: {str(e)}")
-        st.exception(e)
+            st.header("Performance por Responsável")
+            col1, col2 = st.columns(2)
+            with col1:
+                fig = plot_responsavel_performance(concl_df, "Conclusões Bem-sucedidas")
+                st.pyplot(fig) if fig else st.info("Sem dados de conclusões")
+            with col2:
+                fig = plot_responsavel_performance(reprov_df, "Reprovações por Responsável")
+                st.pyplot(fig) if fig else st.info("Sem dados de reprovações")
+
+            st.header("Insights Analíticos")
+            with st.expander("Ver Análise Detalhada"):
+                llm_analysis = analysis.get('llm_analysis', 'Análise não disponível')
+                st.markdown(f"```\n{llm_analysis}\n```")
+
+            st.header("Dados Detalhados")
+            tab1, tab2 = st.tabs(["Conclusões", "Reprovações"])
+            with tab1:
+                st.dataframe(concl_df, hide_index=True, use_container_width=True,
+                            column_config={"card_key": "Card", "responsavel": "Responsável"})
+            with tab2:
+                st.dataframe(reprov_df, hide_index=True, use_container_width=True,
+                            column_config={"card_key": "Card", "responsavel": "Responsável"})
+
+        except Exception as e:
+            st.error(f"Erro crítico: {str(e)}")
+            st.exception(e)
+    else:
+        st.info("Clique em **Run** para buscar os dados do Jira.")
 
 if __name__ == "__main__":
     main()
