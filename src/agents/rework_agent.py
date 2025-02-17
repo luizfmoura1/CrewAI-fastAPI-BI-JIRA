@@ -107,6 +107,11 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
 
         df['data_mudanca'] = pd.to_datetime(df['data_mudanca']).dt.tz_localize(None)
 
+        if 'desenvolvedor' in df.columns:
+            df['desenvolvedor'] = df['desenvolvedor'].apply(
+                lambda x: x['value'] if isinstance(x, dict) and 'value' in x else x
+    )
+
         # Converter as datas de início e fim para Timestamp
         start_date = datetime.now() - timedelta(days=15)
         current_date = datetime.now()
