@@ -83,8 +83,24 @@ def process_dataframe(df: pd.DataFrame, df_name: str) -> pd.DataFrame:
 def main():
     with st.sidebar:
         st.title("Configurações")
-        board_id = st.text_input("Board ID", value="20")
-        sprint_id = st.text_input("Sprint ID", value="123")
+        
+        # Lista de boards conhecidos + opção "Outro"
+        board_options = [20, 23, 24, 32, "Outro"]
+        selected_board = st.selectbox("Selecione o Board ID", options=board_options)
+        
+        if selected_board == "Outro":
+            board_id = st.text_input("Digite o Board ID (numérico ou texto)", value="")
+        else:
+            board_id = selected_board  # usa o valor selecionado no selectbox
+
+        # Lista de sprints conhecidas + opção "Outro"
+        sprint_options = [121, 120, 123, "Outro"]
+        selected_sprint = st.selectbox("Selecione a Sprint ID", options=sprint_options)
+        
+        if selected_sprint == "Outro":
+            sprint_id = st.text_input("Digite a Sprint ID (numérico ou texto)", value="")
+        else:
+            sprint_id = selected_sprint
 
     try:
         with st.spinner("Obtendo dados do Jira..."):

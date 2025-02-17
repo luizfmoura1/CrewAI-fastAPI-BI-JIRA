@@ -118,6 +118,8 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         print(df_filtrado)
         # Classificação dos dados
         conclusoes = df_filtrado[df_filtrado['status_novo'].isin(['Em produção', 'Em release', 'Em homologação'])]
+        conclusoes = conclusoes.drop_duplicates(subset=['card_key'], keep='first')
+
         reprovacoes = df_filtrado[df_filtrado['status_novo'] == 'Reprovado']
 
         crew = Crew(
