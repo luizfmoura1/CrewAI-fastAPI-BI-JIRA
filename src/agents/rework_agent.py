@@ -144,7 +144,7 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
                 "metrics": {
                     "total_concluidos": conclusoes['card_key'].nunique(),
                     "total_reprovados": reprovacoes['card_key'].nunique(),
-                    "total_reprovações": len(reprovacoes)
+                    "total_reprovas": len(reprovacoes)
                 }
             }
         }
