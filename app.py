@@ -1,17 +1,19 @@
 from fastapi import FastAPI, HTTPException
-from src.utils.jira_client import JiraClient
 from dotenv import load_dotenv
-from src.main import main  # Certifique-se de que essa função está implementada
-from src.utils.rework_search import filter_reprovado_entries  # Certifique-se de que essa função está implementada
 import os
 import logging
 
-# Configuração de logs e carregamento do .env
+# Importa os módulos internos do projeto
+from src.utils.jira_client import JiraClient
+from src.main import main  # Certifique-se de que essa função está implementada
+from src.utils.rework_search import filter_reprovado_entries
+
+# Carrega variáveis de ambiente e configura o logging
+load_dotenv()
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-load_dotenv()
 
-# Variáveis de configuração do Jira
+# Variáveis de ambiente do Jira
 BASE_URL = os.getenv("BASE_URL")
 EMAIL = os.getenv("EMAIL")
 API_TOKEN_JIRA = os.getenv("API_TOKEN_JIRA")
@@ -20,12 +22,17 @@ if not API_TOKEN_JIRA:
     logger.error("API_TOKEN_JIRA não foi carregado corretamente do arquivo .env")
     raise ValueError("API_TOKEN_JIRA não foi carregado corretamente do arquivo .env")
 
-# Criação da aplicação FastAPI e do cliente Jira
+# Criação da aplicação FastAPI
 app = FastAPI()
+
+# Instancia o cliente Jira
 jira_client = JiraClient(base_url=BASE_URL, email=EMAIL, api_token=API_TOKEN_JIRA)
 
 @app.get("/JIRA_analitycs")
 def get_analitycs(board_id: str, sprint_id: str) -> dict:
+    """
+    Consulta as issues de um board e sprint específicos e retorna a análise processada.
+    """
     try:
         board_data = jira_client.get_single_board(board_id, sprint_id)
         response = main(board_data)
@@ -50,6 +57,9 @@ def get_analitycs(board_id: str, sprint_id: str) -> dict:
 
 @app.get("/JIRA_analitycs_with_changelogs")
 def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
+    """
+    Consulta as issues de um board/sprint e processa os changelogs para identificar entradas de reprovação.
+    """
     try:
         board_data = jira_client.get_single_board(board_id, sprint_id)
         issues = board_data.get("issues", [])
@@ -61,7 +71,7 @@ def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
             issue_key = issue.get("key")
             fields = issue.get("fields", {})
             
-            # Extração dos dados do assignee e outros campos
+            # Extração dos dados relevantes
             assignee = fields.get("assignee", {})
             dev = fields.get("customfield_10172", "Não definido")
             sp = fields.get("customfield_10106", 0)
@@ -151,4 +161,60 @@ def list_sprints(board_id: str):
         return {"board_id": board_id, "sprints": sprints}
     except Exception as e:
         logger.error(f"Erro ao listar sprints para o board {board_id}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/JIRA_all_analytics")
+def get_all_analytics():
+    """
+    Endpoint que consulta todos os boards e, para cada board, todos os sprints,
+    realizando a análise de cada combinação por meio do rework agent.
+    """
+    results = []
+    try:
+        boards = jira_client.get_all_boards()
+        for board in boards:
+            board_id = board.get("id")
+            sprints = jira_client.get_sprints_by_board(board_id)
+            for sprint in sprints:
+                sprint_id = sprint.get("id")
+                board_data = jira_client.get_single_board(board_id, sprint_id)
+                issues = board_data.get("issues", [])
+                all_reprovados = []
+                
+                for issue in issues:
+                    issue_key = issue.get("key")
+                    fields = issue.get("fields", {})
+                    assignee = fields.get("assignee", {})
+                    dev = fields.get("customfield_10172", "Não definido")
+                    sp = fields.get("customfield_10106", 0)
+                    
+                    if not issue_key:
+                        continue
+                        
+                    try:
+                        changelog_response = jira_client.get_issue_changelog(issue_key)
+                        filtered = filter_reprovado_entries(
+                            issue_key=issue_key,
+                            dev=dev,
+                            sp=sp,
+                            changelog_data=changelog_response,
+                            assignee=assignee
+                        )
+                        all_reprovados.extend(filtered)
+                    except Exception as ex:
+                        logger.error(f"Falha ao buscar changelog para a issue {issue_key}: {ex}", exc_info=True)
+                        continue
+                        
+                from src.agents.rework_agent import create_rework_agent  # Processa os dados com o rework agent
+                rework_analysis = create_rework_agent(all_reprovados)
+                
+                results.append({
+                    "board_id": board_id,
+                    "sprint_id": sprint_id,
+                    "analysis": rework_analysis
+                })
+        return {"results": results}
+    except Exception as e:
+        logger.error(f"Erro ao buscar analytics para todos os boards e sprints: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))

@@ -114,10 +114,23 @@ def fetch_data(board_id: str, sprint_id: str) -> dict:
     from app import get_analitycs_with_changelogs
     return get_analitycs_with_changelogs(board_id, sprint_id)
 
+import requests
+import streamlit as st
+
 @st.cache_data(ttl=3600, show_spinner="Carregando dados do Jira para todos os boards e sprints...")
 def fetch_all_data() -> dict:
-    from app import get_all_analytics  # Endpoint que consulta todos os boards e sprints
-    return get_all_analytics()
+    url = "http://127.0.0.1:8000/JIRA_all_analytics"  # Endpoint correto
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Levanta exceção para erros HTTP
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        st.error(f"Erro na requisição: {str(e)}")
+        return {}
+    except ValueError as e:
+        st.error(f"Resposta inválida da API: {response.text}")
+        return {}
+
 
 # ============================================================================
 # Interface do Sidebar para configuração da consulta
