@@ -4,14 +4,14 @@ import pandas as pd
 import numpy as np
 from typing import Optional
 
-# Configuração da página DEVE SER O PRIMEIRO COMANDO
+# Configuração da página (deve ser o primeiro comando)
 st.set_page_config(
     page_title="JIRA Analytics",
     page_icon="📊",
     layout="wide"
 )
 
-# Custom CSS
+# Custom CSS para melhorar a apresentação dos cards de métricas
 st.markdown("""
     <style>
     .metric-box {
@@ -37,10 +37,14 @@ def plot_responsavel_performance(df: pd.DataFrame, title: str) -> Optional[plt.F
         if df.empty or 'responsavel' not in df.columns:
             return None
 
-        fig, ax = plt.subplots(figsize=(20, 15))
         counts = df['responsavel'].value_counts()
-        colors = plt.cm.viridis_r(np.linspace(0.2, 0.8, len(counts)))
+        
+        # Verifica se há dados para plotar
+        if counts.empty:
+            return None
 
+        fig, ax = plt.subplots(figsize=(20, 15))
+        colors = plt.cm.viridis_r(np.linspace(0.2, 0.8, len(counts)))
         counts.plot(kind='barh', ax=ax, color=colors, title=title)
         ax.set_xlabel('Quantidade', fontsize=21)
         ax.set_ylabel('Responsável', fontsize=21)
@@ -53,22 +57,17 @@ def plot_responsavel_performance(df: pd.DataFrame, title: str) -> Optional[plt.F
         st.error(f"Erro ao gerar gráfico: {str(e)}")
         return None
 
-@st.cache_data(ttl=3600, show_spinner="Carregando dados do Jira...")
-def fetch_data(board_id: str, sprint_id: str) -> dict:
-    from app import get_analitycs_with_changelogs
-    return get_analitycs_with_changelogs(board_id, sprint_id)
 
 def process_dataframe(df: pd.DataFrame, df_name: str) -> pd.DataFrame:
     """
-    Processa um DataFrame garantindo a coluna 'responsavel'.
-    Se o valor em 'responsavel' for algo como 'Estagiário(s)',
-    substitui-o pelo valor da coluna 'desenvolvedor', caso exista.
+    Processa um DataFrame garantindo a coluna 'responsavel'. Caso seja necessário,
+    utiliza a coluna 'desenvolvedor' para corrigir valores (ex: estagiário(s)).
     """
     if not df.empty:
         # Verifica se a coluna 'desenvolvedor' existe
         tem_desenvolvedor = 'desenvolvedor' in df.columns
 
-        # Define as colunas possíveis para 'responsavel' (sem 'desenvolvedor')
+        # Procura as colunas possíveis para 'responsavel'
         possible_columns = ['responsavel', 'Responsável', 'assignee']
         for col in possible_columns:
             if col in df.columns:
@@ -78,126 +77,173 @@ def process_dataframe(df: pd.DataFrame, df_name: str) -> pd.DataFrame:
             st.warning(f"Coluna 'responsavel' não encontrada em {df_name}")
             df['responsavel'] = 'Não definido'
 
-        # Limpeza de valores nulos ou vazios
         df['responsavel'] = (
             df['responsavel']
             .fillna('Não definido')
             .replace({'': 'Não definido'})
         )
 
-        # Se existir a coluna 'desenvolvedor', substituir valores "estagiário(s)"
         if tem_desenvolvedor:
-            # Lista de possíveis grafias para 'estagiário'
             possiveis_estagiario = ['estagiario', 'estagiário', 'estagiarios', 'estagiários']
-            # Gera máscara para qualquer um desses valores (em minúsculas e sem espaços)
             mask = df['responsavel'].str.lower().str.strip().isin(possiveis_estagiario)
             df.loc[mask, 'responsavel'] = df.loc[mask, 'desenvolvedor']
-
     else:
         df['responsavel'] = pd.Series(dtype=str)
         
     return df
 
+# ============================================================================
+# Funções para obter dados dos endpoints do FastAPI
+# Utilize st.cache_data para armazenar os resultados (TTL de 1 hora)
+# ============================================================================
 
+@st.cache_data(ttl=3600, show_spinner="Carregando boards...")
+def fetch_boards():
+    from app import list_boards  # Importa a função do FastAPI
+    boards_data = list_boards()   # Retorna um dict com a chave "boards"
+    return boards_data.get("boards", [])
 
-# -------------------------------------------
-# Código principal diretamente no nível superior
-# -------------------------------------------
+@st.cache_data(ttl=3600, show_spinner="Carregando sprints...")
+def fetch_sprints(board_id: str):
+    from app import list_sprints
+    sprints_data = list_sprints(board_id)  # Retorna dict com chave "sprints"
+    return sprints_data.get("sprints", [])
+
+@st.cache_data(ttl=3600, show_spinner="Carregando dados do Jira...")
+def fetch_data(board_id: str, sprint_id: str) -> dict:
+    from app import get_analitycs_with_changelogs
+    return get_analitycs_with_changelogs(board_id, sprint_id)
+
+@st.cache_data(ttl=3600, show_spinner="Carregando dados do Jira para todos os boards e sprints...")
+def fetch_all_data() -> dict:
+    from app import get_all_analytics  # Endpoint que consulta todos os boards e sprints
+    return get_all_analytics()
+
+# ============================================================================
+# Interface do Sidebar para configuração da consulta
+# ============================================================================
 
 with st.sidebar:
     st.title("Configurações")
     
-    board_options = [23, 20, 24, 32, "Outro"]
-    selected_board = st.selectbox("Selecione o Board ID", options=board_options)
+    modo = st.radio("Selecione o modo de consulta:", options=["Consulta Específica", "Todos Boards e Sprints"])
     
-    if selected_board == "Outro":
-        board_id = st.text_input("Digite o Board ID (numérico ou texto)", value="")
+    if modo == "Consulta Específica":
+        # Busca os boards dinamicamente
+        boards = fetch_boards()
+        # Cria um dicionário: key = id do board (como string) e value = nome (ou "Board {id}" se não houver nome)
+        board_options = {str(board.get("id")): board.get("name", f"Board {board.get('id')}") for board in boards}
+        selected_board_id = st.selectbox("Selecione o Board", options=list(board_options.keys()),
+                                         format_func=lambda x: board_options[x])
+        # Após selecionar o board, busca os sprints dele
+        sprints = fetch_sprints(selected_board_id)
+        sprint_options = {str(sprint.get("id")): sprint.get("name", f"Sprint {sprint.get('id')}") for sprint in sprints}
+        selected_sprint_id = st.selectbox("Selecione a Sprint", options=list(sprint_options.keys()),
+                                          format_func=lambda x: sprint_options[x])
     else:
-        board_id = selected_board
-
-    sprint_options = [123, 120, 121, "Outro"]
-    selected_sprint = st.selectbox("Selecione a Sprint ID", options=sprint_options)
+        st.info("A consulta será realizada em TODOS os boards e sprints.")
     
-    if selected_sprint == "Outro":
-        sprint_id = st.text_input("Digite a Sprint ID (numérico ou texto)", value="")
-    else:
-        sprint_id = selected_sprint
-
     run_query = st.button("Run")
 
+# ============================================================================
+# Execução da consulta e apresentação dos resultados
+# ============================================================================
+
 if run_query:
-    try:
-        with st.spinner("Obtendo dados do Jira..."):
-            data = fetch_data(str(board_id), str(sprint_id))
+    if modo == "Consulta Específica":
+        try:
+            with st.spinner("Obtendo dados do Jira..."):
+                data = fetch_data(str(selected_board_id), str(selected_sprint_id))
 
-        if 'error' in data:
-            st.error(f"Erro na API: {data['error']}")
-            st.stop()  # Use st.stop() em vez de return
+            if 'error' in data:
+                st.error(f"Erro na API: {data['error']}")
+                st.stop()
 
-        analysis = data.get('analysis', {})
-        charts_data = analysis.get('charts_data', {})
+            analysis = data.get('analysis', {})
+            charts_data = analysis.get('charts_data', {})
 
-        concl_df = process_dataframe(
-            pd.DataFrame(charts_data.get('conclusoes', [])),
-            "Conclusões"
-        )
-        reprov_df = process_dataframe(
-            pd.DataFrame(charts_data.get('reprovacoes', [])),
-            "Reprovações"
-        )
-
-        metrics = charts_data.get('metrics', {})
-
-        st.title("📊 Análise de Performance - OPPEM")
-
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.markdown(
-                format_metric(metrics.get('total_concluidos', 0), "Concluídos"),
-                unsafe_allow_html=True
+            # Processa os dados para conclusões e reprovações
+            concl_df = process_dataframe(
+                pd.DataFrame(charts_data.get('conclusoes', [])),
+                "Conclusões"
             )
-        with col2:
-            st.markdown(
-                format_metric(metrics.get('total_reprovados', 0), "Reprovados"),
-                unsafe_allow_html=True
-            )
-        with col3:
-            st.markdown(
-                format_metric(metrics.get('total_reprovas', 0), "Reprovações"),
-                unsafe_allow_html=True
+            reprov_df = process_dataframe(
+                pd.DataFrame(charts_data.get('reprovacoes', [])),
+                "Reprovações"
             )
 
-        st.header("Performance por Responsável")
-        col1, col2 = st.columns(2)
-        with col1:
-            fig = plot_responsavel_performance(concl_df, "Conclusões Bem-sucedidas")
-            if fig:
-                st.pyplot(fig)
+            metrics = charts_data.get('metrics', {})
+
+            st.title("📊 Análise de Performance - OPPEM")
+
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.markdown(format_metric(metrics.get('total_concluidos', 0), "Concluídos"),
+                            unsafe_allow_html=True)
+            with col2:
+                st.markdown(format_metric(metrics.get('total_reprovados', 0), "Reprovados"),
+                            unsafe_allow_html=True)
+            with col3:
+                st.markdown(format_metric(metrics.get('total_reprovas', 0), "Reprovações"),
+                            unsafe_allow_html=True)
+
+            st.header("Performance por Responsável")
+            col1, col2 = st.columns(2)
+            with col1:
+                fig = plot_responsavel_performance(concl_df, "Conclusões Bem-sucedidas")
+                if fig:
+                    st.pyplot(fig)
+                else:
+                    st.info("Sem dados de conclusões")
+            with col2:
+                fig = plot_responsavel_performance(reprov_df, "Reprovações por Responsável")
+                if fig:
+                    st.pyplot(fig)
+                else:
+                    st.info("Sem dados de reprovações")
+
+            st.header("Insights Analíticos")
+            with st.expander("Ver Análise Detalhada"):
+                llm_analysis = analysis.get('llm_analysis', 'Análise não disponível')
+                st.markdown(f"```\n{llm_analysis}\n```")
+
+            st.header("Dados Detalhados")
+            tab1, tab2 = st.tabs(["Conclusões", "Reprovações"])
+            with tab1:
+                st.dataframe(concl_df, hide_index=True, use_container_width=True,
+                             column_config={"card_key": "Card", "responsavel": "Responsável"})
+            with tab2:
+                st.dataframe(reprov_df, hide_index=True, use_container_width=True,
+                             column_config={"card_key": "Card", "responsavel": "Responsável"})
+
+        except Exception as e:
+            st.error(f"Erro crítico: {str(e)}")
+            st.exception(e)
+    else:
+        try:
+            with st.spinner("Obtendo dados do Jira para todos os boards e sprints..."):
+                all_data = fetch_all_data()
+            # all_data deve conter um dicionário com a chave "results", que é uma lista de análises
+            results = all_data.get("results", [])
+            st.title("📊 Análise de Performance - Todos os Boards e Sprints")
+            if not results:
+                st.info("Nenhum dado encontrado.")
             else:
-                st.info("Sem dados de conclusões")
-        with col2:
-            fig = plot_responsavel_performance(reprov_df, "Reprovações por Responsável")
-            if fig:
-                st.pyplot(fig)
-            else:
-                st.info("Sem dados de reprovações")
+                # Exibe um resumo em tabela
+                summary_data = []
+                for result in results:
+                    board_id = result.get("board_id")
+                    sprint_id = result.get("sprint_id")
+                    summary_data.append({"Board": board_id, "Sprint": sprint_id})
+                summary_df = pd.DataFrame(summary_data)
+                st.dataframe(summary_df)
 
-        st.header("Insights Analíticos")
-        with st.expander("Ver Análise Detalhada"):
-            llm_analysis = analysis.get('llm_analysis', 'Análise não disponível')
-            st.markdown(f"```\n{llm_analysis}\n```")
-
-        st.header("Dados Detalhados")
-        tab1, tab2 = st.tabs(["Conclusões", "Reprovações"])
-        with tab1:
-            st.dataframe(concl_df, hide_index=True, use_container_width=True,
-                        column_config={"card_key": "Card", "responsavel": "Responsável"})
-        with tab2:
-            st.dataframe(reprov_df, hide_index=True, use_container_width=True,
-                        column_config={"card_key": "Card", "responsavel": "Responsável"})
-
-    except Exception as e:
-        st.error(f"Erro crítico: {str(e)}")
-        st.exception(e)
+                # Permite expandir os detalhes de cada board/sprint
+                for result in results:
+                    with st.expander(f"Detalhes para Board {result.get('board_id')} - Sprint {result.get('sprint_id')}"):
+                        st.json(result)
+        except Exception as e:
+            st.error(f"Erro crítico: {str(e)}")
+            st.exception(e)
 else:
     st.info("Clique em **Run** para buscar os dados do Jira.")
