@@ -127,6 +127,8 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
 
         reprovacoes = df_filtrado[df_filtrado['status_novo'] == 'Reprovado']
 
+        print(len(reprovacoes))
+
         crew = Crew(
         agents=[rework_agent],
         tasks=[rework_task],
@@ -146,7 +148,6 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
                 }
             }
         }
-    
     except Exception as e:
         return {
             "error": str(e),
@@ -160,5 +161,3 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
                 }
             }
         }
-
-
