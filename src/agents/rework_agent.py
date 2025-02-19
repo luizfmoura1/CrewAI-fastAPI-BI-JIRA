@@ -98,6 +98,7 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
         - Total de cards concluídos: 0
         - Total de cards com reprovações: 0
         - Total de reprovações no período: 0
+        - ID das sprints analisadas
         """,
         agent=rework_agent,
     )

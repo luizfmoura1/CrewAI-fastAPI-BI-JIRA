@@ -28,6 +28,117 @@ app = FastAPI()
 # Instancia o cliente Jira
 jira_client = JiraClient(base_url=BASE_URL, email=EMAIL, api_token=API_TOKEN_JIRA)
 
+@app.get("/JIRA_all_analytics")
+def get_all_analytics():
+    """
+    Endpoint que consulta todos os boards e sprints e retorna a análise.
+    """
+    def process_all_analytics() -> dict:
+        """
+        Consulta todos os boards, coleta todos os sprints (dos boards que aceitam sprints),
+        e seleciona globalmente as duas sprints mais recentes para processar os cards.
+        """
+        results = []
+        try:
+            boards = jira_client.get_all_boards()
+            all_sprints = []
+            
+            # Coleta sprints de cada board, ignorando os que não aceitam sprints
+            for board in boards:
+                board_id = board.get("id")
+                try:
+                    sprints = jira_client.get_sprints_by_board(board_id)
+                except Exception as e:
+                    if "O quadro não aceita sprints" in str(e):
+                        logger.warning(f"Board {board_id} não aceita sprints. Pulando esse board.")
+                        continue
+                    else:
+                        raise
+                # Adiciona o board_id a cada sprint e junta na lista global
+                for sprint in sprints:
+                    sprint['board_id'] = board_id
+                    all_sprints.append(sprint)
+            
+            # Se houver sprints, ordena globalmente pela data de início (mais recente primeiro)
+            if all_sprints:
+                # Verifica se a propriedade startDate existe e não está vazia
+                if "startDate" in all_sprints[0] and all_sprints[0].get("startDate"):
+                    sorted_sprints = sorted(
+                        all_sprints, 
+                        key=lambda s: s.get("startDate", ""), 
+                        reverse=True
+                    )
+                else:
+                    # Se não houver startDate, usa a ordem retornada
+                    sorted_sprints = all_sprints
+                # Seleciona as duas sprints mais recentes globalmente
+                sorted_sprints = sorted_sprints[:2]
+            else:
+                sorted_sprints = []
+            
+            # Processa cada sprint selecionada e acumula os resultados
+            for sprint in sorted_sprints:
+                board_id = sprint.get("board_id")
+                sprint_id = sprint.get("id")
+                board_data = jira_client.get_single_board(board_id, sprint_id)
+                issues = board_data.get("issues", [])
+                all_cards = []
+                
+                for issue in issues:
+                    issue_key = issue.get("key")
+                    fields = issue.get("fields", {})
+                    # Garante que, se assignee for None, use dicionário vazio
+                    assignee = fields.get("assignee") or {}
+                    dev = fields.get("customfield_10172", "Não definido")
+                    sp = fields.get("customfield_10106", 0)
+                    
+                    if not issue_key:
+                        continue
+                        
+                    try:
+                        changelog_response = jira_client.get_issue_changelog(issue_key)
+                        filtered = filter_reprovado_entries(
+                            issue_key=issue_key,
+                            dev=dev,
+                            sp=sp,
+                            changelog_data=changelog_response,
+                            assignee=assignee
+                        )
+                        all_cards.extend(filtered)
+                    except Exception as ex:
+                        logger.error(f"Falha ao buscar changelog para a issue {issue_key}: {ex}", exc_info=True)
+                        continue
+                        
+                from src.agents.rework_agent import create_rework_agent  # Processa os dados com o rework agent
+                rework_analysis = create_rework_agent(all_cards)
+                
+                results.append({
+                    "board_id": board_id,
+                    "sprint_id": sprint_id,
+                    "analysis": {
+                        "llm_analysis": rework_analysis.get("llm_analysis", "Análise não disponível"),
+                        "charts_data": rework_analysis.get("charts_data", {
+                            "conclusoes": [],
+                            "reprovacoes": [],
+                            "metrics": {
+                                "total_concluidos": 0,
+                                "total_reprovados": 0,
+                                "total_reprovações": 0
+                            }
+                        })
+                    }
+                })
+            
+            return {"results": results}
+        except Exception as e:
+            logger.error(f"Erro ao buscar analytics para todos os boards e sprints: {e}", exc_info=True)
+            raise Exception(str(e))
+    
+    try:
+        return process_all_analytics()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.get("/JIRA_analitycs")
 def get_analitycs(board_id: str, sprint_id: str) -> dict:
     """
@@ -53,7 +164,6 @@ def get_analitycs(board_id: str, sprint_id: str) -> dict:
     except Exception as e:
         logger.error(f"Erro ao buscar o board: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @app.get("/JIRA_analitycs_with_changelogs")
 def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
@@ -137,7 +247,6 @@ def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
             }
         }
 
-
 @app.get("/boards")
 def list_boards():
     """
@@ -150,7 +259,6 @@ def list_boards():
         logger.error(f"Erro ao listar boards: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @app.get("/boards/{board_id}/sprints")
 def list_sprints(board_id: str):
     """
@@ -161,60 +269,4 @@ def list_sprints(board_id: str):
         return {"board_id": board_id, "sprints": sprints}
     except Exception as e:
         logger.error(f"Erro ao listar sprints para o board {board_id}: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.get("/JIRA_all_analytics")
-def get_all_analytics():
-    """
-    Endpoint que consulta todos os boards e, para cada board, todos os sprints,
-    realizando a análise de cada combinação por meio do rework agent.
-    """
-    results = []
-    try:
-        boards = jira_client.get_all_boards()
-        for board in boards:
-            board_id = board.get("id")
-            sprints = jira_client.get_sprints_by_board(board_id)
-            for sprint in sprints:
-                sprint_id = sprint.get("id")
-                board_data = jira_client.get_single_board(board_id, sprint_id)
-                issues = board_data.get("issues", [])
-                all_reprovados = []
-                
-                for issue in issues:
-                    issue_key = issue.get("key")
-                    fields = issue.get("fields", {})
-                    assignee = fields.get("assignee", {})
-                    dev = fields.get("customfield_10172", "Não definido")
-                    sp = fields.get("customfield_10106", 0)
-                    
-                    if not issue_key:
-                        continue
-                        
-                    try:
-                        changelog_response = jira_client.get_issue_changelog(issue_key)
-                        filtered = filter_reprovado_entries(
-                            issue_key=issue_key,
-                            dev=dev,
-                            sp=sp,
-                            changelog_data=changelog_response,
-                            assignee=assignee
-                        )
-                        all_reprovados.extend(filtered)
-                    except Exception as ex:
-                        logger.error(f"Falha ao buscar changelog para a issue {issue_key}: {ex}", exc_info=True)
-                        continue
-                        
-                from src.agents.rework_agent import create_rework_agent  # Processa os dados com o rework agent
-                rework_analysis = create_rework_agent(all_reprovados)
-                
-                results.append({
-                    "board_id": board_id,
-                    "sprint_id": sprint_id,
-                    "analysis": rework_analysis
-                })
-        return {"results": results}
-    except Exception as e:
-        logger.error(f"Erro ao buscar analytics para todos os boards e sprints: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
