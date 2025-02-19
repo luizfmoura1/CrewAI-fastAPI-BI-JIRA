@@ -148,6 +148,7 @@ def get_all_analytics():
 
 
 
+
 @app.get("/JIRA_analitycs")
 def get_analitycs(board_id: str, sprint_id: str) -> dict:
     """
