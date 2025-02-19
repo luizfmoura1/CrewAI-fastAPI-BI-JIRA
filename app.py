@@ -31,17 +31,17 @@ jira_client = JiraClient(base_url=BASE_URL, email=EMAIL, api_token=API_TOKEN_JIR
 @app.get("/JIRA_all_analytics")
 def get_all_analytics():
     """
-    Endpoint que consulta todos os boards e sprints e retorna a análise.
+    Endpoint que consulta todos os boards e sprints e retorna a análise combinada das duas sprints mais recentes.
     """
     def process_all_analytics() -> dict:
         """
-        Consulta todos os boards, coleta todos os sprints (dos boards que aceitam sprints),
-        e seleciona globalmente as duas sprints mais recentes para processar os cards.
+        Consulta todos os boards, coleta os sprints (dos boards que aceitam sprints),
+        seleciona globalmente as duas sprints mais recentes (garantindo que não haja duplicatas)
+        e agrega os dados para processamento conjunto.
         """
-        results = []
         try:
             boards = jira_client.get_all_boards()
-            all_sprints = []
+            unique_sprints = {}  # Dicionário para armazenar sprints únicas, chave: sprint_id
             
             # Coleta sprints de cada board, ignorando os que não aceitam sprints
             for board in boards:
@@ -54,35 +54,38 @@ def get_all_analytics():
                         continue
                     else:
                         raise
-                # Adiciona o board_id a cada sprint e junta na lista global
                 for sprint in sprints:
-                    sprint['board_id'] = board_id
-                    all_sprints.append(sprint)
+                    sprint_id = sprint.get("id")
+                    # Se a sprint ainda não foi adicionada, insere-a com seu board_id
+                    if sprint_id not in unique_sprints:
+                        sprint["board_id"] = board_id
+                        unique_sprints[sprint_id] = sprint
             
-            # Se houver sprints, ordena globalmente pela data de início (mais recente primeiro)
+            all_sprints = list(unique_sprints.values())
+            
+            # Ordena globalmente pela data de início (mais recente primeiro) e seleciona as duas sprints mais recentes
             if all_sprints:
-                # Verifica se a propriedade startDate existe e não está vazia
                 if "startDate" in all_sprints[0] and all_sprints[0].get("startDate"):
                     sorted_sprints = sorted(
-                        all_sprints, 
-                        key=lambda s: s.get("startDate", ""), 
+                        all_sprints,
+                        key=lambda s: s.get("startDate", ""),
                         reverse=True
                     )
                 else:
-                    # Se não houver startDate, usa a ordem retornada
                     sorted_sprints = all_sprints
-                # Seleciona as duas sprints mais recentes globalmente
-                sorted_sprints = sorted_sprints[:2]
+                selected_sprints = sorted_sprints[:2]
             else:
-                sorted_sprints = []
+                selected_sprints = []
             
-            # Processa cada sprint selecionada e acumula os resultados
-            for sprint in sorted_sprints:
+            aggregated_cards = []  # Agrega os cards de todas as sprints selecionadas
+            sprint_info = []      # Armazena informações de cada sprint para referência
+            
+            # Processa cada sprint e acumula os dados dos cards
+            for sprint in selected_sprints:
                 board_id = sprint.get("board_id")
                 sprint_id = sprint.get("id")
                 board_data = jira_client.get_single_board(board_id, sprint_id)
                 issues = board_data.get("issues", [])
-                all_cards = []
                 
                 for issue in issues:
                     issue_key = issue.get("key")
@@ -104,32 +107,36 @@ def get_all_analytics():
                             changelog_data=changelog_response,
                             assignee=assignee
                         )
-                        all_cards.extend(filtered)
+                        aggregated_cards.extend(filtered)
                     except Exception as ex:
                         logger.error(f"Falha ao buscar changelog para a issue {issue_key}: {ex}", exc_info=True)
                         continue
-                        
-                from src.agents.rework_agent import create_rework_agent  # Processa os dados com o rework agent
-                rework_analysis = create_rework_agent(all_cards)
                 
-                results.append({
+                # Armazena informações da sprint processada
+                sprint_info.append({
                     "board_id": board_id,
-                    "sprint_id": sprint_id,
-                    "analysis": {
-                        "llm_analysis": rework_analysis.get("llm_analysis", "Análise não disponível"),
-                        "charts_data": rework_analysis.get("charts_data", {
-                            "conclusoes": [],
-                            "reprovacoes": [],
-                            "metrics": {
-                                "total_concluidos": 0,
-                                "total_reprovados": 0,
-                                "total_reprovações": 0
-                            }
-                        })
-                    }
+                    "sprint_id": sprint_id
                 })
             
-            return {"results": results}
+            # Processa os dados agregados com o rework agent, passando os cards de ambas as sprints
+            from src.agents.rework_agent import create_rework_agent
+            rework_analysis = create_rework_agent(aggregated_cards)
+            
+            return {
+                "sprints": sprint_info,
+                "analysis": {
+                    "llm_analysis": rework_analysis.get("llm_analysis", "Análise não disponível"),
+                    "charts_data": rework_analysis.get("charts_data", {
+                        "conclusoes": [],
+                        "reprovacoes": [],
+                        "metrics": {
+                            "total_concluidos": 0,
+                            "total_reprovados": 0,
+                            "total_reprovações": 0
+                        }
+                    })
+                }
+            }
         except Exception as e:
             logger.error(f"Erro ao buscar analytics para todos os boards e sprints: {e}", exc_info=True)
             raise Exception(str(e))
@@ -138,6 +145,8 @@ def get_all_analytics():
         return process_all_analytics()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
 
 @app.get("/JIRA_analitycs")
 def get_analitycs(board_id: str, sprint_id: str) -> dict:
