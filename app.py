@@ -56,10 +56,16 @@ def get_all_analytics():
                         raise
                 for sprint in sprints:
                     sprint_id = sprint.get("id")
-                    # Se a sprint ainda não foi adicionada, insere-a com seu board_id
                     if sprint_id not in unique_sprints:
-                        sprint["board_id"] = board_id
+                        # Armazena a sprint e uma lista com o board_id atual
+                        sprint["boards"] = [board_id]
                         unique_sprints[sprint_id] = sprint
+                    else:
+                        # Adiciona o board_id se ainda não estiver na lista para essa sprint
+                        if board_id not in unique_sprints[sprint_id].get("boards", []):
+                            unique_sprints[sprint_id]["boards"].append(board_id)
+
+
             
             all_sprints = list(unique_sprints.values())
             
@@ -82,41 +88,43 @@ def get_all_analytics():
             
             # Processa cada sprint e acumula os dados dos cards
             for sprint in selected_sprints:
-                board_id = sprint.get("board_id")
                 sprint_id = sprint.get("id")
-                board_data = jira_client.get_single_board(board_id, sprint_id)
-                issues = board_data.get("issues", [])
+                boards_list = sprint.get("boards", [])
                 
-                for issue in issues:
-                    issue_key = issue.get("key")
-                    fields = issue.get("fields", {})
-                    # Garante que, se assignee for None, use dicionário vazio
-                    assignee = fields.get("assignee") or {}
-                    dev = fields.get("customfield_10172", "Não definido")
-                    sp = fields.get("customfield_10106", 0)
+                for board_id in boards_list:
+                    board_data = jira_client.get_single_board(board_id, sprint_id)
+                    issues = board_data.get("issues", [])
                     
-                    if not issue_key:
-                        continue
+                    for issue in issues:
+                        issue_key = issue.get("key")
+                        fields = issue.get("fields", {})
+                        assignee = fields.get("assignee") or {}
+                        dev = fields.get("customfield_10172", "Não definido")
+                        sp = fields.get("customfield_10106", 0)
                         
-                    try:
-                        changelog_response = jira_client.get_issue_changelog(issue_key)
-                        filtered = filter_reprovado_entries(
-                            issue_key=issue_key,
-                            dev=dev,
-                            sp=sp,
-                            changelog_data=changelog_response,
-                            assignee=assignee
-                        )
-                        aggregated_cards.extend(filtered)
-                    except Exception as ex:
-                        logger.error(f"Falha ao buscar changelog para a issue {issue_key}: {ex}", exc_info=True)
-                        continue
-                
-                # Armazena informações da sprint processada
+                        if not issue_key:
+                            continue
+                            
+                        try:
+                            changelog_response = jira_client.get_issue_changelog(issue_key)
+                            filtered = filter_reprovado_entries(
+                                issue_key=issue_key,
+                                dev=dev,
+                                sp=sp,
+                                changelog_data=changelog_response,
+                                assignee=assignee
+                            )
+                            aggregated_cards.extend(filtered)
+                        except Exception as ex:
+                            logger.error(f"Falha ao buscar changelog para a issue {issue_key}: {ex}", exc_info=True)
+                            continue
+                    
+                # Armazena informações da sprint processada (lista dos boards)
                 sprint_info.append({
-                    "board_id": board_id,
-                    "sprint_id": sprint_id
+                    "sprint_id": sprint_id,
+                    "boards": boards_list
                 })
+
             
             # Processa os dados agregados com o rework agent, passando os cards de ambas as sprints
             from src.agents.rework_agent import create_rework_agent
