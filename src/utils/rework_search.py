@@ -10,7 +10,7 @@ def filter_reprovado_entries(
     
     for history in changelog:
         for item in history.get('items', []):
-            if item.get('toString') in ['Reprovado', 'Em produção', 'Em release', 'Em homologação']:
+            if item.get('toString') in ['Reprovado', 'Em produção', 'Em release', 'Em Homologação']:
                 assignee_name = assignee.get('displayName', 'Não atribuído')
                 entry = {
                     'card_key': issue_key,
