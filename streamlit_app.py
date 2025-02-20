@@ -57,7 +57,6 @@ def plot_responsavel_performance(df: pd.DataFrame, title: str) -> Optional[plt.F
         st.error(f"Erro ao gerar gráfico: {str(e)}")
         return None
 
-
 def process_dataframe(df: pd.DataFrame, df_name: str) -> pd.DataFrame:
     """
     Processa um DataFrame garantindo a coluna 'responsavel'. Caso seja necessário,
@@ -114,18 +113,14 @@ def fetch_data(board_id: str, sprint_id: str) -> dict:
     from app import get_analitycs_with_changelogs
     return get_analitycs_with_changelogs(board_id, sprint_id)
 
-import requests
-import streamlit as st
-
 @st.cache_data(ttl=3600, show_spinner="Carregando dados do Jira para todos os boards e sprints...")
-def fetch_all_data() -> dict:
-    from app import get_all_analytics  # Importa o endpoint que contém process_all_analytics internamente
+def fetch_all_data(num_sprints: int) -> dict:
+    from app import get_all_analytics 
     try:
-        return get_all_analytics()
+        return get_all_analytics(num_sprints=num_sprints)
     except Exception as e:
         st.error(f"Erro ao obter analytics: {str(e)}")
         return {}
-
 
 # ============================================================================
 # Interface do Sidebar para configuração da consulta
@@ -137,19 +132,18 @@ with st.sidebar:
     modo = st.radio("Selecione o modo de consulta:", options=["Consulta Específica", "Todos Boards e Sprints"])
     
     if modo == "Consulta Específica":
-        # Busca os boards dinamicamente
+        # Consulta específica: boards, sprints e seleção
         boards = fetch_boards()
-        # Cria um dicionário: key = id do board (como string) e value = nome (ou "Board {id}" se não houver nome)
         board_options = {str(board.get("id")): board.get("name", f"Board {board.get('id')}") for board in boards}
         selected_board_id = st.selectbox("Selecione o Board", options=list(board_options.keys()),
                                          format_func=lambda x: board_options[x])
-        # Após selecionar o board, busca os sprints dele
         sprints = fetch_sprints(selected_board_id)
         sprint_options = {str(sprint.get("id")): sprint.get("name", f"Sprint {sprint.get('id')}") for sprint in sprints}
         selected_sprint_id = st.selectbox("Selecione a Sprint", options=list(sprint_options.keys()),
                                           format_func=lambda x: sprint_options[x])
     else:
         st.info("A consulta será realizada em TODOS os boards e sprints.")
+        num_sprints = st.number_input("Número de últimas sprints para análise", min_value=1, value=2, step=1)
     
     run_query = st.button("Run")
 
@@ -230,9 +224,10 @@ if run_query:
     else:
         try:
             with st.spinner("Obtendo dados do Jira para todos os boards e sprints..."):
-                all_data = fetch_all_data()
-            # all_data deve conter um dicionário com a chave "results", que é uma lista de análises
-            results = all_data.get("results", [])
+                # Passa o valor num_sprints definido pelo usuário
+                all_data = fetch_all_data(num_sprints)
+            # all_data deve conter um dicionário com as chaves "sprints" e "analysis"
+            results = all_data.get("sprints", [])
             st.title("📊 Análise de Performance - Todos os Boards e Sprints")
             if not results:
                 st.info("Nenhum dado encontrado.")
@@ -240,16 +235,16 @@ if run_query:
                 # Exibe um resumo em tabela
                 summary_data = []
                 for result in results:
-                    board_id = result.get("board_id")
-                    sprint_id = result.get("sprint_id")
-                    summary_data.append({"Board": board_id, "Sprint": sprint_id})
+                    summary_data.append({
+                        "Sprint": result.get("sprint_id"),
+                        "Boards": ", ".join([str(b) for b in result.get("boards", [])])
+                    })
                 summary_df = pd.DataFrame(summary_data)
                 st.dataframe(summary_df)
 
-                # Permite expandir os detalhes de cada board/sprint
-                for result in results:
-                    with st.expander(f"Detalhes para Board {result.get('board_id')} - Sprint {result.get('sprint_id')}"):
-                        st.json(result)
+                # Permite expandir os detalhes de cada sprint
+                with st.expander("Ver Análise Detalhada"):
+                    st.json(all_data.get("analysis", {}))
         except Exception as e:
             st.error(f"Erro crítico: {str(e)}")
             st.exception(e)
