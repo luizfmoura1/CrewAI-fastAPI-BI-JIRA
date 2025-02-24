@@ -159,16 +159,16 @@ def get_analitycs(board_id: str, sprint_id: str) -> dict:
         board_data = jira_client.get_single_board(board_id, sprint_id)
         response = main(board_data)
         
-        from src.agents.sp_agent import create_story_agent  # Certifique-se de que o agente está implementado
+        from src.agents.sp_agent import create_story_agent 
         sp_analysis = create_story_agent(board_data)
 
         return {
             "board_id": board_id,
             "sprint_id": sprint_id,
-            "raw_data": board_data,  # Dados brutos extraídos do Jira
+            "raw_data": board_data,  
             "analysis": {
-                "processed_data": [response],  # Dados processados pela função `main()`
-                "sp_analysis": sp_analysis      # Resultado da análise do agente
+                "processed_data": [response],  
+                "sp_analysis": sp_analysis      
             }
         }
     
