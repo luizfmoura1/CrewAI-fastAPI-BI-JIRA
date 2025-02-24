@@ -41,7 +41,7 @@ def plot_responsavel_performance(df: pd.DataFrame, title: str) -> Optional[plt.F
         if counts.empty:
             return None
 
-        fig, ax = plt.subplots(figsize=(20, 15))
+        fig, ax = plt.subplots(figsize=(15, 11))
         colors = plt.cm.viridis_r(np.linspace(0.2, 0.8, len(counts)))
         counts.plot(kind='barh', ax=ax, color=colors, title=title)
         ax.set_xlabel('Quantidade', fontsize=21)
@@ -53,6 +53,34 @@ def plot_responsavel_performance(df: pd.DataFrame, title: str) -> Optional[plt.F
 
     except Exception as e:
         st.error(f"Erro ao gerar gráfico: {str(e)}")
+        return None
+
+def plot_sp_conclusions(df: pd.DataFrame, title: str) -> Optional[plt.Figure]:
+    try:
+        # Verifica se o DataFrame contém as colunas necessárias
+        if df.empty or 'responsavel' not in df.columns or 'sp' not in df.columns:
+            return None
+        
+        # Converte a coluna 'sp' para numérico
+        df['sp'] = pd.to_numeric(df['sp'], errors='coerce').fillna(0)
+        # Agrupa por 'responsavel' e soma os story points
+        sp_sum = df.groupby('responsavel')['sp'].sum().sort_values(ascending=False)
+        
+        if sp_sum.empty:
+            return None
+        
+        # Cria o gráfico de barras horizontal
+        fig, ax = plt.subplots(figsize=(8, 4))
+        colors = plt.cm.viridis_r(np.linspace(0.2, 0.8, len(sp_sum)))
+        sp_sum.plot(kind='barh', ax=ax, color=colors, title=title)
+        ax.set_xlabel('Total Story Points', fontsize=7)
+        ax.set_ylabel('Responsável', fontsize=7)
+        plt.xticks(fontsize=8)
+        plt.yticks(fontsize=8)
+        plt.tight_layout()
+        return fig
+    except Exception as e:
+        st.error(f"Erro ao gerar gráfico de Story Points: {str(e)}")
         return None
 
 def process_dataframe(df: pd.DataFrame, df_name: str) -> pd.DataFrame:
@@ -181,6 +209,13 @@ if run_query:
                 else:
                     st.info("Sem dados de reprovações")
 
+            st.header("Soma dos Story Points dos Cards Concluídos por Responsável")
+            fig_sp = plot_sp_conclusions(concl_df, "Story Points - Conclusões")
+            if fig_sp:
+                st.pyplot(fig_sp)
+            else:
+                st.info("Sem dados para Story Points")
+
             st.header("Insights Analíticos")
             with st.expander("Ver Análise Detalhada"):
                 llm_analysis = analysis.get('llm_analysis', 'Análise não disponível')
@@ -202,7 +237,7 @@ if run_query:
         try:
             with st.spinner("Obtendo dados do Jira para todos os boards e sprints..."):
                 all_data = fetch_all_data(num_sprints)
-            # Agora processamos os dados de análise de forma similar
+            # Processa os dados de análise de forma similar
             analysis = all_data.get("analysis", {})
             charts_data = analysis.get("charts_data", {})
             metrics = charts_data.get("metrics", {})
@@ -234,6 +269,13 @@ if run_query:
                     st.pyplot(fig)
                 else:
                     st.info("Sem dados de reprovações")
+
+            st.header("Soma dos Story Points dos Cards Concluídos por Responsável")
+            fig_sp = plot_sp_conclusions(concl_df, "Story Points - Conclusões")
+            if fig_sp:
+                st.pyplot(fig_sp)
+            else:
+                st.info("Sem dados para Story Points")
 
             st.header("Insights Analíticos")
             with st.expander("Ver Análise Detalhada"):
