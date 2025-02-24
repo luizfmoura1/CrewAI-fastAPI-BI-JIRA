@@ -58,20 +58,17 @@ def plot_responsavel_performance(df: pd.DataFrame, title: str) -> Optional[plt.F
 
 def plot_sp_conclusions(df: pd.DataFrame, title: str) -> Optional[plt.Figure]:
     try:
-        # Verifica se o DataFrame contém as colunas necessárias
         if df.empty or 'responsavel' not in df.columns or 'sp' not in df.columns:
             return None
-        
-        # Converte a coluna 'sp' para numérico
+
         df['sp'] = pd.to_numeric(df['sp'], errors='coerce').fillna(0)
-        # Agrupa por 'responsavel' e soma os story points
         sp_sum = df.groupby('responsavel')['sp'].sum().sort_values(ascending=False)
         
         if sp_sum.empty:
             return None
         
-        # Cria o gráfico de barras horizontal (tamanho do conteúdo permanece o mesmo)
-        fig, ax = plt.subplots(figsize=(8, 4))
+        # Cria o gráfico de barras horizontal sem definir tamanho fixo
+        fig, ax = plt.subplots()
         colors = plt.cm.viridis_r(np.linspace(0.2, 0.8, len(sp_sum)))
         sp_sum.plot(kind='barh', ax=ax, color=colors, title=title)
         ax.set_xlabel('Total Story Points', fontsize=7)
@@ -79,7 +76,6 @@ def plot_sp_conclusions(df: pd.DataFrame, title: str) -> Optional[plt.Figure]:
         plt.xticks(fontsize=8)
         plt.yticks(fontsize=8)
         
-        # Adiciona os valores de soma ao lado de cada barra
         for i, value in enumerate(sp_sum):
             ax.text(value, i, f' {value}', va='center', ha='left', fontsize=8)
         
@@ -201,30 +197,26 @@ if run_query:
                 st.markdown(format_metric(metrics.get('total_reprovas', 0), "Reprovações"), unsafe_allow_html=True)
 
             st.header("Performance por Responsável")
-            col1, col2 = st.columns(2)
+            # Exibe os três gráficos em uma única linha
+            col1, col2, col3 = st.columns(3)
             with col1:
-                fig = plot_responsavel_performance(concl_df, "Conclusões Bem-sucedidas")
-                if fig:
-                    st.pyplot(fig)
+                fig1 = plot_responsavel_performance(concl_df, "Conclusões Bem-sucedidas")
+                if fig1:
+                    st.pyplot(fig1)
                 else:
                     st.info("Sem dados de conclusões")
             with col2:
-                fig = plot_responsavel_performance(reprov_df, "Reprovações por Responsável")
-                if fig:
-                    st.pyplot(fig)
+                fig2 = plot_responsavel_performance(reprov_df, "Reprovações por Responsável")
+                if fig2:
+                    st.pyplot(fig2)
                 else:
                     st.info("Sem dados de reprovações")
-
-            st.header("Soma dos Story Points dos Cards Concluídos por Responsável")
-            fig_sp = plot_sp_conclusions(concl_df, "Story Points - Conclusões")
-            if fig_sp:
-                buf = io.BytesIO()
-                fig_sp.savefig(buf, format="png", bbox_inches="tight")
-                buf.seek(0)  # Reinicia o ponteiro do buffer
-                st.image(buf, width=800)  # Ajuste o valor de 'width' conforme desejado
-
-            else:
-                st.info("Sem dados para Story Points")
+            with col3:
+                fig3 = plot_sp_conclusions(concl_df, "Story Points - Conclusões")
+                if fig3:
+                    st.pyplot(fig3)
+                else:
+                    st.info("Sem dados para Story Points")
 
             st.header("Insights Analíticos")
             with st.expander("Ver Análise Detalhada"):
@@ -266,28 +258,25 @@ if run_query:
             reprov_df = process_dataframe(pd.DataFrame(charts_data.get('reprovacoes', [])), "Reprovações")
 
             st.header("Performance por Responsável")
-            col1, col2 = st.columns(2)
+            col1, col2, col3 = st.columns(3)
             with col1:
-                fig = plot_responsavel_performance(concl_df, "Conclusões Bem-sucedidas")
-                if fig:
-                    st.pyplot(fig)
+                fig1 = plot_responsavel_performance(concl_df, "Conclusões Bem-sucedidas")
+                if fig1:
+                    st.pyplot(fig1)
                 else:
                     st.info("Sem dados de conclusões")
             with col2:
-                fig = plot_responsavel_performance(reprov_df, "Reprovações por Responsável")
-                if fig:
-                    st.pyplot(fig)
+                fig2 = plot_responsavel_performance(reprov_df, "Reprovações por Responsável")
+                if fig2:
+                    st.pyplot(fig2)
                 else:
                     st.info("Sem dados de reprovações")
-
-            st.header("Soma dos Story Points dos Cards Concluídos por Responsável")
-            fig_sp = plot_sp_conclusions(concl_df, "Story Points - Conclusões")
-            if fig_sp:
-                buf = io.BytesIO()
-                fig_sp.savefig(buf, format="png", bbox_inches="tight")
-                st.image(buf, width=300)
-            else:
-                st.info("Sem dados para Story Points")
+            with col3:
+                fig3 = plot_sp_conclusions(concl_df, "Story Points - Conclusões")
+                if fig3:
+                    st.pyplot(fig3)
+                else:
+                    st.info("Sem dados para Story Points")
 
             st.header("Insights Analíticos")
             with st.expander("Ver Análise Detalhada"):
