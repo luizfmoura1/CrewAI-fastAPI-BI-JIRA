@@ -40,69 +40,58 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]]) -> Dict[str, Any]
 
         rework_agent = Agent(
             role="Analista de Métricas Ágeis",
-            goal="Calcular, a partir dos dados dos cards, o número de reprovações que os cards reprovados tiveram por desenvolvedor "
-                 "e a soma dos Story Points dos cards que se encaixaram nos status de **concluídos** por cada desenvolvedor, fornecendo insights analíticos relevantes para a melhoria do processo de desenvolvimento.",
-            backstory="Você é um especialista em métricas ágeis, com ampla experiência na análise de sprints e performance dos times. "
-                      "Seu foco é identificar quais desenvolvedores estão enfrentando desafios frequentes (medidos pelo número de reprovações) e quais estão agregando maior valor (medidos pela soma dos Story Points dos cards concluídos). "
-                      "Utilize os dados fornecidos para calcular essas métricas e, com base nos resultados, gerar insights que auxiliem na otimização dos processos de desenvolvimento.",
+            goal="Analisar os dados dos cards para extrair insights analíticos relevantes, identificando padrões, tendências e oportunidades de melhoria no processo de desenvolvimento.",
+            backstory="Você é um especialista em métricas ágeis, com vasta experiência em transformar dados em insights estratégicos. Seu foco é analisar os registros dos cards para identificar oportunidades de melhoria e gargalos no desempenho dos desenvolvedores, apresentando apenas os insights analíticos que realmente importam, sem expor os cálculos brutos.",
             llm=llm,
             verbose=True
         )
 
         rework_task = Task(
             description=f"""
-            ## Análise de Métricas dos Cards - Período: {start_date_str} a {current_date_str}
+            ## Insights Analíticos Relevantes - Período: {start_date_str} a {current_date_str}
             
             **Objetivo:**
-            - Calcular o número de reprovações (status "Reprovado") para cada desenvolvedor.
-            - Somar os Story Points dos cards **concluídos** (status "Em produção", "Em release" e "Em Homologação") para cada desenvolvedor.
-            - Gerar insights analíticos relevantes com base nesses dados.
+            - Extrair insights analíticos relevantes a partir da análise dos dados dos cards, evidenciando padrões e oportunidades de melhoria no desempenho dos desenvolvedores, sem apresentar os números brutos.
             
             **Processamento:**
             1. Filtrar os registros dos cards para o período entre {start_date_str} e {current_date_str}.
-            2. Para os cards com status "Reprovado", contar o número de reprovações de cada um deles, separando por desenvolvedor.
-            3. Para os cards com status "Em produção", "Em release" ou "Em Homologação", somar os Story Points (campo 'sp') de cada um deles separando por desenvolvedor. **ATENÇÃO** - Um card pode ter mais de um status de conclusão na changelog, mas deve ser contabilizado apenas uma vez.
-            4. Agregar essas métricas por desenvolvedor e analisar a performance.
-            5. Com base nos resultados, gerar insights que identifiquem gargalos ou oportunidades de melhoria.
-    
+            2. Analisar os registros para identificar padrões de reprovações e a acumulação de Story Points nos cards concluídos.
+            3. Agregar as informações por desenvolvedor e identificar tendências que possam indicar gargalos ou oportunidades de otimização.
+            4. Gerar insights analíticos que orientem melhorias no processo de desenvolvimento, apresentando somente as conclusões estratégicas.
+            
             **ATENÇÃO:**
-            Dados a serem analisados a seguir:
+            Utilize os dados a seguir para derivar insights analíticos, sem expor os valores brutos:
             ---------------------
             {df_filtrado.to_dict(orient='records')}
             ---------------------
-            **ATENÇÃO**:
-            - As reprovações devem ser análisadas com base na variavel {reprovacoes}
-            - As conclusões devem ser analisadas com base na variavel {conclusoes} e a soma dos Story Points devem ser **apenas dos cards que estão nessa variavel**.
-            - O número de reprovações devem chegar ao valor da variavel {len(reprovacoes)}.
-
+            - Considere as reprovações conforme a variável {reprovacoes}.
+            - Considere as conclusões e a soma dos Story Points conforme a variável {conclusoes}, contabilizando apenas os cards indicados.
+            - O total de reprovações deve corresponder à variável {len(reprovacoes)}.
+            
             **Dados de Entrada:**
             - Lista de registros contendo:
-              - 'card_key': Identificador do card.
-              - 'responsavel': Nome do desenvolvedor.
-              - 'status_novo': Novo status do card.
-              - 'sp': Story Points do card.
-              - 'data_mudanca': Data da mudança de status.
+            - 'card_key': Identificador do card.
+            - 'responsavel': Nome do desenvolvedor.
+            - 'status_novo': Novo status do card.
+            - 'sp': Story Points do card.
+            - 'data_mudanca': Data da mudança de status.
             
             **Saída Esperada:**
-            - Relatório consolidado com:
-              - Para cada desenvolvedor, o total de reprovações.
-              - Para cada desenvolvedor, a soma dos Story Points dos cards que encaixaram nos status de concluído.
-              - Insights analíticos relevantes, por exemplo, identificação de desenvolvedores com alta taxa de reprovação e sugestões para melhoria dos processos.
+            - Relatório final contendo apenas os insights analíticos relevantes, destacando:
+            - Padrões e tendências de desempenho entre os desenvolvedores.
+            - Recomendações e oportunidades de melhoria para otimização do processo de desenvolvimento.
+            - O resultado final deve ser uma análise visualmente limpa, sem a utilização de asteriscos e hashtags, tente montar uma estrutura clara, objetiva e organizada.
             """,
             expected_output=f"""
-            **Relatório Consolidado - Período: {start_date_str} a {current_date_str}**
+            Relatório Consolidado - Período: {start_date_str} a {current_date_str}
             
-            ### Métricas por Desenvolvedor
-            [Desenvolvedor 1]: Reprovações: [Total], Story Points Concluídos: [Total]
-            [Desenvolvedor 2]: Reprovações: [Total], Story Points Concluídos: [Total]
-            ...
-            
-            ### Insights Analíticos
+            Insights Analíticos Relevantes
             - [Insight 1]: ...
             - [Insight 2]: ...
             """,
             agent=rework_agent,
         )
+
 
         crew = Crew(
             agents=[rework_agent],

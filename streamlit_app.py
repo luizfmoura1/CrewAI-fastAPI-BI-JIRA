@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from typing import Optional
+import io
 
 # Configuração da página (deve ser o primeiro comando)
 st.set_page_config(
@@ -69,7 +70,7 @@ def plot_sp_conclusions(df: pd.DataFrame, title: str) -> Optional[plt.Figure]:
         if sp_sum.empty:
             return None
         
-        # Cria o gráfico de barras horizontal
+        # Cria o gráfico de barras horizontal (tamanho do conteúdo permanece o mesmo)
         fig, ax = plt.subplots(figsize=(8, 4))
         colors = plt.cm.viridis_r(np.linspace(0.2, 0.8, len(sp_sum)))
         sp_sum.plot(kind='barh', ax=ax, color=colors, title=title)
@@ -77,6 +78,11 @@ def plot_sp_conclusions(df: pd.DataFrame, title: str) -> Optional[plt.Figure]:
         ax.set_ylabel('Responsável', fontsize=7)
         plt.xticks(fontsize=8)
         plt.yticks(fontsize=8)
+        
+        # Adiciona os valores de soma ao lado de cada barra
+        for i, value in enumerate(sp_sum):
+            ax.text(value, i, f' {value}', va='center', ha='left', fontsize=8)
+        
         plt.tight_layout()
         return fig
     except Exception as e:
@@ -212,7 +218,11 @@ if run_query:
             st.header("Soma dos Story Points dos Cards Concluídos por Responsável")
             fig_sp = plot_sp_conclusions(concl_df, "Story Points - Conclusões")
             if fig_sp:
-                st.pyplot(fig_sp)
+                buf = io.BytesIO()
+                fig_sp.savefig(buf, format="png", bbox_inches="tight")
+                buf.seek(0)  # Reinicia o ponteiro do buffer
+                st.image(buf, width=800)  # Ajuste o valor de 'width' conforme desejado
+
             else:
                 st.info("Sem dados para Story Points")
 
@@ -273,7 +283,9 @@ if run_query:
             st.header("Soma dos Story Points dos Cards Concluídos por Responsável")
             fig_sp = plot_sp_conclusions(concl_df, "Story Points - Conclusões")
             if fig_sp:
-                st.pyplot(fig_sp)
+                buf = io.BytesIO()
+                fig_sp.savefig(buf, format="png", bbox_inches="tight")
+                st.image(buf, width=300)
             else:
                 st.info("Sem dados para Story Points")
 
