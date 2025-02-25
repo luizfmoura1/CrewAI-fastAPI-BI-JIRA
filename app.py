@@ -170,14 +170,9 @@ def get_daily_all_analytics(num_sprints: int = 2):
                         unique_sprints[sprint_id]["boards"].append(board_id)
 
         all_sprints = list(unique_sprints.values())
-
         if all_sprints:
             if "startDate" in all_sprints[0] and all_sprints[0].get("startDate"):
-                sorted_sprints = sorted(
-                    all_sprints,
-                    key=lambda s: s.get("startDate", ""),
-                    reverse=True
-                )
+                sorted_sprints = sorted(all_sprints, key=lambda s: s.get("startDate", ""), reverse=True)
             else:
                 sorted_sprints = all_sprints
             selected_sprints = sorted_sprints[:num_sprints]
@@ -194,8 +189,8 @@ def get_daily_all_analytics(num_sprints: int = 2):
                 board_data = jira_client.get_single_board(board_id, sprint_id)
                 issues = board_data.get("issues", [])
                 for issue in issues:
-                    status = issue.get("fields", {}).get("status", {}).get("name", "").lower()
-                    if status in ["concluído", "concluida", "done"]:
+                    status = issue.get("fields", {}).get("status", {}).get("name", "")
+                    if status in ["Em produção", "Em release", "Em Homologação"]:
                         created_str = issue.get("fields", {}).get("created")
                         if created_str:
                             created_date = datetime.fromisoformat(created_str.replace("Z", "+00:00")).date()
@@ -209,6 +204,14 @@ def get_daily_all_analytics(num_sprints: int = 2):
                 total_story_points += float(sp_value)
             except Exception:
                 continue
+
+        # Transformação: extrair os dados relevantes para a interface
+        for issue in daily_concluded_cards:
+            fields = issue.get("fields", {})
+            assignee = fields.get("assignee")
+            issue["responsavel"] = assignee.get("displayName") if (assignee and isinstance(assignee, dict)) else "Não definido"
+            issue["sp"] = fields.get("customfield_10106", 0)
+            issue["card_key"] = issue.get("key", "")
 
         return {
             "daily_concluded_cards": daily_concluded_cards,
@@ -227,10 +230,8 @@ def get_analitycs(board_id: str, sprint_id: str) -> dict:
     try:
         board_data = jira_client.get_single_board(board_id, sprint_id)
         response = main(board_data)
-        
         from src.agents.sp_agent import create_story_agent 
         sp_analysis = create_story_agent(board_data)
-
         return {
             "board_id": board_id,
             "sprint_id": sprint_id,
@@ -240,7 +241,6 @@ def get_analitycs(board_id: str, sprint_id: str) -> dict:
                 "sp_analysis": sp_analysis      
             }
         }
-    
     except Exception as e:
         logger.error(f"Erro ao buscar o board: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
@@ -255,20 +255,16 @@ def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
     try:
         board_data = jira_client.get_single_board(board_id, sprint_id)
         issues = board_data.get("issues", [])
-        
         all_reprovados = []
         issues_with_changelogs = []
-        
         for issue in issues:
             issue_key = issue.get("key")
             fields = issue.get("fields", {})
             assignee = fields.get("assignee", {})
             dev = fields.get("customfield_10172", "Não definido")
             sp = fields.get("customfield_10106", 0)
-            
             if not issue_key:
                 continue
-                
             try:
                 changelog_response = jira_client.get_issue_changelog(issue_key)
                 filtered = filter_reprovado_entries(
@@ -283,14 +279,11 @@ def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
                     "reprovado_entries": filtered
                 })
                 all_reprovados.extend(filtered)
-                
             except Exception as ex:
                 logger.error(f"Falha ao buscar changelog para a issue {issue_key}: {ex}", exc_info=True)
                 continue
-
         from src.agents.rework_agent import create_rework_agent
         rework_analysis = create_rework_agent(all_reprovados)
-        
         return {
             "board_id": board_id,
             "sprint_id": sprint_id,
@@ -321,7 +314,6 @@ def get_analitycs_daily(board_id: str, sprint_id: str) -> dict:
     try:
         board_data = jira_client.get_single_board(board_id, sprint_id)
         issues = board_data.get("issues", [])
-        
         today = datetime.now().date()
         concluded_cards = []
         for issue in issues:
@@ -332,7 +324,6 @@ def get_analitycs_daily(board_id: str, sprint_id: str) -> dict:
                     created_date = datetime.fromisoformat(created_str.replace("Z", "+00:00")).date()
                     if created_date == today:
                         concluded_cards.append(issue)
-        
         total_story_points = 0.0
         for issue in concluded_cards:
             sp_value = issue.get("fields", {}).get("customfield_10106", 0)
@@ -340,7 +331,12 @@ def get_analitycs_daily(board_id: str, sprint_id: str) -> dict:
                 total_story_points += float(sp_value)
             except Exception:
                 continue
-        
+        for issue in concluded_cards:
+            fields = issue.get("fields", {})
+            assignee = fields.get("assignee")
+            issue["responsavel"] = assignee.get("displayName") if (assignee and isinstance(assignee, dict)) else "Não definido"
+            issue["sp"] = fields.get("customfield_10106", 0)
+            issue["card_key"] = issue.get("key", "")
         return {
             "concluded_cards": concluded_cards,
             "total_story_points": total_story_points
@@ -352,9 +348,6 @@ def get_analitycs_daily(board_id: str, sprint_id: str) -> dict:
 
 @app.get("/boards")
 def list_boards():
-    """
-    Endpoint para listar todos os boards acessíveis pelo usuário.
-    """
     try:
         boards = jira_client.get_all_boards()
         return {"boards": boards}
@@ -365,12 +358,23 @@ def list_boards():
 
 @app.get("/boards/{board_id}/sprints")
 def list_sprints(board_id: str):
-    """
-    Endpoint para listar todos os sprints de um board específico.
-    """
     try:
         sprints = jira_client.get_sprints_by_board(board_id)
         return {"board_id": board_id, "sprints": sprints}
     except Exception as e:
         logger.error(f"Erro ao listar sprints para o board {board_id}: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# Expondo explicitamente os nomes que queremos importar de app.py
+list_boards = list_boards
+list_sprints = list_sprints
+get_all_analytics = get_all_analytics
+get_daily_all_analytics = get_daily_all_analytics
+get_analitycs = get_analitycs
+get_analitycs_with_changelogs = get_analitycs_with_changelogs
+get_analitycs_daily = get_analitycs_daily
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

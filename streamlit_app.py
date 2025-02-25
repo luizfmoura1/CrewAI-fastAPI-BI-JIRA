@@ -4,6 +4,11 @@ import pandas as pd
 import numpy as np
 from typing import Optional
 import io
+import importlib
+from datetime import datetime
+
+# Carrega o módulo "app" dinamicamente
+app_module = importlib.import_module("app")
 
 # Configuração da página
 st.set_page_config(
@@ -34,19 +39,25 @@ def format_metric(value: int, title: str) -> str:
     """
 
 def plot_responsavel_performance(df: pd.DataFrame, title: str) -> Optional[plt.Figure]:
+    """
+    Gera um gráfico de barras horizontal mostrando a contagem por 'responsavel'.
+    """
     try:
         if df.empty or 'responsavel' not in df.columns:
             return None
+
         counts = df['responsavel'].value_counts()
         if counts.empty:
             return None
-        fig, ax = plt.subplots(figsize=(15, 11))
+
+        # Padroniza o tamanho do gráfico
+        fig, ax = plt.subplots(figsize=(12, 7))
         colors = plt.cm.viridis_r(np.linspace(0.2, 0.8, len(counts)))
         counts.plot(kind='barh', ax=ax, color=colors, title=title)
-        ax.set_xlabel('Quantidade', fontsize=21)
-        ax.set_ylabel('Responsável', fontsize=21)
-        plt.xticks(fontsize=20)
-        plt.yticks(fontsize=20)
+        ax.set_xlabel('Quantidade', fontsize=14)
+        ax.set_ylabel('Responsável', fontsize=14)
+        plt.xticks(fontsize=12)
+        plt.yticks(fontsize=12)
         plt.tight_layout()
         return fig
     except Exception as e:
@@ -54,22 +65,28 @@ def plot_responsavel_performance(df: pd.DataFrame, title: str) -> Optional[plt.F
         return None
 
 def plot_sp_conclusions(df: pd.DataFrame, title: str) -> Optional[plt.Figure]:
+    """
+    Gera um gráfico de barras horizontal mostrando a soma de 'sp' por 'responsavel'.
+    """
     try:
         if df.empty or 'responsavel' not in df.columns or 'sp' not in df.columns:
             return None
+
         df['sp'] = pd.to_numeric(df['sp'], errors='coerce').fillna(0)
         sp_sum = df.groupby('responsavel')['sp'].sum().sort_values(ascending=False)
         if sp_sum.empty:
             return None
-        fig, ax = plt.subplots()
+
+        # Padroniza o tamanho do gráfico
+        fig, ax = plt.subplots(figsize=(12, 7))
         colors = plt.cm.viridis_r(np.linspace(0.2, 0.8, len(sp_sum)))
         sp_sum.plot(kind='barh', ax=ax, color=colors, title=title)
-        ax.set_xlabel('Total Story Points', fontsize=7)
-        ax.set_ylabel('Responsável', fontsize=7)
-        plt.xticks(fontsize=8)
-        plt.yticks(fontsize=8)
+        ax.set_xlabel('Total Story Points', fontsize=14)
+        ax.set_ylabel('Responsável', fontsize=14)
+        plt.xticks(fontsize=12)
+        plt.yticks(fontsize=12)
         for i, value in enumerate(sp_sum):
-            ax.text(value, i, f' {value}', va='center', ha='left', fontsize=8)
+            ax.text(value, i, f' {value}', va='center', ha='left', fontsize=10)
         plt.tight_layout()
         return fig
     except Exception as e:
@@ -78,26 +95,64 @@ def plot_sp_conclusions(df: pd.DataFrame, title: str) -> Optional[plt.Figure]:
 
 def process_dataframe(df: pd.DataFrame, df_name: str) -> pd.DataFrame:
     """
-    Garante que exista a coluna 'responsavel'. Se houver a coluna 'desenvolvedor',
-    utiliza-a para corrigir casos como de estagiários.
+    Se o DataFrame já tiver a coluna 'responsavel', a mantém. Caso contrário, tenta extrair a partir de 'assignee'.
     """
-    if not df.empty:
-        tem_desenvolvedor = 'desenvolvedor' in df.columns
-        possible_columns = ['responsavel', 'Responsável', 'assignee']
-        for col in possible_columns:
-            if col in df.columns:
-                df['responsavel'] = df[col]
-                break
+    if df.empty:
+        return df
+    if "responsavel" not in df.columns:
+        if "assignee" in df.columns:
+            df["responsavel"] = df["assignee"].apply(
+                lambda x: x.get("displayName") if isinstance(x, dict) else "Não definido"
+            )
         else:
-            st.warning(f"Coluna 'responsavel' não encontrada em {df_name}")
-            df['responsavel'] = 'Não definido'
-        df['responsavel'] = df['responsavel'].fillna('Não definido').replace({'': 'Não definido'})
-        if tem_desenvolvedor:
-            possiveis_estagiario = ['estagiario', 'estagiário', 'estagiarios', 'estagiários']
-            mask = df['responsavel'].str.lower().str.strip().isin(possiveis_estagiario)
-            df.loc[mask, 'responsavel'] = df.loc[mask, 'desenvolvedor']
-    else:
-        df['responsavel'] = pd.Series(dtype=str)
+            st.warning(f"Coluna 'responsavel' não encontrada em {df_name}. Definindo como 'Não definido'.")
+            df["responsavel"] = "Não definido"
+    df["responsavel"] = df["responsavel"].fillna("Não definido").replace({'': "Não definido"})
+    return df
+
+def format_data_mudanca(data_str: str) -> str:
+    """
+    Converte a data ISO para o formato 'YYYY-MM-DD HH:MM'. Se falhar, retorna a string original.
+    """
+    if not data_str:
+        return data_str
+    try:
+        dt = datetime.fromisoformat(data_str.replace("Z", "+00:00"))
+        return dt.strftime("%Y-%m-%d %H:%M")
+    except Exception:
+        return data_str
+
+def normalize_issue(issue: dict) -> dict:
+    """
+    Extrai os dados desejados de uma issue, garantindo que as colunas fiquem na ordem:
+    card_key, responsavel, desenvolvedor, status_novo, data_mudanca, sp.
+    Formata a data_mudanca no padrão YYYY-MM-DD HH:MM.
+    """
+    fields = issue.get("fields", {})
+    assignee = fields.get("assignee", {})
+
+    raw_data_mudanca = issue.get("data_mudanca") or fields.get("created", "")
+    data_mudanca_fmt = format_data_mudanca(raw_data_mudanca)
+
+    return {
+        "card_key": issue.get("card_key") or issue.get("key", ""),
+        "responsavel": issue.get("responsavel") or assignee.get("displayName", "Não definido"),
+        "desenvolvedor": issue.get("desenvolvedor") or fields.get("customfield_10172", "Não definido"),
+        "status_novo": issue.get("status_novo") or fields.get("status", {}).get("name", ""),
+        "data_mudanca": data_mudanca_fmt,
+        "sp": issue.get("sp") or fields.get("customfield_10106", 0)
+    }
+
+def normalize_issues_list(issues_list: list) -> pd.DataFrame:
+    """
+    Normaliza uma lista de issues, retornando um DataFrame com as colunas na ordem desejada.
+    """
+    normalized = [normalize_issue(issue) for issue in issues_list]
+    df = pd.DataFrame(normalized)
+    desired_order = ["card_key", "responsavel", "desenvolvedor", "status_novo", "data_mudanca", "sp"]
+    missing = set(desired_order) - set(df.columns)
+    if not missing:
+        df = df[desired_order]
     return df
 
 # ============================================================================
@@ -105,27 +160,23 @@ def process_dataframe(df: pd.DataFrame, df_name: str) -> pd.DataFrame:
 # ============================================================================
 @st.cache_data(ttl=3600, show_spinner="Carregando dados para consulta específica (15 dias)...")
 def fetch_specific_15days(board_id: str, sprint_id: str):
-    from app import get_analitycs_with_changelogs
-    return get_analitycs_with_changelogs(board_id, sprint_id)
+    return app_module.get_analitycs_with_changelogs(board_id, sprint_id)
 
 @st.cache_data(ttl=3600, show_spinner="Carregando dados para consulta específica (diária)...")
 def fetch_specific_daily(board_id: str, sprint_id: str):
-    from app import get_analitycs_daily
-    return get_analitycs_daily(board_id, sprint_id)
+    return app_module.get_analitycs_daily(board_id, sprint_id)
 
 @st.cache_data(ttl=3600, show_spinner="Carregando dados para todos os boards e sprints (15 dias)...")
 def fetch_all_15days(num_sprints: int):
-    from app import get_all_analytics 
     try:
-        return get_all_analytics(num_sprints=num_sprints)
+        return app_module.get_all_analytics(num_sprints=num_sprints)
     except Exception as e:
         st.error(f"Erro ao obter analytics: {str(e)}")
         return {}
 
 @st.cache_data(ttl=3600, show_spinner="Carregando dados para todos os boards e sprints (diária)...")
 def fetch_all_daily(num_sprints: int):
-    from app import get_daily_all_analytics
-    return get_daily_all_analytics(num_sprints=num_sprints)
+    return app_module.get_daily_all_analytics(num_sprints=num_sprints)
 
 # ============================================================================
 # Sidebar: opções de modo e período
@@ -139,20 +190,18 @@ with st.sidebar:
                        options=["Diário", "15 dias"])
     
     if modo_consulta == "Consulta Específica":
-        boards = None
         try:
-            from app import list_boards
-            boards_data = list_boards()
+            boards_data = app_module.list_boards()
             boards = boards_data.get("boards", [])
         except Exception as e:
             st.error(f"Erro ao carregar boards: {e}")
+            boards = []
         if boards:
             board_options = {str(board.get("id")): board.get("name", f"Board {board.get('id')}") for board in boards}
             selected_board_id = st.selectbox("Selecione o Board", options=list(board_options.keys()),
                                              format_func=lambda x: board_options[x])
             try:
-                from app import list_sprints
-                sprints_data = list_sprints(selected_board_id)
+                sprints_data = app_module.list_sprints(selected_board_id)
                 sprints = sprints_data.get("sprints", [])
             except Exception as e:
                 st.error(f"Erro ao carregar sprints: {e}")
@@ -161,7 +210,7 @@ with st.sidebar:
                 sprint_options = {str(sprint.get("id")): sprint.get("name", f"Sprint {sprint.get('id')}") for sprint in sprints}
                 selected_sprint_id = st.selectbox("Selecione a Sprint", options=list(sprint_options.keys()),
                                                   format_func=lambda x: sprint_options[x])
-    else:  # Todos Boards e Sprints
+    else:
         st.info("A consulta será realizada em TODOS os boards e sprints.")
         num_sprints = st.number_input("Número de últimas sprints para análise", min_value=1, value=2, step=1)
     
@@ -176,12 +225,12 @@ if run_query:
             try:
                 with st.spinner("Obtendo dados do Jira (Consulta Específica, 15 dias)..."):
                     data = fetch_specific_15days(str(selected_board_id), str(selected_sprint_id))
-                # Exibe a análise completa (conforme endpoint /JIRA_analitycs)
                 analysis = data.get('analysis', {})
                 charts_data = analysis.get('charts_data', {})
                 metrics = charts_data.get('metrics', {})
                 
                 st.title("📊 Consulta Específica (15 dias)")
+                # Métricas
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     st.markdown(format_metric(metrics.get('total_concluidos', 0), "Concluídos"), unsafe_allow_html=True)
@@ -190,35 +239,41 @@ if run_query:
                 with col3:
                     st.markdown(format_metric(metrics.get('total_reprovas', 0), "Reprovações"), unsafe_allow_html=True)
                 
+                # Conclusões e Reprovações
                 concl_df = process_dataframe(pd.DataFrame(charts_data.get('conclusoes', [])), "Conclusões")
                 reprov_df = process_dataframe(pd.DataFrame(charts_data.get('reprovacoes', [])), "Reprovações")
                 
-                st.header("Performance por Responsável")
-                col1, col2, col3 = st.columns(3)
-                with col1:
+                # Gráficos lado a lado (3 colunas)
+                st.header("Gráficos de Desempenho")
+                col_g1, col_g2, col_g3 = st.columns(3)
+                with col_g1:
                     fig1 = plot_responsavel_performance(concl_df, "Conclusões Bem-sucedidas")
                     if fig1:
                         st.pyplot(fig1)
                     else:
                         st.info("Sem dados de conclusões")
-                with col2:
+
+                with col_g2:
                     fig2 = plot_responsavel_performance(reprov_df, "Reprovações por Responsável")
                     if fig2:
                         st.pyplot(fig2)
                     else:
                         st.info("Sem dados de reprovações")
-                with col3:
+
+                with col_g3:
                     fig3 = plot_sp_conclusions(concl_df, "Story Points - Conclusões")
                     if fig3:
                         st.pyplot(fig3)
                     else:
                         st.info("Sem dados para Story Points")
                 
+                # Insights
                 st.header("Insights Analíticos")
                 with st.expander("Ver Análise Detalhada"):
                     llm_analysis = analysis.get('llm_analysis', 'Análise não disponível')
                     st.markdown(f"```\n{llm_analysis}\n```")
                 
+                # Tabelas por último
                 st.header("Dados Detalhados")
                 tab1, tab2 = st.tabs(["Conclusões", "Reprovações"])
                 with tab1:
@@ -235,28 +290,31 @@ if run_query:
                 concluded_cards = data.get("concluded_cards", [])
                 total_sp = data.get("total_story_points", 0)
                 
-                # Processa os cards concluídos para garantir a coluna 'responsavel'
-                daily_df = process_dataframe(pd.DataFrame(concluded_cards), "Cards Concluídos")
+                # Normaliza as issues para ter as colunas na ordem desejada
+                daily_df = normalize_issues_list(concluded_cards)
                 
                 st.title("📊 Consulta Específica (Diário)")
+                st.header("Gráficos de Desempenho")
+                col_g1, col_g2 = st.columns(2)
+                with col_g1:
+                    fig1 = plot_responsavel_performance(daily_df, "Cards Concluídos por Responsável")
+                    if fig1:
+                        st.pyplot(fig1)
+                    else:
+                        st.info("Sem dados para gráfico de desempenho.")
+                
+                with col_g2:
+                    fig2 = plot_sp_conclusions(daily_df, "Story Points dos Cards Concluídos")
+                    if fig2:
+                        st.pyplot(fig2)
+                    else:
+                        st.info("Sem dados para Story Points.")
+                
+                st.markdown(f"**Total Story Points:** {total_sp}")
+                
                 st.header("Tabela dos Cards Concluídos")
                 st.dataframe(daily_df, hide_index=True, use_container_width=True)
                 
-                st.header("Gráfico de Cards Concluídos por Responsável")
-                fig1 = plot_responsavel_performance(daily_df, "Cards Concluídos por Responsável")
-                if fig1:
-                    st.pyplot(fig1)
-                else:
-                    st.info("Sem dados para gráfico de desempenho.")
-                
-                st.header("Gráfico da Soma dos Story Points dos Cards Concluídos")
-                fig2 = plot_sp_conclusions(daily_df, "Story Points dos Cards Concluídos")
-                if fig2:
-                    st.pyplot(fig2)
-                else:
-                    st.info("Sem dados para Story Points.")
-                
-                st.markdown(f"**Total Story Points:** {total_sp}")
             except Exception as e:
                 st.error(f"Erro crítico: {str(e)}")
                 st.exception(e)
@@ -281,21 +339,21 @@ if run_query:
                 concl_df = process_dataframe(pd.DataFrame(charts_data.get('conclusoes', [])), "Conclusões")
                 reprov_df = process_dataframe(pd.DataFrame(charts_data.get('reprovacoes', [])), "Reprovações")
                 
-                st.header("Performance por Responsável")
-                col1, col2, col3 = st.columns(3)
-                with col1:
+                st.header("Gráficos de Desempenho")
+                col_g1, col_g2, col_g3 = st.columns(3)
+                with col_g1:
                     fig1 = plot_responsavel_performance(concl_df, "Conclusões Bem-sucedidas")
                     if fig1:
                         st.pyplot(fig1)
                     else:
                         st.info("Sem dados de conclusões")
-                with col2:
+                with col_g2:
                     fig2 = plot_responsavel_performance(reprov_df, "Reprovações por Responsável")
                     if fig2:
                         st.pyplot(fig2)
                     else:
                         st.info("Sem dados de reprovações")
-                with col3:
+                with col_g3:
                     fig3 = plot_sp_conclusions(concl_df, "Story Points - Conclusões")
                     if fig3:
                         st.pyplot(fig3)
@@ -323,27 +381,30 @@ if run_query:
                 daily_cards = data.get("daily_concluded_cards", [])
                 total_sp = data.get("total_story_points", 0)
                 
-                daily_df = process_dataframe(pd.DataFrame(daily_cards), "Cards Concluídos")
+                daily_df = normalize_issues_list(daily_cards)
                 
                 st.title("📊 Análise Diária - Todos Boards e Sprints")
+                st.header("Gráficos de Desempenho")
+                col_g1, col_g2 = st.columns(2)
+                with col_g1:
+                    fig1 = plot_responsavel_performance(daily_df, "Cards Concluídos por Responsável")
+                    if fig1:
+                        st.pyplot(fig1)
+                    else:
+                        st.info("Sem dados para gráfico de desempenho.")
+                
+                with col_g2:
+                    fig2 = plot_sp_conclusions(daily_df, "Story Points dos Cards Concluídos")
+                    if fig2:
+                        st.pyplot(fig2)
+                    else:
+                        st.info("Sem dados para Story Points.")
+                
+                st.markdown(f"**Total Story Points:** {total_sp}")
+                
                 st.header("Tabela dos Cards Concluídos")
                 st.dataframe(daily_df, hide_index=True, use_container_width=True)
                 
-                st.header("Gráfico de Cards Concluídos por Responsável")
-                fig1 = plot_responsavel_performance(daily_df, "Cards Concluídos por Responsável")
-                if fig1:
-                    st.pyplot(fig1)
-                else:
-                    st.info("Sem dados para gráfico de desempenho.")
-                
-                st.header("Gráfico da Soma dos Story Points dos Cards Concluídos")
-                fig2 = plot_sp_conclusions(daily_df, "Story Points dos Cards Concluídos")
-                if fig2:
-                    st.pyplot(fig2)
-                else:
-                    st.info("Sem dados para Story Points.")
-                
-                st.markdown(f"**Total Story Points:** {total_sp}")
             except Exception as e:
                 st.error(f"Erro crítico: {str(e)}")
                 st.exception(e)
