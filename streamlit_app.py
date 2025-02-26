@@ -7,17 +7,14 @@ import io
 import importlib
 from datetime import datetime
 
-# Carrega o módulo "app" dinamicamente
 app_module = importlib.import_module("app")
 
-# Configuração da página
 st.set_page_config(
     page_title="JIRA Analytics",
     page_icon="📊",
     layout="wide"
 )
 
-# CSS customizado para os cards de métricas
 st.markdown("""
     <style>
     .metric-box {
@@ -82,48 +79,22 @@ def plot_sp_conclusions(df: pd.DataFrame, title: str) -> Optional[plt.Figure]:
         return None
 
 def process_dataframe(df: pd.DataFrame, df_name: str) -> pd.DataFrame:
-    """
-    Se o DataFrame já tiver a coluna 'responsavel', a mantém. Caso contrário, tenta extrair a partir de 'assignee'.
-    Em seguida, se 'responsavel' for alguma variação de 'estagiario', substitui pelo valor de 'desenvolvedor'.
-    """
     if df.empty:
         return df
-    
-    # Se não houver 'responsavel', tenta extrair de 'assignee'
     if "responsavel" not in df.columns:
         if "assignee" in df.columns:
-            df["responsavel"] = df["assignee"].apply(
-                lambda x: x.get("displayName") if isinstance(x, dict) else "Não definido"
-            )
+            df["responsavel"] = df["assignee"].apply(lambda x: x.get("displayName") if isinstance(x, dict) else "Não definido")
         else:
             st.warning(f"Coluna 'responsavel' não encontrada em {df_name}. Definindo como 'Não definido'.")
             df["responsavel"] = "Não definido"
-    
-    # Garante que exista a coluna 'desenvolvedor' para fazermos a substituição, caso não exista
     if "desenvolvedor" not in df.columns:
         df["desenvolvedor"] = "Não definido"
-    
-    # Ajusta valores vazios ou nulos
     df["responsavel"] = df["responsavel"].fillna("Não definido").replace({'': "Não definido"})
-    
-    # Lista de variações de "estagiario" para substituição
     estagiario_variations = ["estagiario", "estagiarios", "estagiário", "estagiários"]
-    
-    # Substitui 'responsavel' por 'desenvolvedor' se for "estagiario"
-    df["responsavel"] = df.apply(
-        lambda row: row["desenvolvedor"] 
-        if row["responsavel"].strip().lower() in estagiario_variations 
-        else row["responsavel"],
-        axis=1
-    )
-    
+    df["responsavel"] = df.apply(lambda row: row["desenvolvedor"] if row["responsavel"].strip().lower() in estagiario_variations else row["responsavel"], axis=1)
     return df
 
-
 def format_data_mudanca(data_str: str) -> str:
-    """
-    Converte a data ISO para o formato 'YYYY-MM-DD HH:MM'. Se falhar, retorna a string original.
-    """
     if not data_str:
         return data_str
     try:
@@ -133,24 +104,13 @@ def format_data_mudanca(data_str: str) -> str:
         return data_str
 
 def normalize_issue(issue: dict) -> dict:
-    """
-    Extrai os dados desejados de uma issue, garantindo que as colunas fiquem na ordem:
-    card_key, responsavel, desenvolvedor, status_novo, data_mudanca, sp.
-    Formata a data_mudanca no padrão YYYY-MM-DD HH:MM.
-    
-    Se o valor de 'responsavel' for uma variação de "estagiario", substitui pelo valor de 'desenvolvedor'.
-    """
     fields = issue.get("fields", {})
     assignee = fields.get("assignee", {})
-
     raw_data_mudanca = issue.get("data_mudanca") or fields.get("created", "")
     data_mudanca_fmt = format_data_mudanca(raw_data_mudanca)
-
     responsavel = issue.get("responsavel") or assignee.get("displayName", "Não definido")
-    # Verifica se o responsavel é estagiario ou variações
     if responsavel.strip().lower() in ["estagiario", "estagiarios", "estagiário", "estagiários"]:
         responsavel = fields.get("customfield_10172", "Não definido")
-
     return {
         "card_key": issue.get("card_key") or issue.get("key", ""),
         "responsavel": responsavel,
@@ -161,9 +121,6 @@ def normalize_issue(issue: dict) -> dict:
     }
 
 def normalize_issues_list(issues_list: list) -> pd.DataFrame:
-    """
-    Normaliza uma lista de issues, retornando um DataFrame com as colunas na ordem desejada.
-    """
     normalized = [normalize_issue(issue) for issue in issues_list]
     df = pd.DataFrame(normalized)
     desired_order = ["card_key", "responsavel", "desenvolvedor", "status_novo", "data_mudanca", "sp"]
@@ -172,9 +129,6 @@ def normalize_issues_list(issues_list: list) -> pd.DataFrame:
         df = df[desired_order]
     return df
 
-# ============================================================================
-# Funções para obter dados dos endpoints do FastAPI
-# ============================================================================
 @st.cache_data(ttl=3600, show_spinner="Carregando dados para consulta específica (15 dias)...")
 def fetch_specific_15days(board_id: str, sprint_id: str):
     return app_module.get_analitycs_with_changelogs(board_id, sprint_id)
@@ -195,17 +149,10 @@ def fetch_all_15days(num_sprints: int):
 def fetch_all_daily(num_sprints: int):
     return app_module.get_daily_all_analytics(num_sprints=num_sprints)
 
-# ============================================================================
-# Sidebar: opções de modo e período
-# ============================================================================
 with st.sidebar:
     st.title("Configurações")
-    
-    modo_consulta = st.radio("Selecione o modo de consulta:", 
-                              options=["Consulta Específica", "Todos Boards e Sprints"])
-    periodo = st.radio("Selecione o período:", 
-                       options=["Diário", "15 dias"])
-    
+    modo_consulta = st.radio("Selecione o modo de consulta:", options=["Consulta Específica", "Todos Boards e Sprints"])
+    periodo = st.radio("Selecione o período:", options=["Diário", "15 dias"])
     if modo_consulta == "Consulta Específica":
         try:
             boards_data = app_module.list_boards()
@@ -215,8 +162,7 @@ with st.sidebar:
             boards = []
         if boards:
             board_options = {str(board.get("id")): board.get("name", f"Board {board.get('id')}") for board in boards}
-            selected_board_id = st.selectbox("Selecione o Board", options=list(board_options.keys()),
-                                             format_func=lambda x: board_options[x])
+            selected_board_id = st.selectbox("Selecione o Board", options=list(board_options.keys()), format_func=lambda x: board_options[x])
             try:
                 sprints_data = app_module.list_sprints(selected_board_id)
                 sprints = sprints_data.get("sprints", [])
@@ -225,17 +171,12 @@ with st.sidebar:
                 sprints = []
             if sprints:
                 sprint_options = {str(sprint.get("id")): sprint.get("name", f"Sprint {sprint.get('id')}") for sprint in sprints}
-                selected_sprint_id = st.selectbox("Selecione a Sprint", options=list(sprint_options.keys()),
-                                                  format_func=lambda x: sprint_options[x])
+                selected_sprint_id = st.selectbox("Selecione a Sprint", options=list(sprint_options.keys()), format_func=lambda x: sprint_options[x])
     else:
         st.info("A consulta será realizada em TODOS os boards e sprints.")
         num_sprints = st.number_input("Número de últimas sprints para análise", min_value=1, value=2, step=1)
-    
     run_query = st.button("Run")
 
-# ============================================================================
-# Execução da consulta e apresentação dos resultados
-# ============================================================================
 if run_query:
     if modo_consulta == "Consulta Específica":
         if periodo == "15 dias":
@@ -245,9 +186,7 @@ if run_query:
                 analysis = data.get('analysis', {})
                 charts_data = analysis.get('charts_data', {})
                 metrics = charts_data.get('metrics', {})
-                
                 st.title("📊 Consulta Específica (15 dias)")
-                # Métricas
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     st.markdown(format_metric(metrics.get('total_concluidos', 0), "Concluídos"), unsafe_allow_html=True)
@@ -255,12 +194,8 @@ if run_query:
                     st.markdown(format_metric(metrics.get('total_reprovados', 0), "Reprovados"), unsafe_allow_html=True)
                 with col3:
                     st.markdown(format_metric(metrics.get('total_reprovas', 0), "Reprovações"), unsafe_allow_html=True)
-                
-                # Dados de Tabelas
                 concl_df = process_dataframe(pd.DataFrame(charts_data.get('conclusoes', [])), "Conclusões")
                 reprov_df = process_dataframe(pd.DataFrame(charts_data.get('reprovacoes', [])), "Reprovações")
-                
-                # Gráficos lado a lado
                 st.header("Gráficos de Desempenho")
                 col_g1, col_g2, col_g3 = st.columns(3)
                 with col_g1:
@@ -281,12 +216,10 @@ if run_query:
                         st.pyplot(fig3)
                     else:
                         st.info("Sem dados para Story Points")
-                
                 st.header("Insights Analíticos")
                 with st.expander("Ver Análise Detalhada"):
                     llm_analysis = analysis.get('llm_analysis', 'Análise não disponível')
                     st.markdown(f"```\n{llm_analysis}\n```")
-                
                 st.header("Dados Detalhados")
                 tab1, tab2 = st.tabs(["Conclusões", "Reprovações"])
                 with tab1:
@@ -296,16 +229,13 @@ if run_query:
             except Exception as e:
                 st.error(f"Erro crítico: {str(e)}")
                 st.exception(e)
-        else:  # Período Diário na consulta específica
+        else:
             try:
                 with st.spinner("Obtendo dados do Jira (Consulta Específica, Diário)..."):
                     data = fetch_specific_daily(str(selected_board_id), str(selected_sprint_id))
                 concluded_cards = data.get("concluded_cards", [])
                 total_sp = data.get("total_story_points", 0)
-                
-                # Normaliza as issues para ter as colunas na ordem desejada e com data formatada
                 daily_df = normalize_issues_list(concluded_cards)
-                
                 st.title("📊 Consulta Específica (Diário)")
                 st.header("Gráficos de Desempenho")
                 col_g1, col_g2 = st.columns(2)
@@ -321,16 +251,13 @@ if run_query:
                         st.pyplot(fig2)
                     else:
                         st.info("Sem dados para Story Points.")
-                
                 st.markdown(f"**Total Story Points:** {total_sp}")
-                
                 st.header("Tabela dos Cards Concluídos")
                 st.dataframe(daily_df, hide_index=True, use_container_width=True)
-                
             except Exception as e:
                 st.error(f"Erro crítico: {str(e)}")
                 st.exception(e)
-    else:  # Modo "Todos Boards e Sprints"
+    else:
         if periodo == "15 dias":
             try:
                 with st.spinner("Obtendo dados do Jira (Todos Boards e Sprints, 15 dias)..."):
@@ -338,7 +265,6 @@ if run_query:
                 analysis = all_data.get("analysis", {})
                 charts_data = analysis.get("charts_data", {})
                 metrics = charts_data.get("metrics", {})
-                
                 st.title("📊 Análise de Performance - Todos Boards e Sprints (15 dias)")
                 col1, col2, col3 = st.columns(3)
                 with col1:
@@ -347,10 +273,8 @@ if run_query:
                     st.markdown(format_metric(metrics.get('total_reprovados', 0), "Reprovados"), unsafe_allow_html=True)
                 with col3:
                     st.markdown(format_metric(metrics.get('total_reprovas', 0), "Reprovações"), unsafe_allow_html=True)
-                
                 concl_df = process_dataframe(pd.DataFrame(charts_data.get('conclusoes', [])), "Conclusões")
                 reprov_df = process_dataframe(pd.DataFrame(charts_data.get('reprovacoes', [])), "Reprovações")
-                
                 st.header("Gráficos de Desempenho")
                 col_g1, col_g2, col_g3 = st.columns(3)
                 with col_g1:
@@ -371,12 +295,10 @@ if run_query:
                         st.pyplot(fig3)
                     else:
                         st.info("Sem dados para Story Points")
-                
                 st.header("Insights Analíticos")
                 with st.expander("Ver Análise Detalhada"):
-                    llm_analysis = analysis.get("llm_analysis", "Análise não disponível")
+                    llm_analysis = analysis.get('llm_analysis', "Análise não disponível")
                     st.markdown(f"```\n{llm_analysis}\n```")
-                
                 st.header("Dados Detalhados")
                 tab1, tab2 = st.tabs(["Conclusões", "Reprovações"])
                 with tab1:
@@ -386,16 +308,13 @@ if run_query:
             except Exception as e:
                 st.error(f"Erro crítico: {str(e)}")
                 st.exception(e)
-        else:  # Período Diário na consulta agregada
+        else:
             try:
                 with st.spinner("Obtendo dados do Jira (Todos Boards e Sprints, Diário)..."):
                     data = fetch_all_daily(num_sprints)
                 daily_cards = data.get("daily_concluded_cards", [])
                 total_sp = data.get("total_story_points", 0)
-                
-                # Normaliza os cards para obter as colunas na ordem desejada e data formatada
                 daily_df = normalize_issues_list(daily_cards)
-                
                 st.title("📊 Análise Diária - Todos Boards e Sprints")
                 st.header("Gráficos de Desempenho")
                 col_g1, col_g2 = st.columns(2)
@@ -411,12 +330,9 @@ if run_query:
                         st.pyplot(fig2)
                     else:
                         st.info("Sem dados para Story Points.")
-                
                 st.markdown(f"**Total Story Points:** {total_sp}")
-                
                 st.header("Tabela dos Cards Concluídos")
                 st.dataframe(daily_df, hide_index=True, use_container_width=True)
-                
             except Exception as e:
                 st.error(f"Erro crítico: {str(e)}")
                 st.exception(e)
