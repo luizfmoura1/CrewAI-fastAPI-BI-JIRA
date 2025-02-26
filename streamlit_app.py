@@ -90,9 +90,13 @@ def process_dataframe(df: pd.DataFrame, df_name: str) -> pd.DataFrame:
     if "desenvolvedor" not in df.columns:
         df["desenvolvedor"] = "Não definido"
     df["responsavel"] = df["responsavel"].fillna("Não definido").replace({'': "Não definido"})
-    estagiario_variations = ["estagiario", "estagiarios", "estagiário", "estagiários"]
-    df["responsavel"] = df.apply(lambda row: row["desenvolvedor"] if row["responsavel"].strip().lower() in estagiario_variations else row["responsavel"], axis=1)
+    estagiario_variations = ["estagiario", "estagiarios", "estagiário", "estagiários", "não definido", "Não definido", "Não atribuído"]
+    df["responsavel"] = df.apply(
+        lambda row: row["desenvolvedor"] if row["responsavel"].strip().lower() in estagiario_variations else row["responsavel"],
+        axis=1
+    )
     return df
+
 
 def format_data_mudanca(data_str: str) -> str:
     if not data_str:
@@ -109,7 +113,7 @@ def normalize_issue(issue: dict) -> dict:
     raw_data_mudanca = issue.get("data_mudanca") or fields.get("created", "")
     data_mudanca_fmt = format_data_mudanca(raw_data_mudanca)
     responsavel = issue.get("responsavel") or assignee.get("displayName", "Não definido")
-    if responsavel.strip().lower() in ["estagiario", "estagiarios", "estagiário", "estagiários"]:
+    if responsavel.strip().lower() in ["estagiario", "estagiarios", "estagiário", "estagiários", "Não definido", "não definido", "Não atribuído", "Não atribuido"]:
         responsavel = fields.get("customfield_10172", "Não definido")
     return {
         "card_key": issue.get("card_key") or issue.get("key", ""),
@@ -123,11 +127,24 @@ def normalize_issue(issue: dict) -> dict:
 def normalize_issues_list(issues_list: list) -> pd.DataFrame:
     normalized = [normalize_issue(issue) for issue in issues_list]
     df = pd.DataFrame(normalized)
+    
+
     desired_order = ["card_key", "responsavel", "desenvolvedor", "status_novo", "data_mudanca", "sp"]
     missing = set(desired_order) - set(df.columns)
     if not missing:
         df = df[desired_order]
+    
+    df["responsavel"] = df["responsavel"].fillna("Não definido").replace({'': "Não definido"})
+    estagiario_variations = ["estagiario", "estagiarios", "estagiário", "estagiários", "não definido"]
+    df["responsavel"] = df.apply(
+        lambda row: row["desenvolvedor"] 
+        if row["responsavel"].strip().lower() in estagiario_variations 
+        else row["responsavel"],
+        axis=1
+    )
+    
     return df
+
 
 @st.cache_data(ttl=3600, show_spinner="Carregando dados para consulta específica (15 dias)...")
 def fetch_specific_15days(board_id: str, sprint_id: str):

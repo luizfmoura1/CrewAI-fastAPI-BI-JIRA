@@ -11,7 +11,6 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]], start_date: datet
             df['desenvolvedor'] = df['desenvolvedor'].apply(
                 lambda x: x['value'] if isinstance(x, dict) and 'value' in x else x
             )
-        # Se não informados, o padrão é os últimos 15 dias
         if start_date is None:
             start_date_dt = datetime.now() - timedelta(days=15)
         else:

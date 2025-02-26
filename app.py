@@ -170,7 +170,6 @@ def get_daily_all_analytics(num_sprints: int = 2):
                         logger.error(f"Falha ao buscar changelog para a issue {issue_key}: {ex}", exc_info=True)
                         continue
 
-        # Definir o período diário (apenas o dia atual)
         today_date = datetime.now().date()
         start_date = datetime.combine(today_date, datetime.min.time())
         end_date = datetime.combine(today_date, datetime.max.time())
@@ -278,14 +277,13 @@ def get_analitycs_daily(board_id: str, sprint_id: str) -> dict:
                 logger.error(f"Falha ao buscar changelog para a issue {issue_key}: {ex}", exc_info=True)
                 continue
 
-        # Definir o período como somente o dia atual
         today_date = datetime.now().date()
         start_date = datetime.combine(today_date, datetime.min.time())
         end_date = datetime.combine(today_date, datetime.max.time())
 
         from src.agents.rework_agent import create_rework_agent
         rework_analysis = create_rework_agent(aggregated_cards, start_date=start_date, end_date=end_date)
-        # Extraindo somente as "conclusões" para a análise diária
+
         concl_cards = rework_analysis.get("charts_data", {}).get("conclusoes", [])
         total_story_points = sum(float(item.get("sp", 0)) for item in concl_cards)
         return {"concluded_cards": concl_cards, "total_story_points": total_story_points}
