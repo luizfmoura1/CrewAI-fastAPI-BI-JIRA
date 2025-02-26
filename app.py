@@ -140,8 +140,8 @@ def get_daily_all_analytics(num_sprints: int = 2):
             selected_sprints = sorted_sprints[:num_sprints]
         else:
             selected_sprints = []
-        daily_concluded_cards = []
-        today = datetime.now().date()
+
+        aggregated_cards = []
         for sprint in selected_sprints:
             sprint_id = sprint.get("id")
             boards_list = sprint.get("boards", [])
@@ -149,30 +149,42 @@ def get_daily_all_analytics(num_sprints: int = 2):
                 board_data = jira_client.get_single_board(board_id, sprint_id)
                 issues = board_data.get("issues", [])
                 for issue in issues:
-                    status = issue.get("fields", {}).get("status", {}).get("name", "")
-                    if status in ["Em produção", "Em release", "Em Homologação"]:
-                        created_str = issue.get("fields", {}).get("created")
-                        if created_str:
-                            created_date = datetime.fromisoformat(created_str.replace("Z", "+00:00")).date()
-                            if created_date == today:
-                                daily_concluded_cards.append(issue)
-        total_story_points = 0.0
-        for issue in daily_concluded_cards:
-            sp_value = issue.get("fields", {}).get("customfield_10106", 0)
-            try:
-                total_story_points += float(sp_value)
-            except Exception:
-                continue
-        for issue in daily_concluded_cards:
-            fields = issue.get("fields", {})
-            assignee = fields.get("assignee")
-            issue["responsavel"] = assignee.get("displayName") if (assignee and isinstance(assignee, dict)) else "Não definido"
-            issue["sp"] = fields.get("customfield_10106", 0)
-            issue["card_key"] = issue.get("key", "")
-        return {"daily_concluded_cards": daily_concluded_cards, "total_story_points": total_story_points}
+                    issue_key = issue.get("key")
+                    if not issue_key:
+                        continue
+                    fields = issue.get("fields", {})
+                    assignee = fields.get("assignee") or {}
+                    dev = fields.get("customfield_10172", "Não definido")
+                    sp = fields.get("customfield_10106", 0)
+                    try:
+                        changelog_response = jira_client.get_issue_changelog(issue_key)
+                        filtered = filter_reprovado_entries(
+                            issue_key=issue_key,
+                            dev=dev,
+                            sp=sp,
+                            changelog_data=changelog_response,
+                            assignee=assignee
+                        )
+                        aggregated_cards.extend(filtered)
+                    except Exception as ex:
+                        logger.error(f"Falha ao buscar changelog para a issue {issue_key}: {ex}", exc_info=True)
+                        continue
+
+        # Definir o período diário (apenas o dia atual)
+        today_date = datetime.now().date()
+        start_date = datetime.combine(today_date, datetime.min.time())
+        end_date = datetime.combine(today_date, datetime.max.time())
+
+        from src.agents.rework_agent import create_rework_agent
+        rework_analysis = create_rework_agent(aggregated_cards, start_date=start_date, end_date=end_date)
+        concl_cards = rework_analysis.get("charts_data", {}).get("conclusoes", [])
+        total_story_points = sum(float(item.get("sp", 0)) for item in concl_cards)
+        return {"daily_concluded_cards": concl_cards, "total_story_points": total_story_points}
     except Exception as e:
         logger.error(f"Erro ao buscar daily analytics para todos os boards e sprints: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
+
+
 
 @app.get("/JIRA_analitycs")
 def get_analitycs(board_id: str, sprint_id: str) -> dict:
@@ -243,30 +255,40 @@ def get_analitycs_daily(board_id: str, sprint_id: str) -> dict:
     try:
         board_data = jira_client.get_single_board(board_id, sprint_id)
         issues = board_data.get("issues", [])
-        today = datetime.now().date()
-        concluded_cards = []
+        aggregated_cards = []
         for issue in issues:
-            status = issue.get("fields", {}).get("status", {}).get("name", "")
-            if status in ["Em produção", "Em release", "Em Homologação"]:
-                created_str = issue.get("fields", {}).get("created")
-                if created_str:
-                    created_date = datetime.fromisoformat(created_str.replace("Z", "+00:00")).date()
-                    if created_date == today:
-                        concluded_cards.append(issue)
-        total_story_points = 0.0
-        for issue in concluded_cards:
-            sp_value = issue.get("fields", {}).get("customfield_10106", 0)
-            try:
-                total_story_points += float(sp_value)
-            except Exception:
+            issue_key = issue.get("key")
+            if not issue_key:
                 continue
-        for issue in concluded_cards:
             fields = issue.get("fields", {})
-            assignee = fields.get("assignee")
-            issue["responsavel"] = assignee.get("displayName") if (assignee and isinstance(assignee, dict)) else "Não definido"
-            issue["sp"] = fields.get("customfield_10106", 0)
-            issue["card_key"] = issue.get("key", "")
-        return {"concluded_cards": concluded_cards, "total_story_points": total_story_points}
+            assignee = fields.get("assignee") or {}
+            dev = fields.get("customfield_10172", "Não definido")
+            sp = fields.get("customfield_10106", 0)
+            try:
+                changelog_response = jira_client.get_issue_changelog(issue_key)
+                filtered = filter_reprovado_entries(
+                    issue_key=issue_key,
+                    dev=dev,
+                    sp=sp,
+                    changelog_data=changelog_response,
+                    assignee=assignee
+                )
+                aggregated_cards.extend(filtered)
+            except Exception as ex:
+                logger.error(f"Falha ao buscar changelog para a issue {issue_key}: {ex}", exc_info=True)
+                continue
+
+        # Definir o período como somente o dia atual
+        today_date = datetime.now().date()
+        start_date = datetime.combine(today_date, datetime.min.time())
+        end_date = datetime.combine(today_date, datetime.max.time())
+
+        from src.agents.rework_agent import create_rework_agent
+        rework_analysis = create_rework_agent(aggregated_cards, start_date=start_date, end_date=end_date)
+        # Extraindo somente as "conclusões" para a análise diária
+        concl_cards = rework_analysis.get("charts_data", {}).get("conclusoes", [])
+        total_story_points = sum(float(item.get("sp", 0)) for item in concl_cards)
+        return {"concluded_cards": concl_cards, "total_story_points": total_story_points}
     except Exception as e:
         logger.error(f"Erro na análise diária específica: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
