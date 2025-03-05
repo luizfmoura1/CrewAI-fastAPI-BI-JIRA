@@ -134,14 +134,15 @@ def normalize_issues_list(issues_list: list) -> pd.DataFrame:
     if not missing:
         df = df[desired_order]
     
-    df["responsavel"] = df["responsavel"].fillna("Não definido").replace({'': "Não definido"})
-    estagiario_variations = ["estagiario", "estagiarios", "estagiário", "estagiários", "não definido"]
-    df["responsavel"] = df.apply(
-        lambda row: row["desenvolvedor"] 
-        if row["responsavel"].strip().lower() in estagiario_variations 
-        else row["responsavel"],
-        axis=1
-    )
+    if not df.empty:
+        df["responsavel"] = df["responsavel"].fillna("Não definido").replace({'': "Não definido"})
+        estagiario_variations = ["estagiario", "estagiarios", "estagiário", "estagiários", "não definido"]
+        df["responsavel"] = df.apply(
+            lambda row: row["desenvolvedor"] 
+            if row["responsavel"].strip().lower() in estagiario_variations 
+            else row["responsavel"],
+            axis=1
+        )
     
     return df
 
