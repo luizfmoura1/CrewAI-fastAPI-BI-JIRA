@@ -25,7 +25,7 @@ class ChatDatabricks(SimpleChatModel):
     endpoint_url: str
     token: str
     temperature: float = 0.7
-    max_tokens: int = 1024 # Aumentei um pouco para análises mais longas
+    max_tokens: int = 10000 # Aumentei um pouco para análises mais longas
 
     def _call(
         self,
