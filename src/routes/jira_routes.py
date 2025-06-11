@@ -1,26 +1,20 @@
-from fastapi import FastAPI, HTTPException
-from dotenv import load_dotenv
-import os
-import logging
+from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import requests
+import logging
+
 from src.utils.jira_client import JiraClient
-from src.main import main
 from src.utils.rework_search import filter_reprovado_entries
+from src.config.config import BASE_URL, EMAIL, API_TOKEN_JIRA
 
-load_dotenv()
-logging.basicConfig(level=logging.DEBUG)
+# Configura o cliente Jira usando variáveis centrais de config
+jira_client = JiraClient(BASE_URL, EMAIL, API_TOKEN_JIRA)
 logger = logging.getLogger(__name__)
-BASE_URL = os.getenv("BASE_URL")
-EMAIL = os.getenv("EMAIL")
-API_TOKEN_JIRA = os.getenv("API_TOKEN_JIRA")
-if not API_TOKEN_JIRA:
-    logger.error("API_TOKEN_JIRA não foi carregado corretamente do arquivo .env")
-    raise ValueError("API_TOKEN_JIRA não foi carregado corretamente do arquivo .env")
-app = FastAPI()
-jira_client = JiraClient(base_url=BASE_URL, email=EMAIL, api_token=API_TOKEN_JIRA)
 
-@app.get("/JIRA_all_analytics")
+router = APIRouter()
+
+# 🔍 Analisa todos os boards e últimos N sprints.
+# 🔄 Busca todas as issues de cada board/sprint, aplica análise de retrabalho.
+@router.get("/JIRA_all_analytics")
 def get_all_analytics(num_sprints: int = 2):
     def process_all_analytics(num_sprints: int) -> dict:
         try:
@@ -95,7 +89,7 @@ def get_all_analytics(num_sprints: int = 2):
                         "metrics": {
                             "total_concluidos": 0,
                             "total_reprovados": 0,
-                            "total_reprovações": 0
+                            "total_reprovacoes": 0
                         }
                     })
                 }
@@ -108,7 +102,10 @@ def get_all_analytics(num_sprints: int = 2):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/JIRA_daily_all_analytics")
+
+# 📆 Analisa todos os boards e últimos N sprints, mas apenas os cards concluídos hoje.
+# 🔄 Agrupa os cards finalizados no dia atual e calcula os Story Points entregues hoje.
+@router.get("/JIRA_daily_all_analytics")
 def get_daily_all_analytics(num_sprints: int = 2):
     try:
         boards = jira_client.get_all_boards()
@@ -184,25 +181,9 @@ def get_daily_all_analytics(num_sprints: int = 2):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-
-@app.get("/JIRA_analitycs")
-def get_analitycs(board_id: str, sprint_id: str) -> dict:
-    try:
-        board_data = jira_client.get_single_board(board_id, sprint_id)
-        response = main(board_data)
-        from src.agents.sp_agent import create_story_agent 
-        sp_analysis = create_story_agent(board_data)
-        return {
-            "board_id": board_id,
-            "sprint_id": sprint_id,
-            "raw_data": board_data,
-            "analysis": {"processed_data": [response], "sp_analysis": sp_analysis}
-        }
-    except Exception as e:
-        logger.error(f"Erro ao buscar o board: {str(e)}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/JIRA_analitycs_with_changelogs")
+# 🔍 Analisa um board e sprint específicos, incluindo histórico de mudanças (changelogs).
+# 🔄 Identifica entradas de retrabalho, status reprovado e movimentações.
+@router.get("/JIRA_analitycs_with_changelogs")
 def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
     try:
         board_data = jira_client.get_single_board(board_id, sprint_id)
@@ -249,7 +230,10 @@ def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
         logger.error(f"Erro durante a análise com changelogs: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/JIRA_analitycs_daily")
+
+# 📆 Analisa um board e sprint específicos, considerando apenas os cards concluídos hoje.
+# 🔄 Filtra os dados por data atual e calcula Story Points entregues.
+@router.get("/JIRA_analitycs_daily")
 def get_analitycs_daily(board_id: str, sprint_id: str) -> dict:
     try:
         board_data = jira_client.get_single_board(board_id, sprint_id)
@@ -291,7 +275,9 @@ def get_analitycs_daily(board_id: str, sprint_id: str) -> dict:
         logger.error(f"Erro na análise diária específica: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/boards")
+# 📋 Lista todos os boards disponíveis no Jira.
+# 🔧 Utilizado pelo frontend (ex: Streamlit) para montar seleções.
+@router.get("/boards")
 def list_boards():
     try:
         boards = jira_client.get_all_boards()
@@ -300,7 +286,9 @@ def list_boards():
         logger.error(f"Erro ao listar boards: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/boards/{board_id}/sprints")
+# 🧭 Lista todas as sprints atreladas a um board específico.
+# 🔧 Utilizado pelo frontend para selecionar sprints ativas.
+@router.get("/boards/{board_id}/sprints")
 def list_sprints(board_id: str):
     try:
         sprints = jira_client.get_sprints_by_board(board_id)
@@ -308,15 +296,3 @@ def list_sprints(board_id: str):
     except Exception as e:
         logger.error(f"Erro ao listar sprints para o board {board_id}: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
-
-list_boards = list_boards
-list_sprints = list_sprints
-get_all_analytics = get_all_analytics
-get_daily_all_analytics = get_daily_all_analytics
-get_analitycs = get_analitycs
-get_analitycs_with_changelogs = get_analitycs_with_changelogs
-get_analitycs_daily = get_analitycs_daily
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -3,11 +3,17 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from typing import Optional
-import io
-import importlib
 from datetime import datetime
 
-app_module = importlib.import_module("app")
+# Import direto das rotas, sem usar importlib
+from src.routes.jira_routes import (
+    get_all_analytics,
+    get_daily_all_analytics,
+    get_analitycs_with_changelogs,
+    get_analitycs_daily,
+    list_boards,
+    list_sprints,
+)
 
 st.set_page_config(
     page_title="JIRA Analytics",
@@ -149,23 +155,23 @@ def normalize_issues_list(issues_list: list) -> pd.DataFrame:
 
 @st.cache_data(ttl=3600, show_spinner="Carregando dados para consulta específica (15 dias)...")
 def fetch_specific_15days(board_id: str, sprint_id: str):
-    return app_module.get_analitycs_with_changelogs(board_id, sprint_id)
+    return get_analitycs_with_changelogs(board_id, sprint_id)
 
 @st.cache_data(ttl=3600, show_spinner="Carregando dados para consulta específica (diária)...")
 def fetch_specific_daily(board_id: str, sprint_id: str):
-    return app_module.get_analitycs_daily(board_id, sprint_id)
+    return get_analitycs_daily(board_id, sprint_id)
 
 @st.cache_data(ttl=3600, show_spinner="Carregando dados para todos os boards e sprints (15 dias)...")
 def fetch_all_15days(num_sprints: int):
     try:
-        return app_module.get_all_analytics(num_sprints=num_sprints)
+        return get_all_analytics(num_sprints=num_sprints)
     except Exception as e:
         st.error(f"Erro ao obter analytics: {str(e)}")
         return {}
 
 @st.cache_data(ttl=3600, show_spinner="Carregando dados para todos os boards e sprints (diária)...")
 def fetch_all_daily(num_sprints: int):
-    return app_module.get_daily_all_analytics(num_sprints=num_sprints)
+    return get_daily_all_analytics(num_sprints=num_sprints)
 
 with st.sidebar:
     st.title("Configurações")
@@ -173,22 +179,22 @@ with st.sidebar:
     periodo = st.radio("Selecione o período:", options=["Diário", "15 dias"])
     if modo_consulta == "Consulta Específica":
         try:
-            boards_data = app_module.list_boards()
+            boards_data = list_boards()
             boards = boards_data.get("boards", [])
         except Exception as e:
             st.error(f"Erro ao carregar boards: {e}")
             boards = []
         if boards:
-            board_options = {str(board.get("id")): board.get("name", f"Board {board.get('id')}") for board in boards}
+            board_options = {str(b["id"]): b.get("name", f"Board {b['id']}") for b in boards}
             selected_board_id = st.selectbox("Selecione o Board", options=list(board_options.keys()), format_func=lambda x: board_options[x])
             try:
-                sprints_data = app_module.list_sprints(selected_board_id)
+                sprints_data = list_sprints(selected_board_id)
                 sprints = sprints_data.get("sprints", [])
             except Exception as e:
                 st.error(f"Erro ao carregar sprints: {e}")
                 sprints = []
             if sprints:
-                sprint_options = {str(sprint.get("id")): sprint.get("name", f"Sprint {sprint.get('id')}") for sprint in sprints}
+                sprint_options = {str(s["id"]): s.get("name", f"Sprint {s['id']}") for s in sprints}
                 selected_sprint_id = st.selectbox("Selecione a Sprint", options=list(sprint_options.keys()), format_func=lambda x: sprint_options[x])
     else:
         st.info("A consulta será realizada em TODOS os boards e sprints.")
@@ -211,7 +217,7 @@ if run_query:
                 with col2:
                     st.markdown(format_metric(metrics.get('total_reprovados', 0), "Reprovados"), unsafe_allow_html=True)
                 with col3:
-                    st.markdown(format_metric(metrics.get('total_reprovas', 0), "Reprovações"), unsafe_allow_html=True)
+                    st.markdown(format_metric(metrics.get('total_reprovacoes', 0), "Reprovações"), unsafe_allow_html=True)
                 concl_df = process_dataframe(pd.DataFrame(charts_data.get('conclusoes', [])), "Conclusões")
                 reprov_df = process_dataframe(pd.DataFrame(charts_data.get('reprovacoes', [])), "Reprovações")
                 st.header("Gráficos de Desempenho")
@@ -290,7 +296,7 @@ if run_query:
                 with col2:
                     st.markdown(format_metric(metrics.get('total_reprovados', 0), "Reprovados"), unsafe_allow_html=True)
                 with col3:
-                    st.markdown(format_metric(metrics.get('total_reprovas', 0), "Reprovações"), unsafe_allow_html=True)
+                    st.markdown(format_metric(metrics.get('total_reprovacoes', 0), "Reprovações"), unsafe_allow_html=True)
                 concl_df = process_dataframe(pd.DataFrame(charts_data.get('conclusoes', [])), "Conclusões")
                 reprov_df = process_dataframe(pd.DataFrame(charts_data.get('reprovacoes', [])), "Reprovações")
                 st.header("Gráficos de Desempenho")

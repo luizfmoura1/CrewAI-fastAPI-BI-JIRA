@@ -1,2 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.log
+
+# VSCode e Dev Containers
+.vscode/
+.devcontainer/
+
+# Ambientes virtuais
 .env
 venv/
+
+# macOS / Linux
+.DS_Store

@@ -24,7 +24,6 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]], start_date: datet
         end_date_str = end_date_dt.strftime("%d-%m-%Y")
 
         df_filtrado = df[(df['data_mudanca'] >= start_date_dt) & (df['data_mudanca'] <= end_date_dt)]
-        print(df_filtrado)
 
         conclusoes = df_filtrado[df_filtrado['status_novo'].isin(['Em produção', 'Em release', 'Em Homologação'])]
         conclusoes = conclusoes.drop_duplicates(subset=['card_key'], keep='first')
@@ -33,7 +32,6 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]], start_date: datet
             subset=['card_key', 'status_novo', 'responsavel', 'data_mudanca', 'sp'],
             keep='first'
         )
-        print(len(reprovacoes))
 
         llm = LLM(
             model="gpt-4o",
