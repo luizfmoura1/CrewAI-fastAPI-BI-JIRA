@@ -1,10 +1,17 @@
-from crewai import Agent, Task, Crew, LLM
+from crewai import Agent, Task, Crew
 from typing import Dict, Any, List
 from datetime import datetime, timedelta
 import pandas as pd
 
+# --- MUDANÇA 1: Importações ---
+# Importamos nosso cliente customizado e o arquivo de configuração
+from src.utils.custom_llm import ChatDatabricks
+import src.config.config as config
+
+
 def create_rework_agent(reprovados_data: List[Dict[str, Any]], start_date: datetime = None, end_date: datetime = None) -> Dict[str, Any]:
     try:
+        # ... (Toda a sua lógica com o DataFrame pandas permanece exatamente igual) ...
         df = pd.DataFrame(reprovados_data)
         df['data_mudanca'] = pd.to_datetime(df['data_mudanca']).dt.tz_localize(None)
         if 'desenvolvedor' in df.columns:
@@ -33,12 +40,17 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]], start_date: datet
             keep='first'
         )
 
-        llm = LLM(
-            model="gpt-4o",
+        # --- MUDANÇA 2: Definição do LLM ---
+        # Removemos a antiga definição do LLM e instanciamos nosso cliente customizado,
+        # passando as credenciais carregadas do arquivo de configuração.
+        llm = ChatDatabricks(
+            endpoint_url=config.DATABRICKS_ENDPOINT,
+            token=config.DATABRICKS_TOKEN,
             temperature=0.7,
-            seed=0
         )
 
+        # --- NENHUMA MUDANÇA DAQUI EM DIANTE ---
+        # O CrewAI funciona perfeitamente com nosso objeto `llm` customizado.
         rework_agent = Agent(
             role="Analista de Métricas Ágeis",
             goal="Analisar os dados dos cards para extrair insights analíticos relevantes, identificando padrões, tendências e oportunidades de melhoria no processo de desenvolvimento.",
@@ -65,8 +77,8 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]], start_date: datet
             ---------------------
             {df_filtrado.to_dict(orient='records')}
             ---------------------
-            - Considere as reprovações conforme a variável {reprovacoes}.
-            - Considere as conclusões e a soma dos Story Points conforme a variável {conclusoes}, contabilizando apenas os cards indicados.
+            - Considere as reprovações conforme a variável {reprovacoes.to_dict(orient='records')}.
+            - Considere as conclusões e a soma dos Story Points conforme a variável {conclusoes.to_dict(orient='records')}, contabilizando apenas os cards indicados.
             - O total de reprovações deve corresponder à variável {len(reprovacoes)}.
             
             **Dados de Entrada:**
@@ -114,6 +126,10 @@ def create_rework_agent(reprovados_data: List[Dict[str, Any]], start_date: datet
             }
         }
     except Exception as e:
+        # Adiciona um log mais detalhado do erro
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Erro ao executar o agente de retrabalho: {e}", exc_info=True)
         return {
             "error": str(e),
             "charts_data": {

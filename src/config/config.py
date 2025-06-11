@@ -9,5 +9,7 @@ BASE_URL        = os.getenv("BASE_URL")
 EMAIL           = os.getenv("EMAIL")
 API_TOKEN_JIRA  = os.getenv("API_TOKEN_JIRA")
 
-# OpenAI
-OPENAI_API_KEY  = os.getenv("OPENAI_API_KEY")
+
+# Databricks Model Serving
+DATABRICKS_ENDPOINT="https://adb-4450746371403902.2.azuredatabricks.net/serving-endpoints/TesteProvisioned/invocations"
+DATABRICKS_TOKEN="seu_token_do_databricks_aqui"
