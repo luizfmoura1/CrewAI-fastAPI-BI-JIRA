@@ -143,8 +143,8 @@ def normalize_issues_list(issues_list: list) -> pd.DataFrame:
         df["responsavel"] = df["responsavel"].fillna("Não definido").replace({'': "Não definido"})
         estagiario_variations = ["estagiario", "estagiarios", "estagiário", "estagiários", "não definido"]
         df["responsavel"] = df.apply(
-            lambda row: row["desenvolvedor"] 
-            if row["responsavel"].strip().lower() in estagiario_variations 
+            lambda row: row["desenvolvedor"]
+            if row["responsavel"].strip().lower() in estagiario_variations
             else row["responsavel"],
             axis=1
         )
@@ -153,11 +153,11 @@ def normalize_issues_list(issues_list: list) -> pd.DataFrame:
 
 
 @st.cache_data(ttl=3600, show_spinner="Carregando dados para consulta específica (15 dias)...")
-def fetch_specific_15days(board_id: str, sprint_id: str):
+def fetch_specific_15days(board_id: str, sprint_id: Optional[str]):
     return get_analitycs_with_changelogs(board_id, sprint_id)
 
 @st.cache_data(ttl=3600, show_spinner="Carregando dados para consulta específica (diária)...")
-def fetch_specific_daily(board_id: str, sprint_id: str):
+def fetch_specific_daily(board_id: str, sprint_id: Optional[str]):
     return get_analitycs_daily(board_id, sprint_id)
 
 @st.cache_data(ttl=3600, show_spinner="Carregando dados para todos os boards e sprints (15 dias)...")
@@ -178,27 +178,33 @@ with st.sidebar:
     periodo = st.radio("Selecione o período:", options=["Diário", "15 dias"])
     
     if modo_consulta == "Consulta Específica":
-        # <<< ALTERAÇÃO INÍCIO
-        # ID do board fixado em 734. A busca e seleção de board foi removida.
         selected_board_id = "734"
         st.info(f"Análise focada no Board ID: {selected_board_id}")
-
+        
+        sprints = []
+        selected_sprint_id = None  # Inicializa como None
+        
         try:
-            # A busca de sprints agora usa o ID fixo
             sprints_data = list_sprints(selected_board_id)
             sprints = sprints_data.get("sprints", [])
         except Exception as e:
-            st.error(f"Erro ao carregar sprints: {e}")
-            sprints = []
-
+            # Captura o erro, mas só exibe se não for o esperado para boards Kanban
+            if "O quadro não aceita sprints" not in str(e):
+                st.error(f"Erro ao carregar sprints: {e}")
+            sprints = [] # Garante que a lista de sprints está vazia em caso de erro
+        
+        # Se houver sprints, mostra a seleção
         if sprints:
             sprint_options = {str(s["id"]): s.get("name", f"Sprint {s['id']}") for s in sprints}
-            selected_sprint_id = st.selectbox("Selecione a Sprint", options=list(sprint_options.keys()), format_func=lambda x: sprint_options[x])
+            selected_sprint_id = st.selectbox(
+                "Selecione a Sprint",
+                options=list(sprint_options.keys()),
+                format_func=lambda x: sprint_options[x]
+            )
+        # Se não houver sprints, apenas informa o usuário
         else:
-            st.warning("Nenhuma sprint encontrada para este board.")
-            selected_sprint_id = None # Evita NameError se não houver sprints
-        # <<< ALTERAÇÃO FIM
-            
+            st.info("Nenhuma sprint disponível. A análise será feita nos cards do board (modo Kanban).")
+
     else: # modo_consulta == "Todos Boards e Sprints"
         st.info("A consulta será realizada em TODOS os boards e sprints.")
         num_sprints = st.number_input("Número de últimas sprints para análise", min_value=1, value=2, step=1)
@@ -207,14 +213,12 @@ run_query = st.button("Run")
 
 if run_query:
     if modo_consulta == "Consulta Específica":
-        # <<< ALTERAÇÃO INÍCIO
-        # Garante que a consulta só roda se uma sprint válida foi selecionada
-        if selected_board_id and selected_sprint_id:
-        # <<< ALTERAÇÃO FIM
+        # A condição agora permite rodar a consulta mesmo sem uma sprint selecionada
+        if selected_board_id:
             if periodo == "15 dias":
                 try:
                     with st.spinner("Obtendo dados do Jira (Consulta Específica, 15 dias)..."):
-                        data = fetch_specific_15days(str(selected_board_id), str(selected_sprint_id))
+                        data = fetch_specific_15days(str(selected_board_id), selected_sprint_id)
                     
                     analysis = data.get('analysis', {})
                     charts_data = analysis.get('charts_data', {})
@@ -262,10 +266,11 @@ if run_query:
                 except Exception as e:
                     st.error(f"Erro crítico: {str(e)}")
                     st.exception(e)
+
             else: # periodo == "Diário"
                 try:
                     with st.spinner("Obtendo dados do Jira (Consulta Específica, Diário)..."):
-                        data = fetch_specific_daily(str(selected_board_id), str(selected_sprint_id))
+                        data = fetch_specific_daily(str(selected_board_id), selected_sprint_id)
 
                     concluded_cards = data.get("concluded_cards", [])
                     total_sp = data.get("total_story_points", 0)
@@ -290,10 +295,6 @@ if run_query:
                 except Exception as e:
                     st.error(f"Erro crítico: {str(e)}")
                     st.exception(e)
-        # <<< ALTERAÇÃO INÍCIO
-        else:
-            st.error("Para a Consulta Específica, uma sprint deve ser selecionada. Por favor, verifique as opções na barra lateral.")
-        # <<< ALTERAÇÃO FIM
     
     else: # modo_consulta == "Todos Boards e Sprints"
         if periodo == "15 dias":

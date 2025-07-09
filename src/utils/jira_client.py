@@ -18,6 +18,26 @@ class JiraClient:
         else:
             raise Exception(f"Erro ao buscar o board/sprint: {response.status_code} - {response.text}")
 
+    # MÉTODO CORRIGIDO
+    def get_issues_by_board(self, board_id):
+        """Busca todas as issues de um board (backlog e colunas) usando o endpoint correto."""
+        # URL corrigida para buscar issues diretamente do board
+        url = f"{self.base_url}/rest/agile/1.0/board/{board_id}/issue"
+        params = {
+            # O JQL aqui funciona como um filtro adicional
+            "jql": "status NOT IN (CANCELADO)",
+            "fields": "customfield_10106,customfield_10172,assignee,status,created"
+        }
+        headers = {"Accept": "application/json"}
+        response = requests.get(url, headers=headers, params=params, auth=self.auth)
+        
+        if response.status_code == 200:
+            # A resposta deste endpoint já contém a lista de issues
+            return response.json().get("issues", [])
+        else:
+            # A exceção agora retornará um erro mais claro se a API falhar
+            raise Exception(f"Erro ao buscar issues do board {board_id}: {response.status_code} - {response.text}")
+
     def get_issue_changelog(self, issue_id) -> dict:
         url = f"{self.base_url}/rest/api/2/issue/{issue_id}"
         params = {"expand": "changelog"}

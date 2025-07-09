@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
 import logging
+from typing import Optional
 
 from src.utils.jira_client import JiraClient
 from src.utils.rework_search import filter_reprovado_entries
@@ -184,10 +185,14 @@ def get_daily_all_analytics(num_sprints: int = 2):
 # 🔍 Analisa um board e sprint específicos, incluindo histórico de mudanças (changelogs).
 # 🔄 Identifica entradas de retrabalho, status reprovado e movimentações.
 @router.get("/JIRA_analitycs_with_changelogs")
-def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
+def get_analitycs_with_changelogs(board_id: str, sprint_id: Optional[str] = None) -> dict:
     try:
-        board_data = jira_client.get_single_board(board_id, sprint_id)
-        issues = board_data.get("issues", [])
+        if sprint_id:
+            board_data = jira_client.get_single_board(board_id, sprint_id)
+            issues = board_data.get("issues", [])
+        else:
+            issues = jira_client.get_issues_by_board(board_id)
+            
         all_reprovados = []
         issues_with_changelogs = []
         for issue in issues:
@@ -234,10 +239,14 @@ def get_analitycs_with_changelogs(board_id: str, sprint_id: str) -> dict:
 # 📆 Analisa um board e sprint específicos, considerando apenas os cards concluídos hoje.
 # 🔄 Filtra os dados por data atual e calcula Story Points entregues.
 @router.get("/JIRA_analitycs_daily")
-def get_analitycs_daily(board_id: str, sprint_id: str) -> dict:
+def get_analitycs_daily(board_id: str, sprint_id: Optional[str] = None) -> dict:
     try:
-        board_data = jira_client.get_single_board(board_id, sprint_id)
-        issues = board_data.get("issues", [])
+        if sprint_id:
+            board_data = jira_client.get_single_board(board_id, sprint_id)
+            issues = board_data.get("issues", [])
+        else:
+            issues = jira_client.get_issues_by_board(board_id)
+
         aggregated_cards = []
         for issue in issues:
             issue_key = issue.get("key")
