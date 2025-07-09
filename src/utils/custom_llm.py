@@ -1,3 +1,5 @@
+# src/utils/custom_llm.py
+
 import requests
 import json
 from typing import Any, List, Optional
@@ -6,7 +8,6 @@ from langchain_core.language_models.chat_models import SimpleChatModel
 from langchain_core.messages import BaseMessage, AIMessage, HumanMessage, SystemMessage
 
 def _message_to_dict(message: BaseMessage) -> dict:
-    """Converte uma mensagem LangChain para o formato de dicionário da API."""
     if isinstance(message, HumanMessage):
         role = "user"
     elif isinstance(message, AIMessage):
@@ -18,14 +19,16 @@ def _message_to_dict(message: BaseMessage) -> dict:
     return {"role": role, "content": message.content}
 
 class ChatDatabricks(SimpleChatModel):
-    """
-    Cliente de Chat customizado para chamar um endpoint de modelo no Databricks
-    que seja compatível com a API da OpenAI (como o Llama 3).
-    """
     endpoint_url: str
     token: str
     temperature: float = 0.7
     max_tokens: int = 10000 
+
+    # --- ADIÇÃO NECESSÁRIA AQUI ---
+    @property
+    def _llm_type(self) -> str:
+        """Retorna o tipo do modelo de linguagem."""
+        return "chat-databricks-custom"
 
     def _call(
         self,
@@ -50,12 +53,10 @@ class ChatDatabricks(SimpleChatModel):
 
         response = requests.post(self.endpoint_url, headers=headers, data=json.dumps(payload))
         
-        # Lança um erro se a resposta não for bem-sucedida (ex: 401, 404, 500)
         response.raise_for_status() 
 
         response_json = response.json()
         
-        # A estrutura de resposta do Databricks para modelos foundation segue este padrão
         content = response_json["choices"][0]["message"]["content"]
         
         return content
