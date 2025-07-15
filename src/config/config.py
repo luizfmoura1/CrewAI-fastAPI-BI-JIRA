@@ -15,4 +15,4 @@ API_TOKEN_JIRA = os.getenv("API_TOKEN_JIRA")
 # --- MUDANÇA AQUI ---
 # Removemos o final "/invocations" da URL
 DATABRICKS_ENDPOINT = os.getenv("DATABRICKS_ENDPOINT")
-DATABRICKS_TOKEN = os.getenv("DATABRICKS_TOKEN") # Recomendo carregar do .env também
+DATABRICKS_TOKEN = os.getenv("DATABRICKS_TOKEN")

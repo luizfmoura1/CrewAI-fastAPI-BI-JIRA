@@ -4,7 +4,8 @@ from crewai import Agent, Task, Crew
 from typing import Dict, Any, List
 import logging
 
-from src.utils.custom_llm import ChatDatabricks
+from langchain_openai import ChatOpenAI
+
 import src.config.config as config
 
 def create_workflow_analysis_agent(progression_data: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -15,10 +16,15 @@ def create_workflow_analysis_agent(progression_data: List[Dict[str, Any]]) -> Di
                 "progression_data_for_display": []
             }
 
-        llm = ChatDatabricks(
-            endpoint_url=config.DATABRICKS_ENDPOINT,
-            token=config.DATABRICKS_TOKEN,
-            temperature=0.7,
+        llm = ChatOpenAI(
+            # --- CORREÇÃO AQUI ---
+            # Adicionamos o prefixo "azure/" para dizer ao litellm qual
+            # "protocolo" usar com a URL e a chave fornecidas.
+            model="azure/TesteProvisioned",
+            
+            api_key=config.DATABRICKS_TOKEN,
+            base_url=config.DATABRICKS_ENDPOINT,
+            temperature=0.7
         )
 
         workflow_analyst_agent = Agent(
@@ -58,8 +64,6 @@ def create_workflow_analysis_agent(progression_data: List[Dict[str, Any]]) -> Di
         }
     except Exception as e:
         logger = logging.getLogger(__name__)
-        # --- MUDANÇA PRINCIPAL AQUI ---
-        # Em vez de uma mensagem genérica, vamos retornar o erro real.
         error_message = f"ERRO NO AGENTE DE IA: {str(e)}"
         logger.error(error_message, exc_info=True)
         return {
