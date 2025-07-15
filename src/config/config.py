@@ -14,5 +14,5 @@ API_TOKEN_JIRA = os.getenv("API_TOKEN_JIRA")
 # Databricks Model Serving
 # --- MUDANÇA AQUI ---
 # Removemos o final "/invocations" da URL
-DATABRICKS_ENDPOINT = "https://adb-4450746371403902.2.azuredatabricks.net/serving-endpoints/TesteProvisioned"
+DATABRICKS_ENDPOINT = os.getenv("DATABRICKS_ENDPOINT")
 DATABRICKS_TOKEN = os.getenv("DATABRICKS_TOKEN") # Recomendo carregar do .env também

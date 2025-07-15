@@ -65,5 +65,5 @@ def create_workflow_analysis_agent(progression_data: List[Dict[str, Any]]) -> Di
         return {
             "error": str(e),
             "llm_analysis": error_message,
-            "progression_data_for_display": progression_data  # Retorna os dados mesmo em caso de erro na IA
+            "progression_data_for_display": progression_data  
         }
